@@ -93,3 +93,7 @@ References:
 > https://github.com/mfarache/micronaut-cqrs-kafka
 
 > https://dzone.com/articles/cqrs-by-example-introduction --  https://github.com/asc-lab/java-cqrs-intro
+
+> https://www.youtube.com/watch?v=uTCKzPg0Uak -- https://github.com/sdaschner/scalable-coffee-shop
+
+> https://www.youtube.com/watch?v=JHGkaShoyNs
