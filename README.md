@@ -95,8 +95,6 @@ Session  2
  ```
 
 
-```
-
 The above will launch 1 instance of frontend vuejs site running on `localhost:3000` 
 and a backend micronaut site running on port `localhost:{random}` a gateway micronaut app running on port 
 `localhost:8080` 
