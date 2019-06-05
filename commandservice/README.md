@@ -1,3 +1,4 @@
+```
 11:07:13.806 [nioEventLoopGroup-1-3] INFO  i.m.d.registration.AutoRegistration - Registered service [commandapp] with Consul
 Create Hotel handler
 HotelWriteEndpoint save
@@ -7,8 +8,14 @@ getCommandName: CreateHotelCommand
 handle command: CreateHotelCommand
 getCommandName: CreateHotelCommand
 hotel:null,AAAAAAAAAAAAA
-handleCommand AbstractCommandHandler - save is called commandservice.model.HotelSaveCommand@360d46bb
+handleCommand AbstractCommandHandler - save is called commandservice.model.HotelSaveCommand@360d46bb 
 --- from abstract class save hotel:null,AAAAAAAAAAAAA
+```
+
+[handleCommand AbstractCommandHandler - save is called commandservice.model.HotelSaveCommand@360d46bb --- from abstract class save hotel:null,AAAAAAAAAAAAA](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/master/commandservice/src/main/java/commandservice/commands/AbstractCommandHandler.java#L32-L40)
+
+
+```
 Adding hotel to arrayList
 handleCommand AbstractCommandHandler - buildEvent commandservice.model.HotelSaveCommand@360d46bb
 build event hotel:null,AAAAAAAAAAAAA
@@ -105,3 +112,4 @@ io.micronaut.messaging.exceptions.MessagingClientException: Exception sending pr
         at io.micronaut.context.DefaultBeanContext$BeanExecutionHandle.invoke(DefaultBeanContext.java:2704)
         at io.micronaut.web.router.AbstractRouteMatch.execute(AbstractRouteMatch.java:295)
         at io.micronaut.web.router.RouteMatch.execute(RouteMatch.java:122)
+```
