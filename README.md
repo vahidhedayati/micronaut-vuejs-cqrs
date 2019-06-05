@@ -187,12 +187,9 @@ we can host the read service on 25 servers and the write service on two. The pro
 
 
 
-Attempt to build the existing microservice micronaut CRUD app to use CQRS: Image taken from: Taken from: https://www.kennybastani.com/2017/01/building-event-driven-microservices.html
+Attempt to build the existing microservice micronaut CRUD app to use CQRS:
   
-![The diagram above is a rough sketch of an implementation of the CQRS pattern.](https://raw.githubusercontent.com/vahidhedayati/micronaut-vuejs-cqrs/master/docs/cqrs.png)
-
-https://microservices.io/patterns/data/cqrs.html
-![The diagram above is a rough sketch of an implementation of the CQRS pattern.](https://raw.githubusercontent.com/vahidhedayati/micronaut-vuejs-cqrs/master/docs/QuerySideService.png)
+![The diagram above is a rough sketch of an implementation of the CQRS pattern.](https://raw.githubusercontent.com/vahidhedayati/micronaut-vuejs-cqrs/master/docs/diagram-cqrs.png)
 
 
 

@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: userbase.write
+---
+testFramework: junit
+sourceLanguage: java
