@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: queryservice
+---
+testFramework: junit
+sourceLanguage: java

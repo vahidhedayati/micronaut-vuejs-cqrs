@@ -29,6 +29,7 @@ dependencies {
     implementation "io.micronaut:micronaut-security-jwt"
     runtimeOnly "com.h2database:h2"
     runtimeOnly "io.micronaut:micronaut-discovery-client"
+    implementation "io.micronaut.configuration:micronaut-kafka"
     testImplementation  "io.micronaut:micronaut-inject-java"
     testImplementation  "org.junit.jupiter:junit-jupiter-api"
     testImplementation  "io.micronaut.test:micronaut-test-junit5"

@@ -1,6 +1,7 @@
 package gateway.adaptors.web;
 
 import gateway.adaptors.clients.BackendClient;
+import gateway.adaptors.clients.HotelWriteClient;
 import gateway.adaptors.clients.UserClient;
 import gateway.adaptors.models.Hotel;
 import gateway.adaptors.models.HotelModel;
@@ -29,9 +30,11 @@ public class GatewayController {
    // Validator validator;
     private final BackendClient backendClient;
     private final UserClient userClient;
-    public GatewayController(BackendClient backendClient,UserClient userClient) {
+    private final HotelWriteClient hotelWriteClient;
+    public GatewayController(BackendClient backendClient,UserClient userClient,HotelWriteClient hotelWriteClient) {
         this.userClient=userClient;
         this.backendClient = backendClient;
+        this.hotelWriteClient=hotelWriteClient;
     }
 
     @Get(uri="/list{?args*}" , consumes = MediaType.APPLICATION_JSON)
@@ -84,7 +87,7 @@ public class GatewayController {
     @Post(uri = "/", consumes = MediaType.APPLICATION_JSON)
 
     public HttpResponse save(@Body @Valid HotelSaveCommand args)  {
-
+        hotelWriteClient.save(args);
         /**
          * Below captures and returns a http response with all errors  -
          * this is backend validation against HotelSaveCommand in the Gateway application - gateway will decide on if it

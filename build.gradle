@@ -86,8 +86,11 @@ subprojects { project ->
     
           } else {
               apply plugin: "java"
-              if (project.name == 'userbase') {
-
+              if ((project.path.contains(':queryservice'))||
+                      project.name == 'commandapp' ||
+                      project.path.contains(':backend')||
+                      project.path.contains(':userbase')) {
+                  compile "io.micronaut.configuration:micronaut-kafka"
               }
               if (project.name != 'something' && !project.path.contains(':someFunction') && !project.path.contains(':frontend')) {
 

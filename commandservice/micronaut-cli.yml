@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: commandservice
+---
+testFramework: junit
+sourceLanguage: java
