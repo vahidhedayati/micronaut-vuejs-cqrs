@@ -20,10 +20,15 @@ public class HotelCreatedEvent extends AbstractEvent<HotelSaveCommand> implement
 		this.hotel = hotel;
 	}
 
+	/**
+	 * getEventId must be specific to kafka - fails due to null id
+	 * @return
+	 */
 	@Override
 	public String getEventId() {
 		System.out.println("getEventId: " +  getDtoFromEvent().getId());
-		return getDtoFromEvent().getId().toString();
+		return getDtoFromEvent().getCode();
+		//return getDtoFromEvent().getCode().toString();
 	}
 	@Override
 	public String getEventCode() {
