@@ -30,12 +30,12 @@ or if you have installed docker simply run `sudo docker run -p 8500:8500 consul`
 ```
 #open  cmd and run (cmd2)
 
-c:\dev\kafka\bin\windows>zookeeper-server-start.bat  c:\dev\kafka\config\zookeeper.properties
+zookeeper-server-start.bat  c:\dev\kafka\config\zookeeper.properties
 
 
 # open cmd and run (cmd3)
 
-c:\dev\kafka\bin\windows>kafka-server-start.bat c:\dev\kafka\config\server.properties
+kafka-server-start.bat c:\dev\kafka\config\server.properties
 
 
 ```
@@ -97,19 +97,16 @@ c:\dev\kafka\bin\windows>kafka-server-start.bat c:\dev\kafka\config\server.prope
 ##### To start all applications in 2 sessions run:
 Session  1
 ```
-./gradlew frontend:start backend:run gateway:run userbase:run  --parallel
+./gradlew frontend:start gateway:run hotel-read:run hotel-write:run userbase-read:run  --parallel
 ```
-Session  2
-```
-./gradlew  queryservice:run  commandservice:run  --parallel
-```
+
 # Advanced: 
 # When running on linux a process for node hangs on which also keeps jvms active - killing node kills all other jvms hanging off
 # this is all in 1 line to kill if found and start apps
 
 Session  1
 ```
-kill -9 $(netstat -pln 2>/dev/null |grep LISTEN|grep node|awk '{print $7}'|awk -F"/" '{print $1}'); ./gradlew frontend:start backend:run gateway:run userbase:run
+kill -9 $(netstat -pln 2>/dev/null |grep LISTEN|grep node|awk '{print $7}'|awk -F"/" '{print $1}');  ./gradlew frontend:start gateway:run hotel-read:run hotel-write:run userbase-read:run  --parallel
 ```
 
 Session  2 
