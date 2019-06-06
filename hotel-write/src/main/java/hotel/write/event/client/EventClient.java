@@ -16,9 +16,7 @@ import io.micronaut.messaging.annotation.Body;
 @KafkaClient
 public interface EventClient<T> {
 
-    @Topic("hotels")
+    @Topic("hotelCreated")
     void sendEvent(@KafkaKey String hotelId, @Body AbstractEvent<T> hotelEvent);
 
-    @Topic("hotel")
-    void sendCode(@KafkaKey String hotelCode, @Body AbstractEvent<T> hotelEvent);
 }

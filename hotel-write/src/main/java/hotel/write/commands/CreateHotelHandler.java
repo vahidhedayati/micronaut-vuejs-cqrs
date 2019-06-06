@@ -1,5 +1,6 @@
 package hotel.write.commands;
 
+import hotel.write.domain.Hotel;
 import hotel.write.event.AbstractEvent;
 import hotel.write.event.HotelCreatedEvent;
 import hotel.write.event.client.EventPublisher;
@@ -16,38 +17,44 @@ import javax.inject.Singleton;
  *
  */
 @Singleton
-public class CreateHotelHandler extends AbstractCommandHandler<HotelSaveCommand>{
+public class CreateHotelHandler extends AbstractCommandHandler<Hotel>{
 	
 	protected static final Logger LOG = LoggerFactory.getLogger(CreateHotelHandler.class);
 	
 	@Inject
-	public CreateHotelHandler(Dao<HotelSaveCommand> dao, EventPublisher<HotelSaveCommand> publisher) {
+	public CreateHotelHandler(Dao<Hotel> dao, EventPublisher<Hotel> publisher) {
 		super(dao, publisher);
         System.out.println("Create Hotel handler");
 	}
 
 	@Override
-	HotelSaveCommand getDto(Command<HotelSaveCommand> command) {
-		HotelSaveCommand hotel = ((CreateHotelCommand) command).getHotel();
+	Hotel getDto(Command<Hotel> command) {
+		Hotel hotel = ((CreateHotelCommand) command).getHotel();
 		LOG.debug("hotel:" + hotel.getId() + "," + hotel.getName());
         System.out.println("hotel:" + hotel.getId() + "," + hotel.getName());
 		return hotel;
 	}
 
 	@Override
-    AbstractEvent<HotelSaveCommand> buildEvent(HotelSaveCommand hotel) {
+    AbstractEvent<Hotel> buildEvent(Hotel hotel) {
         System.out.println("build event hotel:" + hotel.getId() + "," + hotel.getName());
 		return new HotelCreatedEvent(hotel);
 	}
 
 	@Override
-	void save(HotelSaveCommand hotel) {
+	void save(Hotel hotel) {
         System.out.println("--- from abstract class save hotel:" + hotel.getId() + "," + hotel.getName());
 		dao.save( hotel);
 	}
 
+	/*
+	AbstractEvent<Hotel> saveCodeName(String code,String name) {
+		return new HotelCreatedEvent(dao.addCodeName(code,name));
+	}
+	*/
+
 	@Override
-    Result<HotelSaveCommand> buildResult(HotelSaveCommand hotel) {
+    Result<Hotel> buildResult(Hotel hotel) {
         System.out.println("buildResult hotel:" + hotel.getId() + "," + hotel.getName());
 		return new HotelResult();
 	}

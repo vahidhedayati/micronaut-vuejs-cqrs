@@ -1,6 +1,6 @@
 package gateway.adaptors.web;
 
-import gateway.adaptors.clients.BackendClient;
+import gateway.adaptors.clients.HotelReadClient;
 import gateway.adaptors.clients.HotelWriteClient;
 import gateway.adaptors.clients.UserClient;
 import gateway.adaptors.models.Hotel;
@@ -11,12 +11,12 @@ import gateway.adaptors.models.implementation.SortingAndOrderArguments;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
-import io.micronaut.http.annotation.Error;
-import io.reactivex.Single;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.inject.Inject;
-import javax.validation.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.HashSet;
@@ -28,19 +28,20 @@ import java.util.Set;
 public class GatewayController {
    // @Inject
    // Validator validator;
-    private final BackendClient backendClient;
-    private final UserClient userClient;
     private final HotelWriteClient hotelWriteClient;
-    public GatewayController(BackendClient backendClient,UserClient userClient,HotelWriteClient hotelWriteClient) {
+    private final HotelReadClient hotelReadClient;
+    private final UserClient userClient;
+
+    public GatewayController(HotelReadClient hotelReadClient,UserClient userClient,HotelWriteClient hotelWriteClient) {
         this.userClient=userClient;
-        this.backendClient = backendClient;
+        this.hotelReadClient = hotelReadClient;
         this.hotelWriteClient=hotelWriteClient;
     }
 
     @Get(uri="/list{?args*}" , consumes = MediaType.APPLICATION_JSON)
     public Optional<HotelModel> findAll(SortingAndOrderArguments args) {
         //System.out.println("Trying to find"+args.getValues());
-        Optional<HotelModel> hotelModel =  backendClient.findAll(args);
+        Optional<HotelModel> hotelModel =  hotelReadClient.findAll(args);
         /**
          * We bind in userClient and have a slightly different modelled hotel on gateway application which has a User updateUser
          * defined - this binds in via flatMap to bind in actual user for given user -
@@ -64,18 +65,26 @@ public class GatewayController {
 
     @Get("/{id}")
     public Optional<Hotel> findById(@NotNull Long id) {
-        return backendClient.findById(id);
+        return hotelReadClient.findById(id);
     }
 
+
+    /*
+---------- re-enable
     @Delete("/{id}")
     public HttpResponse delete(Long id) {
-        return backendClient.delete(id);
+        return hotelWriteClient.delete(id);
     }
 
     @Put(uri = "/update/{id}", consumes = MediaType.APPLICATION_JSON)
     public HttpResponse update(Long id, @Body HotelUpdateCommand args) {
-        return backendClient.update(id,args);
+        return hotelWriteClient.update(id,args);
     }
+
+    */
+
+
+
 
 
     /**
@@ -87,7 +96,7 @@ public class GatewayController {
     @Post(uri = "/", consumes = MediaType.APPLICATION_JSON)
 
     public HttpResponse save(@Body @Valid HotelSaveCommand args)  {
-        hotelWriteClient.save(args);
+        hotelWriteClient.save(args.getHotel());
         /**
          * Below captures and returns a http response with all errors  -
          * this is backend validation against HotelSaveCommand in the Gateway application - gateway will decide on if it
@@ -108,11 +117,12 @@ public class GatewayController {
             return HttpResponse.badRequest(violationMessages);
         }
 
+        return  hotelWriteClient.save(args.getHotel());
         //Hotel hotel = backendClient.save(args);
-        Hotel hotel = backendClient.save(args);
-        return HttpResponse
-                .created(hotel)
-                .headers(headers -> headers.location(location(hotel.getId())));
+        //Hotel hotel = hotelWriteClient.save(args.getHotel());
+        //return HttpResponse
+          //      .created(hotel)
+            //    .headers(headers -> headers.location(location(hotel.getId())));
 
 
 

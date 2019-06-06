@@ -45,6 +45,16 @@ public class Hotel {
         this.hotelRooms = new ArrayList<>();
     }
 
+    public Hotel(String code, String name, String phone, String email) {
+        this.code = code;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.updateUserId = 1L;
+        this.lastUpdated=new Date();
+        this.hotelRooms = new ArrayList<>();
+    }
+
     public Date getLastUpdated() {
         return this.lastUpdated;
     }
@@ -60,6 +70,10 @@ public class Hotel {
 
     public String getName() {
         return this.name;
+    }
+
+    public void setName(String n) {
+        this.name = n;
     }
 
     public List<HotelRooms> getHotelRooms() {

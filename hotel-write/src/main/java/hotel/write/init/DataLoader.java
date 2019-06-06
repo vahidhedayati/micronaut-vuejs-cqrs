@@ -1,7 +1,7 @@
 package hotel.write.init;
 
 import hotel.write.domain.Hotel;
-import hotel.write.implementations.HotelImpl;
+import hotel.write.services.write.HotelDaoWriteDb;
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
 import io.micronaut.spring.tx.annotation.Transactional;
@@ -16,12 +16,12 @@ import java.util.List;
 public class DataLoader  implements ApplicationEventListener<ServerStartupEvent> {
 
 	@Inject
-	private HotelImpl hotelDb;
+	private HotelDaoWriteDb hotelDb;
 	 
 	@Transactional
 	@Override
 	public void onApplicationEvent(ServerStartupEvent event) {
-		if (!hotelDb.findByCode("HILL").isPresent()) {
+		//if (!hotelDb.findByCode("HILL").isPresent()) {
 		List<Hotel> hotels = DemoHotelsFactory.defaultHotels();
 		hotelDb.add(hotels);
 		//for ( final Hotel hotel : hotels ) {
@@ -35,5 +35,5 @@ public class DataLoader  implements ApplicationEventListener<ServerStartupEvent>
 			//hotelDb.add(hotels);
         }
 
-	}
+	//}
 }

@@ -70,7 +70,9 @@ public class HotelController {
 
     @Get("/list{?args*}") //, consumes = MediaType.APPLICATION_JSON
     public Optional<HotelModel> findAll(@Nullable SortingAndOrderArguments args) {
+        System.out.println(" In findAll hotels");
         return hotels.findAll(args);
+
     }
 
     @Post("/")

@@ -1,6 +1,8 @@
 package hotel.write.model;
 
-public class HotelResult implements Result<HotelSaveCommand> {
+import hotel.write.domain.Hotel;
+
+public class HotelResult implements Result<Hotel> {
 
 
 }

@@ -1,9 +1,9 @@
 package hotel.write.cqrs.bus;
 
 import hotel.write.commands.CreateHotelCommand;
+import hotel.write.domain.Hotel;
 import hotel.write.model.Command;
 import hotel.write.model.CommandHandler;
-import hotel.write.model.Hotel;
 import hotel.write.model.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

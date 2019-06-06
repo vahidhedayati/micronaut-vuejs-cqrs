@@ -8,6 +8,13 @@ Running app
 ##### Run Consul
 
 To run first either install consul locally and run `./consul agent dev`
+#####  Consul on  Windows : you will need [consul.exe](https://www.consul.io/docs/install/index.html) then open cmd and run:
+
+```
+
+consul agent -dev -node  machine
+
+```
 
 or if you have installed docker simply run `sudo docker run -p 8500:8500 consul`
 
@@ -17,7 +24,23 @@ or if you have installed docker simply run `sudo docker run -p 8500:8500 consul`
  -> sudo /opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properties
  
  -> sudo /opt/kafka/bin/kafka-topics.sh --list --zookeeper localhost:2181
- 
+
+ #### Kafka on windows: [Download kafka](https://www.apache.org/dyn/closer.cgi?path=/kafka/2.2.1/kafka_2.11-2.2.1.tgz)
+
+```
+#open  cmd and run (cmd2)
+
+c:\dev\kafka\bin\windows>zookeeper-server-start.bat  c:\dev\kafka\config\zookeeper.properties
+
+
+# open cmd and run (cmd3)
+
+c:\dev\kafka\bin\windows>kafka-server-start.bat c:\dev\kafka\config\server.properties
+
+
+```
+
+
  Or using docker
  
  First of all we need to set up a local Kafka

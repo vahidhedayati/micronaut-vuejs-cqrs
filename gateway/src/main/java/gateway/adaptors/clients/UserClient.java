@@ -14,7 +14,7 @@ import io.micronaut.http.client.annotation.Client;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
-@Client(id = "userbase", path = "/")
+@Client(id = "userbaseread", path = "/")
 public interface UserClient {
 
     @Get("/status")

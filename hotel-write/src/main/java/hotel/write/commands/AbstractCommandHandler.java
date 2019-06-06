@@ -28,9 +28,9 @@ public abstract class AbstractCommandHandler<T> implements CommandHandler<Comman
 		this.publisher = publisher;
 	}
 
+
 	@Override
 	public Result<T> handleCommand(Command<T> command) {
-
 		T dto = getDto(command);
 		System.out.println("handleCommand AbstractCommandHandler - save is called "+dto);
 		save(dto);
@@ -39,9 +39,23 @@ public abstract class AbstractCommandHandler<T> implements CommandHandler<Comman
 		return buildResult(dto);
 	}
 
-	abstract void save(T dto);
+	/*
+	@Override
+	public Result<T> addCodeName(Command<T> command) {
+		T dto = getDto(command);
+		save(dto);
+		//T dto = saveCodeName(command);
+		System.out.println("handleCommand AbstractCommandHandler - buildEvent "+dto);
+		publish( buildEvent(dto));
+		return buildResult(dto);
+	}
+	*/
 
+
+	abstract void save(T dto);
 	abstract T getDto(Command<T> command);
+
+	//abstract T saveCodeName(Command<T> command);
 
 	abstract AbstractEvent<T> buildEvent(T dto);
 

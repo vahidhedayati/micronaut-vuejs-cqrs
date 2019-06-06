@@ -1,20 +1,20 @@
 package hotel.write.commands;
 
+import hotel.write.domain.Hotel;
 import hotel.write.model.Command;
-import hotel.write.model.HotelSaveCommand;
 
 /**
  * implements Command<Hotel> is bound to CreateHotelHandler .. AbstractCommandHandler
  */
-public class CreateHotelCommand implements Command<HotelSaveCommand> {
+public class CreateHotelCommand implements Command<Hotel> {
 	
-	private HotelSaveCommand hotel;
+	private Hotel hotel;
 
-	public CreateHotelCommand(HotelSaveCommand m) {
+	public CreateHotelCommand(Hotel m) {
 		this.hotel = m;
 	}
 
-	public HotelSaveCommand getHotel() {
+	public Hotel getHotel() {
 		return hotel;
 	}
 
