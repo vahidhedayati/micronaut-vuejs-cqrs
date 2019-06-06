@@ -46,20 +46,21 @@ public class GatewayController {
          * We bind in userClient and have a slightly different modelled hotel on gateway application which has a User updateUser
          * defined - this binds in via flatMap to bind in actual user for given user -
          */
-        hotelModel.flatMap(hotelModel1 -> {
-            hotelModel1.getInstanceList().flatMap(hotel-> {
-                hotel.forEach(hotel1 -> {
-                    hotel1.setUpdateUser(userClient.findById(hotel1.getUpdateUserId()).get());
+        if (hotelModel.isPresent() ) {
+            hotelModel.flatMap(hotelModel1 -> {
+                hotelModel1.getInstanceList().flatMap(hotel-> {
+                    hotel.forEach(hotel1 -> {
+                        //hotel1.setUpdateUser(userClient.findById(hotel1.getUpdateUserId()).get());
+                        hotel1.setUpdateUser(userClient.findByUsername("admin").get());
+                    });
+
+                    return Optional.of(hotel);
                 });
-                /*
-                for (Hotel hotel1 : hotel) {
-                    hotel1.setUpdateUser(userClient.findById(hotel1.getUpdateUserId()).get());
-                };
-                 */
-                return Optional.of(hotel);
+                return Optional.of(hotelModel1);
             });
-            return Optional.of(hotelModel1);
-        });
+        }
+
+
         return hotelModel;
     }
 
@@ -94,9 +95,8 @@ public class GatewayController {
      * //@Error(exception = ConstraintViolationException.class)
      */
     @Post(uri = "/", consumes = MediaType.APPLICATION_JSON)
-
     public HttpResponse save(@Body @Valid HotelSaveCommand args)  {
-        hotelWriteClient.save(args.getHotel());
+       // hotelWriteClient.save(args.getHotel());
         /**
          * Below captures and returns a http response with all errors  -
          * this is backend validation against HotelSaveCommand in the Gateway application - gateway will decide on if it
@@ -117,12 +117,15 @@ public class GatewayController {
             return HttpResponse.badRequest(violationMessages);
         }
 
-        return  hotelWriteClient.save(args.getHotel());
+        System.out.println("Default save of hotel in gateway");
+        Hotel hotel = args.getHotel();
+        hotelWriteClient.save(hotel);
+
         //Hotel hotel = backendClient.save(args);
         //Hotel hotel = hotelWriteClient.save(args.getHotel());
-        //return HttpResponse
-          //      .created(hotel)
-            //    .headers(headers -> headers.location(location(hotel.getId())));
+        return HttpResponse
+               .created(hotel)
+                .headers(headers -> headers.location(location(hotel.getId())));
 
 
 

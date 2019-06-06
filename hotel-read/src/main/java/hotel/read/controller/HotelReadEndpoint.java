@@ -19,8 +19,8 @@ public class HotelReadEndpoint {
 		this.queryService = queryService;
 	}
     
-    @Get("/all")
-    public HttpResponse<List<Hotel>> get() {
-    	    return HttpResponse.ok(queryService.getHotels());
-    }
+    //@Get("/all")
+    //public HttpResponse<List<Hotel>> get() {
+    //	    return HttpResponse.ok(queryService.getHotels());
+    //}
 }

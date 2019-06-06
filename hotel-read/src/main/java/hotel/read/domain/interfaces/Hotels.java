@@ -12,23 +12,17 @@ import java.util.Optional;
 public interface Hotels {
 
 	Optional<Hotel> findById(@NotNull Long id);
-	void deleteById(@NotNull Long id);
-	int update(@NotNull Long id, @NotBlank String name, String code,@NotBlank  String phone,@NotBlank String email);
 
 	Optional<HotelModel> findAll(@NotNull SortingAndOrderArguments args);
 
 
 	Optional<Hotel> findByCode(String code);
-
+	void save(Hotel hotel);
 	//Single<List<Hotel>> listAll(Map input);
 
 	//Maybe<Hotel> reolveCode(String code);
 
 	Hotel getByCode(String code);
 	
-	void add(Hotel hotel);
 
-	Hotel save(@NotBlank String code, @NotBlank String name);
-	
-	void add(List<Hotel> hotel);
 }

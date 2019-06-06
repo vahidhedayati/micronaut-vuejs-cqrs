@@ -9,7 +9,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 
 
-@Controller("/hotel-write")
+@Controller("/")
 public class HotelWriteEndpoint {
 
 	private HotelService writeService;

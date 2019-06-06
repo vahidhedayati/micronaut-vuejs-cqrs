@@ -12,7 +12,7 @@ import io.micronaut.http.annotation.Put;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.retry.annotation.Fallback;
 
-@Client(id = "backend", path = "/")
+@Client(id = "hotel-write", path = "/")
 @Fallback
 public class HotelWriteFallBack implements HotelWriteClient {
 

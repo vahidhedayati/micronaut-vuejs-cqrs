@@ -3,16 +3,13 @@ package hotel.read.adaptors.web;
 import hotel.read.adaptors.models.HotelModel;
 import hotel.read.domain.Hotel;
 import hotel.read.domain.interfaces.Hotels;
-import hotel.read.implementation.HotelSaveCommand;
-import hotel.read.implementation.HotelUpdateCommand;
 import hotel.read.implementation.SortingAndOrderArguments;
-import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.*;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
 import io.micronaut.validation.Validated;
 import io.reactivex.annotations.Nullable;
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.util.Optional;
 
@@ -40,33 +37,7 @@ public class HotelController {
                 .orElse(null);
     }
 
-    //, consumes = MediaType.APPLICATION_FORM_URLENCODED
-    @Put("/update/{id}")
-    public HttpResponse update(Long id,@Body @Valid HotelUpdateCommand command) {
-        System.out.println(" In controller updateHotel");
-        int numberOfEntitiesUpdated = hotels.update(id, command.getName(),command.getCode(), command.getPhone(), command.getEmail());
 
-        return HttpResponse
-                .noContent()
-                .header(HttpHeaders.LOCATION, location(command.getId()).getPath());
-    }
-
-    /*
-    @Get("/list2{?args*}")
-    public List<Hotel> list(@Valid SortingAndOrderArguments args) {
-        return hotels.findAll(args);
-    }
-
-
-
-    public List<Hotel> findAll(@Nullable Integer max, @Nullable Integer offset, @Nullable String order) {
-        SortingAndOrderArguments args = new SortingAndOrderArguments();
-        args.setMax(max);
-        args.setOffset(offset);
-        args.setOrder(order);
-        return hotels.findAll(args);
-    }
-    */
 
     @Get("/list{?args*}") //, consumes = MediaType.APPLICATION_JSON
     public Optional<HotelModel> findAll(@Nullable SortingAndOrderArguments args) {
@@ -75,20 +46,6 @@ public class HotelController {
 
     }
 
-    @Post("/")
-    public HttpResponse<Hotel> save(@Body @Valid HotelSaveCommand cmd) {
-        Hotel hotel = hotels.save(cmd.getCode(),cmd.getName());
-
-        return HttpResponse
-                .created(hotel)
-                .headers(headers -> headers.location(location(hotel.getId())));
-    }
-
-    @Delete("/{id}")
-    public HttpResponse delete(Long id) {
-        hotels.deleteById(id);
-        return HttpResponse.ok();
-    }
 
     protected URI location(Long id) {
         return URI.create("/" + id);

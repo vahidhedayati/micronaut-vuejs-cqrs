@@ -34,7 +34,7 @@ public abstract class AbstractCommandHandler<T> implements CommandHandler<Comman
 		T dto = getDto(command);
 		System.out.println("handleCommand AbstractCommandHandler - save is called "+dto);
 		save(dto);
-		System.out.println("handleCommand AbstractCommandHandler - buildEvent "+dto);
+		System.out.println("handleCommand AbstractCommandHandler - buildEvent -------- WRITE ---------------------------------------- "+dto);
 		publish( buildEvent(dto));
 		return buildResult(dto);
 	}

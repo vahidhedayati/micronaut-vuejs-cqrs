@@ -11,7 +11,7 @@ public class QueryHotelService {
 	@Inject
 	QueryHotelViewDao dao;
 	
-	public List<Hotel> getHotels() {
-		return dao.getHotels();
-	}
+	//public List<Hotel> getHotels() {
+	//	return dao.getHotels();
+	//}
 }
