@@ -8,6 +8,8 @@ import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 
+import javax.validation.Valid;
+
 
 @Controller("/")
 public class HotelWriteEndpoint {
@@ -19,14 +21,15 @@ public class HotelWriteEndpoint {
 		this.writeService = writeService;
 	}
 
-
-    @Post()
-    public HttpResponse<Hotel> save(@Body Hotel hotel) {
+	@Post("/")
+	public HttpResponse<HotelSaveCommand> save(@Body @Valid HotelSaveCommand cmd) {
 		System.out.println("HotelWriteEndpoint save");
-    		writeService.addHotel(hotel);
-    	    return HttpResponse.ok(hotel);
-    }
 
+		writeService.addHotel(new Hotel(cmd.getCode(),cmd.getName(),cmd.getPhone(),cmd.getEmail()));
+		return HttpResponse.ok(cmd);
+
+	}
+    /*
 	@Post()
 	public HttpResponse saveCodeName(String code,String name) {
 		System.out.println("HotelWriteEndpoint saveCodeName");
@@ -36,6 +39,6 @@ public class HotelWriteEndpoint {
 		return HttpResponse.ok(hotel);
 	}
 
-
+*/
 
 }

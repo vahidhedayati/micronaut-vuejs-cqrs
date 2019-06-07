@@ -71,6 +71,7 @@ public class HotelDaoWriteDb  implements Dao<Hotel>  {
     }
 
     @Override
+    @Transactional
     public void save(Hotel hotel) {
         entityManager.persist(hotel);
         // System.out.println("bus.handleCommand new CreateHotelCommand");

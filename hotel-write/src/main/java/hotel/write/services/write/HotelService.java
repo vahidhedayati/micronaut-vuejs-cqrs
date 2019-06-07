@@ -15,7 +15,7 @@ public class HotelService {
     private Bus bus;
 
     public void addHotel(Hotel m) {
-        System.out.println("bus.handleCommand new CreateHotelCommand");
+        System.out.println("bus.handleCommand new CreateHotelCommand --------------------------------------------  ");
         bus.handleCommand(new CreateHotelCommand(m));
     }
 
