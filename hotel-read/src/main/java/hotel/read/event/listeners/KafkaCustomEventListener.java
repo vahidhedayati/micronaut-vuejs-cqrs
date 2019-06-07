@@ -26,7 +26,7 @@ public class KafkaCustomEventListener {
 	@Topic("hotelCreated")
 	public void consume( @KafkaKey String movieId, @Body HotelCreatedEvent hotelCreatedEvent) {
 		LOG.debug("KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER");
-		System.out.println("READ --------------- KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER");
-		dao.save(hotelCreatedEvent.getDtoFromEvent());
+		System.out.println("READ --------------- KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER ---"+hotelCreatedEvent.getDtoFromEvent());
+		dao.save(hotelCreatedEvent.getDtoFromEvent().createHotel());
 	}
 }

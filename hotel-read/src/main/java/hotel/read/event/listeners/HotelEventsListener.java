@@ -1,5 +1,6 @@
 package hotel.read.event.listeners;
 
+import hotel.read.adaptors.models.HotelCreatedCommand;
 import hotel.read.domain.Hotel;
 import hotel.read.domain.interfaces.Hotels;
 import hotel.read.event.AbstractEvent;
@@ -13,7 +14,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class HotelEventsListener implements ApplicationEventListener<AbstractEvent<Hotel>> {
+public class HotelEventsListener implements ApplicationEventListener<AbstractEvent<HotelCreatedCommand>> {
 
 	protected static final Logger LOG = LoggerFactory.getLogger(HotelCreatedEvent.class);
 	
@@ -23,13 +24,13 @@ public class HotelEventsListener implements ApplicationEventListener<AbstractEve
 
 
 	@Override
-	public void onApplicationEvent(AbstractEvent<Hotel> event) {
+	public void onApplicationEvent(AbstractEvent<HotelCreatedCommand> event) {
 		LOG.debug("EVENT RECEIVED:" +  event);
 		System.out.println(" READ ---------------------------------------------------------- EVENT RECEIVED: "+event);
 		if (event instanceof HotelCreatedEvent) {
 			LOG.debug("EVENT RECEIVED AT APPLICATION LISTENER");
 
-			Hotel h = ((HotelCreatedEvent) event).getDtoFromEvent();
+			Hotel h = ((HotelCreatedEvent) event).getDtoFromEvent().createHotel();
 			System.out.println(" EVENT RECEIVED AT APPLICATION LISTENER ================"+h.getName());
 			dao.save(h);
 		}

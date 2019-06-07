@@ -1,21 +1,22 @@
 package hotel.read.event;
 
+import hotel.read.adaptors.models.HotelCreatedCommand;
 import hotel.read.domain.Hotel;
 
 import java.io.Serializable;
 
 
-public class HotelCreatedEvent extends AbstractEvent<Hotel> implements  Serializable{
+public class HotelCreatedEvent extends AbstractEvent<HotelCreatedCommand> implements  Serializable{
 
 	private static final long serialVersionUID = -7452000227812130114L;
 	
-	private Hotel hotel;
+	private HotelCreatedCommand hotel;
 	
 	public HotelCreatedEvent() {
 
 	}
 
-	public HotelCreatedEvent(Hotel hotel) {
+	public HotelCreatedEvent(HotelCreatedCommand hotel) {
 		this.hotel = hotel;
 	}
 
@@ -35,7 +36,7 @@ public class HotelCreatedEvent extends AbstractEvent<Hotel> implements  Serializ
 		return getDtoFromEvent().getCode();
 	}
 	@Override
-	public Hotel getDtoFromEvent() {
+	public HotelCreatedCommand getDtoFromEvent() {
 		return this.hotel;
 	}
 

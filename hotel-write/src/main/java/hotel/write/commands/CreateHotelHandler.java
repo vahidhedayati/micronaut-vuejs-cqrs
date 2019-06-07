@@ -2,6 +2,7 @@ package hotel.write.commands;
 
 import hotel.write.domain.Hotel;
 import hotel.write.event.AbstractEvent;
+import hotel.write.event.HotelCreatedCommandEvent;
 import hotel.write.event.HotelCreatedEvent;
 import hotel.write.event.client.EventPublisher;
 import hotel.write.model.*;
@@ -36,9 +37,14 @@ public class CreateHotelHandler extends AbstractCommandHandler<Hotel>{
 	}
 
 	@Override
-    AbstractEvent<Hotel> buildEvent(Hotel hotel) {
-        System.out.println("build event hotel:" + hotel.getId() + "," + hotel.getName());
+	AbstractEvent<Hotel> buildEvent(Hotel hotel) {
 		return new HotelCreatedEvent(hotel);
+	}
+
+	@Override
+    AbstractEvent<HotelCreatedCommand> buildEventFlexible(Hotel hotel) {
+        System.out.println("build event hotel:" + hotel.getId() + "," + hotel.getName());
+		return new HotelCreatedCommandEvent(new HotelCreatedCommand(hotel));
 	}
 
 	@Override

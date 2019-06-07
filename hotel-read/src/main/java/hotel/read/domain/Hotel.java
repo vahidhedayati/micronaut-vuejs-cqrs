@@ -43,7 +43,15 @@ public class Hotel {
     @Column(name = "lastUpdated")
     private Date lastUpdated;
 
-
+    public Hotel(String code, String name, String phone, String email, Long updateUserId, List<HotelRooms> hotelRooms, Date lastUpdated) {
+        this.code = code;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.updateUserId = updateUserId;
+        this.hotelRooms = hotelRooms;
+        this.lastUpdated = lastUpdated;
+    }
 
     public Hotel() {
 
