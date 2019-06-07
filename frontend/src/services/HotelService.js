@@ -94,6 +94,9 @@ export default {
         }
     });
   },
+  deleteAlt (component, params) {
+    return instance.delete(component, params)
+  },
   deleteNoCatch (component, id) {
     return instance.delete(component+'/' + id)
   },

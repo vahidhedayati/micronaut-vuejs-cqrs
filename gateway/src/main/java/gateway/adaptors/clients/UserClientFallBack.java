@@ -57,7 +57,7 @@ public class UserClientFallBack implements UserClient {
 
     @Get("/find/{username}")
     public Optional<User> findByUsername(String username) {
-        System.out.println("Backend app is down using fallback  findByCode");
+        System.out.println("Backend app is down using fallback  findByUsername");
         return Optional.ofNullable(new User());
     }
 

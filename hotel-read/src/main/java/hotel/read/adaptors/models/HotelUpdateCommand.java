@@ -1,4 +1,4 @@
-package hotel.read.implementation;
+package hotel.read.adaptors.models;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

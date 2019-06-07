@@ -40,6 +40,13 @@ public class UserController {
                 .orElse(null);
     }
 
+    @Get("/find/{username}")
+    Optional<User> findByUsername(String username) {
+        return users
+                .findByUsername(username);
+
+    }
+
     @Put("/update/{id}")
     public HttpResponse update(Long id,@Body @Valid UserUpdateCommand command) {
         System.out.println(" In controller updateUser");

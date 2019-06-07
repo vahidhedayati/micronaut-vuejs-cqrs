@@ -35,9 +35,33 @@ public abstract class AbstractCommandHandler<T> implements CommandHandler<Comman
 		System.out.println("handleCommand AbstractCommandHandler - save is called "+dto);
 		save(dto);
 		System.out.println("handleCommand AbstractCommandHandler - buildEvent -------- WRITE ---------------------------------------- "+dto);
-		publish( buildEventFlexible(dto));
+		//publish( buildEventFlexible(dto));
+        publish( buildEventFlexible(dto));
 		return buildResult(dto);
 	}
+	@Override
+	public Result<T> updateCommand(Command<T> command) {
+		T dto = getDto(command);
+		System.out.println("handleCommand AbstractCommandHandler - save is called "+dto);
+		update(dto);
+		System.out.println("handleCommand AbstractCommandHandler - buildEvent -------- WRITE ---------------------------------------- "+dto);
+		publish( updateEvent(dto));
+		//publish(buildEvent(dto));
+		return buildResult(dto);
+	}
+	@Override
+	public Result<T> deleteCommand(Command<T> command) {
+		T dto = getDto(command);
+		System.out.println("handleCommand AbstractCommandHandler - save is called "+dto);
+		System.out.println("handleCommand AbstractCommandHandler - buildEvent -------- WRITE ---------------------------------------- "+dto);
+		//publish( buildEventFlexible(dto));
+		publish(deleteEvent(dto));
+
+		delete(dto);
+
+		return buildResult(dto);
+	}
+
 
 	/*
 	@Override
@@ -51,6 +75,9 @@ public abstract class AbstractCommandHandler<T> implements CommandHandler<Comman
 	}
 	*/
 
+	abstract void update(T dto);
+
+	abstract void delete(T dto);
 
 	abstract void save(T dto);
 	abstract T getDto(Command<T> command);
@@ -60,6 +87,10 @@ public abstract class AbstractCommandHandler<T> implements CommandHandler<Comman
 	abstract AbstractEvent<T> buildEvent(T dto);
 
 	abstract AbstractEvent buildEventFlexible(T dto);
+
+	abstract AbstractEvent deleteEvent(T dto);
+
+	abstract AbstractEvent updateEvent(T dto);
 
 	void publish(AbstractEvent<T> event) {
 		if (event != null) {

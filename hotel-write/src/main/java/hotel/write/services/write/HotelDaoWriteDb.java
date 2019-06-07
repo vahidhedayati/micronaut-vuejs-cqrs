@@ -35,21 +35,6 @@ public class HotelDaoWriteDb  implements Dao<Hotel>  {
 
 
     @Transactional
-    public Hotel addCodeName(@NotBlank String code, @NotBlank String name) {
-        Hotel hotel = new Hotel(code,name);
-        entityManager.persist(hotel);
-        return hotel;
-    }
-
-
-
-    @Transactional
-    public void deleteById(@NotNull Long id) {
-       // findById(id).ifPresent(hotel -> entityManager.remove(hotel));
-    }
-
-
-    @Transactional
     public int update(@NotNull Long id, @NotBlank String name, @NotBlank String code,@NotBlank  String phone,@NotBlank String email) {
         return entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
                 .setParameter("name", name)
@@ -70,10 +55,30 @@ public class HotelDaoWriteDb  implements Dao<Hotel>  {
         }
     }
 
+
+
     @Override
     @Transactional
     public void save(Hotel hotel) {
         entityManager.persist(hotel);
-        // System.out.println("bus.handleCommand new CreateHotelCommand");
+         System.out.println("bus.handleCommand new CreateHotelCommand ----------------------------------------- hotel-write - process writing to DB");
+    }
+
+    @Override
+    @Transactional
+    public void update(Hotel cmd) {
+        entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
+                .setParameter("name", cmd.getName())
+                .setParameter("id", cmd.getId())
+                .setParameter("code", cmd.getCode())
+                .setParameter("phone", cmd.getPhone())
+                .setParameter("email", cmd.getEmail())
+                .executeUpdate();
+    }
+
+    @Override
+    @Transactional
+    public void delete(Hotel hotel) {
+        entityManager.remove(hotel);
     }
 }

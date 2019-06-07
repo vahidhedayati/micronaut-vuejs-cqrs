@@ -19,4 +19,9 @@ public interface EventClient<T> {
     @Topic("hotelCreated")
     void sendEvent(@KafkaKey String hotelId, @Body AbstractEvent<T> hotelEvent);
 
+    @Topic("hotelEdit")
+    void sendEventEdit(@KafkaKey String hotelId, @Body AbstractEvent<T> hotelEvent);
+
+    @Topic("hotelDelete")
+    void sendEventDelete(@KafkaKey String hotelId, @Body AbstractEvent<T> hotelEvent);
 }

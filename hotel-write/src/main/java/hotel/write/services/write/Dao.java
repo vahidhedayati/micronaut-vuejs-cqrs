@@ -8,6 +8,10 @@ public interface Dao<T> {
 
     void save(T object);
 
+    void update(T object);
+
+    void delete(T object);
+
     //T addCodeName(String code, String name);
 
 

@@ -1,14 +1,16 @@
 package hotel.write.controller;
 
 import hotel.write.domain.Hotel;
+import hotel.write.model.HotelDeleteCommand;
 import hotel.write.model.HotelSaveCommand;
+import hotel.write.model.HotelUpdateCommand;
 import hotel.write.services.write.HotelService;
+import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.Body;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 
 @Controller("/")
@@ -29,6 +31,29 @@ public class HotelWriteEndpoint {
 		return HttpResponse.ok(cmd);
 
 	}
+
+    @Put("/update/{id}")
+    public HttpResponse update(Long id,@Body @Valid HotelUpdateCommand command) {
+        System.out.println(" In controller updateHotel");
+         writeService.update(id, command);
+
+        return HttpResponse
+                .noContent()
+                .header(HttpHeaders.LOCATION, location(command.getId()).getPath());
+    }
+    @Delete("/{id}")
+    public HttpResponse delete(Long id, @Body @Valid HotelDeleteCommand cmd) {
+        writeService.deleteById(cmd);
+        return HttpResponse.ok();
+    }
+
+    protected URI location(Long id) {
+        return URI.create("/" + id);
+    }
+
+    protected URI location(Hotel hotel) {
+        return location(hotel.getId());
+    }
     /*
 	@Post()
 	public HttpResponse saveCodeName(String code,String name) {

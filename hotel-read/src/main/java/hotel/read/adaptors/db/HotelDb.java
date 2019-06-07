@@ -1,6 +1,8 @@
 package hotel.read.adaptors.db;
 
+import hotel.read.adaptors.models.HotelDeleteCommand;
 import hotel.read.adaptors.models.HotelModel;
+import hotel.read.adaptors.models.HotelUpdateCommand;
 import hotel.read.domain.Hotel;
 import hotel.read.domain.interfaces.Hotels;
 import hotel.read.implementation.ApplicationConfiguration;
@@ -13,6 +15,7 @@ import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +46,22 @@ public class HotelDb implements Hotels {
         return Optional.ofNullable(entityManager.find(Hotel.class, id));
     }
 
+    @Override
+    @Transactional
+    public void delete(HotelDeleteCommand cmd) {
+        findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
+    }
+    @Override
+    @Transactional
+    public void update(HotelUpdateCommand cmd) {
+        entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
+                .setParameter("name", cmd.getName())
+                .setParameter("id", cmd.getId())
+                .setParameter("code", cmd.getCode())
+                .setParameter("phone", cmd.getPhone())
+                .setParameter("email", cmd.getEmail())
+                .executeUpdate();
+    }
 
     @Transactional
     public void add(List<Hotel> hotels) {

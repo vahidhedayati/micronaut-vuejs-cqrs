@@ -1,5 +1,7 @@
 package hotel.write.model;
 
+import hotel.write.domain.Hotel;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -28,6 +30,15 @@ public class HotelUpdateCommand {
         this.id = id;
         this.name = name;
         this.code=code;
+    }
+
+    public HotelUpdateCommand(Hotel h) {
+        this.id = id;
+        this.name = h.getName();
+        this.code = h.getCode();
+        this.name = h.getName();
+        this.phone = h.getPhone();
+        this.email = h.getEmail();
     }
 
     public Long getId() {

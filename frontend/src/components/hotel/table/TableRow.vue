@@ -75,6 +75,7 @@ export default {
           //newHotel:{name:'',code:'',updateUser:{id:''}, phone:'',email:''},
           showHotel:null,
           updatedHotel:{},
+          deleteHotel:{id:''},
           serverURL: process.env.SERVER_URL,
           showForm: false,
           config: {
@@ -159,8 +160,8 @@ export default {
            if (event.value==='delete') {
              if (confirm('Delete record?')) {
                console.log('delete '+id)
-
-               return HotelService.deleteNoCatch('', id)
+               this.deleteHotel.id=id;
+               return HotelService.deleteAlt('/delete/'+id, this.deleteHotel)
                  .then((res) => {
                  if (res) {
                    console.log('RES: '+JSON.stringify(res));

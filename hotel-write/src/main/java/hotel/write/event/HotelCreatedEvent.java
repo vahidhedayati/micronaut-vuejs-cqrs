@@ -9,6 +9,7 @@ public class HotelCreatedEvent extends AbstractEvent<Hotel> implements  Serializ
 
 	private static final long serialVersionUID = -7452000227812130114L;
 
+
 	private Hotel hotel;
 
 	public HotelCreatedEvent() {
@@ -34,6 +35,15 @@ public class HotelCreatedEvent extends AbstractEvent<Hotel> implements  Serializ
 		System.out.println("getEventCode: " +  getDtoFromEvent().getCode());
 		return getDtoFromEvent().getCode();
 	}
+
+	public Hotel getHotel() {
+		return hotel;
+	}
+
+	public void setHotel(Hotel hotel) {
+		this.hotel = hotel;
+	}
+
 	@Override
 	public Hotel getDtoFromEvent() {
 		return this.hotel;

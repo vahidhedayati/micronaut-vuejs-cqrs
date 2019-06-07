@@ -5,6 +5,7 @@ import gateway.adaptors.clients.HotelWriteClient;
 import gateway.adaptors.clients.UserClient;
 import gateway.adaptors.models.Hotel;
 import gateway.adaptors.models.HotelModel;
+import gateway.adaptors.models.implementation.HotelDeleteCommand;
 import gateway.adaptors.models.implementation.HotelSaveCommand;
 import gateway.adaptors.models.implementation.HotelUpdateCommand;
 import gateway.adaptors.models.implementation.SortingAndOrderArguments;
@@ -70,19 +71,17 @@ public class GatewayController {
     }
 
 
-    /*
----------- re-enable
-    @Delete("/{id}")
+    @Delete("/delete/{id}")
     public HttpResponse delete(Long id) {
-        return hotelWriteClient.delete(id);
+        HotelDeleteCommand cmd=new HotelDeleteCommand(id);
+        return hotelWriteClient.delete(id,cmd);
     }
+
 
     @Put(uri = "/update/{id}", consumes = MediaType.APPLICATION_JSON)
     public HttpResponse update(Long id, @Body HotelUpdateCommand args) {
         return hotelWriteClient.update(id,args);
     }
-
-    */
 
 
 

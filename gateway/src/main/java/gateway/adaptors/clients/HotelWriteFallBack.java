@@ -1,6 +1,7 @@
 package gateway.adaptors.clients;
 
 import gateway.adaptors.models.Hotel;
+import gateway.adaptors.models.implementation.HotelDeleteCommand;
 import gateway.adaptors.models.implementation.HotelSaveCommand;
 import gateway.adaptors.models.implementation.HotelUpdateCommand;
 import io.micronaut.http.HttpResponse;
@@ -11,6 +12,8 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.retry.annotation.Fallback;
+
+import javax.validation.Valid;
 
 @Client(id = "hotel-write", path = "/")
 @Fallback
@@ -28,9 +31,8 @@ public class HotelWriteFallBack implements HotelWriteClient {
         return HttpResponse.serverError();
     }
 
-
     @Delete("/{id}")
-    public HttpResponse delete(Long id) {
+    public HttpResponse delete(Long id, @Body @Valid HotelDeleteCommand cmd) {
         return HttpResponse.serverError();
     }
 }

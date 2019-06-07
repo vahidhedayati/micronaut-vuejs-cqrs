@@ -40,6 +40,8 @@ public class UsersImpl implements Users {
         return Optional.ofNullable(entityManager.find(User.class, id));
     }
 
+
+
     @Override
     @Transactional
     public void deleteById(@NotNull Long id) {

@@ -1,9 +1,7 @@
 package hotel.write.commands;
 
 import hotel.write.domain.Hotel;
-import hotel.write.event.AbstractEvent;
-import hotel.write.event.HotelCreatedCommandEvent;
-import hotel.write.event.HotelCreatedEvent;
+import hotel.write.event.*;
 import hotel.write.event.client.EventPublisher;
 import hotel.write.model.*;
 import hotel.write.services.write.Dao;
@@ -47,11 +45,34 @@ public class CreateHotelHandler extends AbstractCommandHandler<Hotel>{
 		return new HotelCreatedCommandEvent(new HotelCreatedCommand(hotel));
 	}
 
+    @Override
+    AbstractEvent<HotelDeleteCommand> deleteEvent(Hotel hotel) {
+        System.out.println("build deleteEvent hotel:" + hotel.getId() + "," + hotel.getName());
+        return new HotelDeletedCommandEvent(new HotelDeleteCommand(hotel.getId()));
+    }
+
+    @Override
+    AbstractEvent<HotelUpdateCommand> updateEvent(Hotel hotel) {
+        System.out.println("build event hotel:" + hotel.getId() + "," + hotel.getName());
+        return new HotelUpdateCommandEvent(new HotelUpdateCommand(hotel));
+    }
 	@Override
 	void save(Hotel hotel) {
         System.out.println("--- from abstract class save hotel:" + hotel.getId() + "," + hotel.getName());
 		dao.save( hotel);
 	}
+
+	@Override
+	void update(Hotel hotel) {
+		System.out.println("--- from abstract class save hotel:" + hotel.getId() + "," + hotel.getName());
+		dao.save( hotel);
+	}
+
+	@Override
+	void delete(Hotel dto) {
+
+	}
+
 
 	/*
 	AbstractEvent<Hotel> saveCodeName(String code,String name) {

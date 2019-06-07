@@ -17,7 +17,7 @@ import javax.inject.Singleton;
 public class HotelEventsListener implements ApplicationEventListener<AbstractEvent<HotelCreatedCommand>> {
 
 	protected static final Logger LOG = LoggerFactory.getLogger(HotelCreatedEvent.class);
-	
+
 	@Inject
 	//private QueryHotelViewDao dao;
 	private Hotels dao;

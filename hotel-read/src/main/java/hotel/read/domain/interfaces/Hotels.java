@@ -1,6 +1,8 @@
 package hotel.read.domain.interfaces;
 
+import hotel.read.adaptors.models.HotelDeleteCommand;
 import hotel.read.adaptors.models.HotelModel;
+import hotel.read.adaptors.models.HotelUpdateCommand;
 import hotel.read.domain.Hotel;
 import hotel.read.implementation.SortingAndOrderArguments;
 
@@ -18,6 +20,8 @@ public interface Hotels {
 
 	Optional<Hotel> findByCode(String code);
 	void save(Hotel hotel);
+	void delete(HotelDeleteCommand hotel);
+	void update(HotelUpdateCommand hotel);
 	//Single<List<Hotel>> listAll(Map input);
 
 	//Maybe<Hotel> reolveCode(String code);

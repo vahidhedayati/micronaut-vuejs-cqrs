@@ -17,4 +17,15 @@ public class AppContextPublisher implements EventPublisher<Hotel> {
 		System.out.println(" publisher publishing: " +event);
 		publisher.publishEvent(event);
 	}
+
+	public void publishEdit(AbstractEvent<Hotel> event) {
+		System.out.println(" publisher publishing: " +event);
+		publisher.publishEvent(event);
+	}
+
+	public void publishDelete(AbstractEvent<Hotel> event) {
+		System.out.println(" publisher publishing: " +event);
+		publisher.publishEvent(event);
+	}
+
 }
