@@ -9,15 +9,23 @@ import java.io.Serializable;
 public class HotelCreatedEvent extends AbstractEvent<HotelCreatedCommand> implements  Serializable{
 
 	private static final long serialVersionUID = -7452000227812130114L;
-	
-	private HotelCreatedCommand hotel;
+
+	public HotelCreatedCommand getHotelCreatedCommand() {
+		return hotelCreatedCommand;
+	}
+
+	public void setHotelCreatedCommand(HotelCreatedCommand hotelCreatedCommand) {
+		this.hotelCreatedCommand = hotelCreatedCommand;
+	}
+
+	private HotelCreatedCommand hotelCreatedCommand;
 	
 	public HotelCreatedEvent() {
 
 	}
 
 	public HotelCreatedEvent(HotelCreatedCommand hotel) {
-		this.hotel = hotel;
+		this.hotelCreatedCommand = hotel;
 	}
 
 	/**
@@ -26,7 +34,7 @@ public class HotelCreatedEvent extends AbstractEvent<HotelCreatedCommand> implem
 	 */
 	@Override
 	public String getEventId() {
-		System.out.println("READ ---- getEventId: " +  getDtoFromEvent().getId());
+		System.out.println("READ ---- getEventId: " +  getDtoFromEvent().getCode());
 		return getDtoFromEvent().getCode();
 		//return getDtoFromEvent().getCode().toString();
 	}
@@ -37,7 +45,7 @@ public class HotelCreatedEvent extends AbstractEvent<HotelCreatedCommand> implem
 	}
 	@Override
 	public HotelCreatedCommand getDtoFromEvent() {
-		return this.hotel;
+		return this.hotelCreatedCommand;
 	}
 
 }

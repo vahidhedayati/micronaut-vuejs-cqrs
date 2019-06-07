@@ -11,8 +11,7 @@ import java.util.List;
 
 
 public class HotelCreatedCommand implements Serializable  {
-
-    private Long id;
+    private static final long serialVersionUID = 3413033273791553964L;
 
 
     private String code;
@@ -85,9 +84,7 @@ public class HotelCreatedCommand implements Serializable  {
     	return this.code;
     }
 
-    public Long getId() {
-        return this.id;
-    }
+
 
     public String getName() {
         return this.name;
@@ -127,14 +124,5 @@ public class HotelCreatedCommand implements Serializable  {
 
 
 
-    @Override
-    public String toString() {
-        return "hotel{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", rooms='" + getHotelRooms() + '\'' +
-                ", name='" + name + '\'' +
-                '}';
-    }
     
 }

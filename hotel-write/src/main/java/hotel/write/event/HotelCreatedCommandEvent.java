@@ -9,14 +9,22 @@ public class HotelCreatedCommandEvent extends AbstractEvent<HotelCreatedCommand>
 
 	private static final long serialVersionUID = -7452000227812130114L;
 
-	private HotelCreatedCommand hotel;
+	private HotelCreatedCommand hotelCreatedCommand;
 
 	public HotelCreatedCommandEvent() {
 
 	}
 
+	public HotelCreatedCommand getHotelCreatedCommand() {
+		return hotelCreatedCommand;
+	}
+
+	public void setHotelCreatedCommand(HotelCreatedCommand hotelCreatedCommand) {
+		this.hotelCreatedCommand = hotelCreatedCommand;
+	}
+
 	public HotelCreatedCommandEvent(HotelCreatedCommand hotel) {
-		this.hotel = hotel;
+		this.hotelCreatedCommand = hotel;
 	}
 
 	/**
@@ -25,7 +33,7 @@ public class HotelCreatedCommandEvent extends AbstractEvent<HotelCreatedCommand>
 	 */
 	@Override
 	public String getEventId() {
-		System.out.println("getEventId: " +  getDtoFromEvent().getId());
+		System.out.println("getEventId: " +  getDtoFromEvent());
 		return getDtoFromEvent().getCode();
 		//return getDtoFromEvent().getCode().toString();
 	}
@@ -36,7 +44,7 @@ public class HotelCreatedCommandEvent extends AbstractEvent<HotelCreatedCommand>
 	}
 	@Override
 	public HotelCreatedCommand getDtoFromEvent() {
-		return this.hotel;
+		return this.hotelCreatedCommand;
 	}
 
 }
