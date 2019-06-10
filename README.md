@@ -1,5 +1,21 @@
-Micronaut backend vuejs frontend application - [CQRS](http://codebetter.com/gregyoung/2010/02/16/cqrs-task-based-uis-event-sourcing-agh/)
+Micronaut backend vuejs frontend application - CQRS
 ---
+
+Firstly a big thank you to [Mauricio Farache for his ground work on micronaut kafka cqrs](https://github.com/mfarache/micronaut-cqrs-kafka).
+
+This is an additional enhanced revision of [micronaut-vuejs-crud](https://github.com/vahidhedayati/micronaut-vuejs-crud). 
+At the moment the hotel application has been split into hotel-read and hotel-write. 
+
+Hotel-write deals with any queries related to writing to hotel object.
+Hotel-read deals with any lookup queries related to hotels.
+
+With this CQRS model in theory the read/write can be scaled as required 
+
+A basic theory can be seen here 
+
+#### [Youtube part one - running two instances of hotel-read app test](https://www.youtube.com/watch?v=W9kOuBWG4KA)
+
+ 
 
 
 Running app
