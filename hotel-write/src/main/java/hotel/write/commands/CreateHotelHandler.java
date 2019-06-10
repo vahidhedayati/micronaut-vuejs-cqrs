@@ -19,7 +19,7 @@ import javax.inject.Singleton;
 public class CreateHotelHandler extends AbstractCommandHandler<Hotel>{
 	
 	protected static final Logger LOG = LoggerFactory.getLogger(CreateHotelHandler.class);
-	
+
 	@Inject
 	public CreateHotelHandler(Dao<Hotel> dao, EventPublisher<Hotel> publisher) {
 		super(dao, publisher);
@@ -35,13 +35,30 @@ public class CreateHotelHandler extends AbstractCommandHandler<Hotel>{
 	}
 
 	@Override
+	Hotel getUpd(Command<Hotel> command) {
+		Hotel hotel = ((UpdateHotelCommand) command).getActualHotel();
+		LOG.debug("hotel:" + hotel.getId() + "," + hotel.getName());
+		System.out.println("getUpd getUpd getUpd hotel:" + hotel.getId() + "," + hotel.getName());
+		return hotel;
+	}
+
+	@Override
+	Hotel getDel(Command<Hotel> command) {
+		Hotel hotel = ((DeleteHotelCommand) command).getActualHotel();
+		LOG.debug("hotel:" + hotel.getId() + "," + hotel.getName());
+		System.out.println("getUpd getUpd getUpd hotel:" + hotel.getId() + "," + hotel.getName());
+		return hotel;
+	}
+
+
+	@Override
 	AbstractEvent<Hotel> buildEvent(Hotel hotel) {
 		return new HotelCreatedEvent(hotel);
 	}
 
 	@Override
     AbstractEvent<HotelCreatedCommand> buildEventFlexible(Hotel hotel) {
-        System.out.println("build event hotel:" + hotel.getId() + "," + hotel.getName());
+        System.out.println("buildEventFlexible build event hotel:" + hotel.getId() + "," + hotel.getName());
 		return new HotelCreatedCommandEvent(new HotelCreatedCommand(hotel));
 	}
 
@@ -53,9 +70,14 @@ public class CreateHotelHandler extends AbstractCommandHandler<Hotel>{
 
     @Override
     AbstractEvent<HotelUpdateCommand> updateEvent(Hotel hotel) {
-        System.out.println("build event hotel:" + hotel.getId() + "," + hotel.getName());
+        System.out.println("build updateEvent1 event hotel:" + hotel.getId() + "," + hotel.getName());
         return new HotelUpdateCommandEvent(new HotelUpdateCommand(hotel));
     }
+	AbstractEvent<HotelUpdateCommand> updateEvent(HotelUpdateCommand hotel) {
+		System.out.println("build updateEvent2 event hotel:" + hotel.getId() + "," + hotel.getName());
+		return new HotelUpdateCommandEvent(hotel);
+	}
+
 	@Override
 	void save(Hotel hotel) {
         System.out.println("--- from abstract class save hotel:" + hotel.getId() + "," + hotel.getName());
@@ -64,14 +86,35 @@ public class CreateHotelHandler extends AbstractCommandHandler<Hotel>{
 
 	@Override
 	void update(Hotel hotel) {
-		System.out.println("--- from abstract class save hotel:" + hotel.getId() + "," + hotel.getName());
+		System.out.println("--- from abstract class update hotel:" + hotel.getId() + "," + hotel.getName());
 		dao.save( hotel);
 	}
+	void update(HotelUpdateCommand hotel) {
+		System.out.println("--- from abstract class update HotelUpdateCommand:" + hotel.getId() + "," + hotel.getName());
+		//dao.save( hotel);
+	}
+
+	@Override
+	void updateCmd( Command<Hotel> command) {
+		//System.out.println("--- from abstract class update HotelUpdateCommand:" + hotel.getId() + "," + hotel.getName());
+		Hotel hotel = ((UpdateHotelCommand) command).getActualHotel();
+
+		System.out.println("--- updateCmd  updateCmd updateCmd :" + hotel.getName() + "," + hotel.getCode());
+		dao.update(hotel);
+	}
+
+	void delCmd(Command<Hotel> command) {
+		Hotel hotel = ((DeleteHotelCommand) command).getActualHotel();
+		System.out.println("--- updateCmd  updateCmd updateCmd :" + hotel.getName() + "," + hotel.getCode());
+		dao.delete(hotel);
+	}
+
 
 	@Override
 	void delete(Hotel dto) {
 
 	}
+
 
 
 	/*

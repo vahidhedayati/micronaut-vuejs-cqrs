@@ -1,5 +1,6 @@
 package hotel.read.event.listeners;
 
+import hotel.read.adaptors.models.HotelDeleteCommand;
 import hotel.read.domain.interfaces.Hotels;
 import hotel.read.event.HotelCreatedEvent;
 import hotel.read.event.HotelDeletedCommandEvent;
@@ -27,22 +28,22 @@ public class KafkaCustomEventListener {
 
     @Topic("hotelCreated")
     public void consume( @KafkaKey String hotelCode, @Body HotelCreatedEvent hotelCreatedEvent) {
-        LOG.debug("KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER");
-        System.out.println("READ --------------- KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER ---"+hotelCreatedEvent.getDtoFromEvent());
+        LOG.debug("KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER hotelCreated "+hotelCode);
+        System.out.println("READ --------------- KAKFA hotelCreated EVENT RECEIVED AT CUSTOM APPLICATION LISTENER  hotelCreated ---"+hotelCreatedEvent.getDtoFromEvent()+" "+hotelCode);
         dao.save(hotelCreatedEvent.getDtoFromEvent().createHotel());
     }
 
     @Topic("hotelEdit")
-    public void consumeEdit( @KafkaKey String hotelCode, @Body HotelDeletedCommandEvent hotelCreatedEvent) {
-        LOG.debug("KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER");
-        System.out.println("READ --------------- KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER ---"+hotelCreatedEvent.getDtoFromEvent());
-        dao.delete(hotelCreatedEvent.getDtoFromEvent());
+    public void consumeEdit( @KafkaKey String hotelCode, @Body HotelUpdateCommandEvent hotelCreatedEvent) {
+        LOG.debug("KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER consumeEdit "+hotelCode);
+        System.out.println("READ --------------- KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER consumeEdit ---"+hotelCreatedEvent.getDtoFromEvent()+" "+hotelCode);
+        dao.update(hotelCreatedEvent.getDtoFromEvent());
     }
 
     @Topic("hotelDelete")
-    public void consumeDelete( @KafkaKey String hotelCode, @Body HotelUpdateCommandEvent hotelCreatedEvent) {
-        LOG.debug("KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER");
-        System.out.println("READ --------------- KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER ---"+hotelCreatedEvent.getDtoFromEvent());
-        dao.update(hotelCreatedEvent.getDtoFromEvent());
+    public void consumeDelete( @KafkaKey String hotelCode, @Body HotelDeletedCommandEvent hotelCreatedEvent) {
+        LOG.debug("KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER hotelDelete "+hotelCode);
+        System.out.println("READ --------------- KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER hotelDelete ---"+hotelCreatedEvent.getDtoFromEvent()+" "+hotelCode);
+        dao.delete(hotelCreatedEvent.getDtoFromEvent());
     }
 }

@@ -32,8 +32,16 @@ public class HotelUpdateCommand {
         this.code=code;
     }
 
-    public HotelUpdateCommand(Hotel h) {
+    public HotelUpdateCommand(@NotNull Long id, @NotBlank String name, @NotBlank String code, @NotBlank String phone, @NotBlank String email) {
         this.id = id;
+        this.name = name;
+        this.code = code;
+        this.phone = phone;
+        this.email = email;
+    }
+
+    public HotelUpdateCommand(Hotel h) {
+        this.id = h.getId();
         this.name = h.getName();
         this.code = h.getCode();
         this.name = h.getName();
@@ -81,5 +89,9 @@ public class HotelUpdateCommand {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Hotel createHotel() {
+        return new Hotel(this.id,this.code,this.name, this.phone, this.email);
     }
 }

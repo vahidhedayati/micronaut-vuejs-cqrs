@@ -1,5 +1,7 @@
 package hotel.write.model;
 
+import hotel.write.domain.Hotel;
+
 import javax.validation.constraints.NotNull;
 
 public class HotelDeleteCommand {
@@ -26,4 +28,12 @@ public class HotelDeleteCommand {
         this.id = Long.valueOf(id);
     }
 
+    public static class HotelUpdateResult implements Result<Hotel> {
+
+
+    }
+
+    public Hotel getHotel() {
+        return new Hotel(this.id);
+    }
 }

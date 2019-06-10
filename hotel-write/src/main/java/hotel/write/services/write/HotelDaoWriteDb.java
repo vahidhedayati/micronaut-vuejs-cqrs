@@ -67,6 +67,7 @@ public class HotelDaoWriteDb  implements Dao<Hotel>  {
     @Override
     @Transactional
     public void update(Hotel cmd) {
+        System.out.println("bus.handleCommand new update ----------------------------------------- hotel-write - process update  DB");
         entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
                 .setParameter("name", cmd.getName())
                 .setParameter("id", cmd.getId())

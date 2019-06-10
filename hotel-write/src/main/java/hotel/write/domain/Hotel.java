@@ -48,6 +48,9 @@ public class Hotel {
     public Hotel() {
 
     }
+    public Hotel(Long id) {
+        this.id=id;
+    }
 
     public Hotel(String code, String name, String phone, String email, Long updateUserId, List<HotelRooms> hotelRooms, Date lastUpdated) {
         this.code = code;
@@ -74,7 +77,16 @@ public class Hotel {
         this.updateUserId = 1L;
         this.lastUpdated=date;
     }
-
+    public Hotel(Long id, String code, String name, String phone, String email) {
+        this.id=id;
+        this.code = code;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.hotelRooms = new ArrayList<>();
+        this.updateUserId = 1L;
+        this.lastUpdated=new Date();
+    }
     public Hotel(String code, String name, String phone, String email) {
         this.code = code;
         this.name = name;

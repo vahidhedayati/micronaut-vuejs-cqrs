@@ -1,9 +1,12 @@
 package hotel.write.cqrs.bus;
 
 import hotel.write.commands.CreateHotelCommand;
+import hotel.write.commands.DeleteHotelCommand;
+import hotel.write.commands.UpdateHotelCommand;
 import hotel.write.domain.Hotel;
 import hotel.write.model.Command;
 import hotel.write.model.CommandHandler;
+import hotel.write.model.HotelUpdateCommand;
 import hotel.write.model.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +22,12 @@ public class BusImpl implements Bus {
 	private Map<String, CommandHandler<?, ?>> handlers = new HashMap<>();
 	
 	@Inject 
-	public BusImpl(CommandHandler<Command<Hotel>, Hotel> handler) {
+	public BusImpl(CommandHandler handler) {
 		handlers.put(CreateHotelCommand.class.getSimpleName(), handler );
+		//Adds the updateHotelCommand handler
+		handlers.put(UpdateHotelCommand.class.getSimpleName(), handler );
+		//Adds the DeleteHotelCommand handler
+		handlers.put(DeleteHotelCommand.class.getSimpleName(), handler );
 	}
 
 	@SuppressWarnings("unchecked")
@@ -42,8 +49,10 @@ public class BusImpl implements Bus {
 		System.out.println("handle updateCommand: " + command.getCommandName());
 		CommandHandler<Command<R>, R> handler = (CommandHandler<Command<R>, R>) handlers.get(command.getCommandName());
 		if (handler!=null) {
+			System.out.println("handle updateCommand OK : handler.updateCommand(command) " + command.getCommandName());
 			return (Result<R>) handler.updateCommand(command);
 		} else {
+			System.out.println("handle updateCommand failed --"+handlers);
 			return null;
 		}
 

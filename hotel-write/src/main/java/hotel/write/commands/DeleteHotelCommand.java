@@ -7,7 +7,7 @@ import hotel.write.model.HotelDeleteCommand;
 /**
  * implements Command<Hotel> is bound to CreateHotelHandler .. AbstractCommandHandler
  */
-public class DeleteHotelCommand implements Command<HotelDeleteCommand> {
+public class DeleteHotelCommand implements Command<Hotel> {
 
 	private HotelDeleteCommand hotel;
 
@@ -17,6 +17,10 @@ public class DeleteHotelCommand implements Command<HotelDeleteCommand> {
 
 	public HotelDeleteCommand getHotel() {
 		return hotel;
+	}
+
+	public Hotel getActualHotel() {
+		return hotel.getHotel();
 	}
 
 

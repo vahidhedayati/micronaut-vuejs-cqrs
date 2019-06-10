@@ -51,8 +51,8 @@ public class GatewayController {
             hotelModel.flatMap(hotelModel1 -> {
                 hotelModel1.getInstanceList().flatMap(hotel-> {
                     hotel.forEach(hotel1 -> {
-                        //hotel1.setUpdateUser(userClient.findById(hotel1.getUpdateUserId()).get());
-                        hotel1.setUpdateUser(userClient.findByUsername("admin").get());
+                        hotel1.setUpdateUser(userClient.findById(hotel1.getUpdateUserId()).get());
+                        //hotel1.setUpdateUser(userClient.findByUsername("admin").get());
                     });
 
                     return Optional.of(hotel);

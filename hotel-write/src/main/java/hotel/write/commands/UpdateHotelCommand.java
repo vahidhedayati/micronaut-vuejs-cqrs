@@ -7,7 +7,7 @@ import hotel.write.model.HotelUpdateCommand;
 /**
  * implements Command<Hotel> is bound to CreateHotelHandler .. AbstractCommandHandler
  */
-public class UpdateHotelCommand implements Command<HotelUpdateCommand> {
+public class UpdateHotelCommand implements Command<Hotel> {
 
 	private HotelUpdateCommand hotel;
 
@@ -18,6 +18,11 @@ public class UpdateHotelCommand implements Command<HotelUpdateCommand> {
 	public HotelUpdateCommand getHotel() {
 		return hotel;
 	}
+
+	public Hotel getActualHotel() {
+		return hotel.createHotel();
+	}
+
 
 
 }

@@ -7,11 +7,9 @@ import hotel.write.cqrs.bus.Bus;
 import hotel.write.domain.Hotel;
 import hotel.write.model.HotelDeleteCommand;
 import hotel.write.model.HotelUpdateCommand;
-import io.micronaut.spring.tx.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Singleton
@@ -33,7 +31,7 @@ public class HotelService {
 
 
     public void deleteById(HotelDeleteCommand cmd) {
-        bus.handleCommand(new DeleteHotelCommand(cmd));
+        bus.deleteCommand(new DeleteHotelCommand(cmd));
 
         //findById(id).ifPresent(hotel -> entityManager.remove(hotel));
     }
@@ -41,7 +39,9 @@ public class HotelService {
     //@Override
     //@Transactional
     public void update(@NotNull Long id, HotelUpdateCommand command) {
-        bus.handleCommand(new UpdateHotelCommand(command));
+
+       // bus.registerHandlerCommand(new UpdateHotelCommand(command),uh);
+        bus.updateCommand(new UpdateHotelCommand(command));
     }
 
 }

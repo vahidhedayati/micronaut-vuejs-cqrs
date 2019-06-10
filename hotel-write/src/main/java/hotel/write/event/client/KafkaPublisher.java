@@ -18,7 +18,6 @@ public class KafkaPublisher implements EventPublisher<Hotel> {
 		System.out.println(" KafkaPublisher publishing: " +event);
 		eventClient.sendEvent(event.getEventCode(), event);
 	}
-
 	@Override
 	public void publishEdit(AbstractEvent<Hotel> event) {
 		System.out.println(" KafkaPublisher publishing: " +event);
