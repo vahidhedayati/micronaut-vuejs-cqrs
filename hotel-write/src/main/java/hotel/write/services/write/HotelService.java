@@ -9,10 +9,8 @@ import hotel.write.model.HotelDeleteCommand;
 import hotel.write.model.HotelUpdateCommand;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.validation.constraints.NotNull;
 
-@Singleton
 public class HotelService {
 
 
@@ -40,7 +38,7 @@ public class HotelService {
     //@Transactional
     public void update(@NotNull Long id, HotelUpdateCommand command) {
 
-       // bus.registerHandlerCommand(new UpdateHotelCommand(command),uh);
+
         bus.updateCommand(new UpdateHotelCommand(command));
     }
 

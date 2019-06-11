@@ -29,6 +29,7 @@ public abstract class AbstractCommandHandler<T> implements CommandHandler<Comman
 	}
 
 
+
 	@Override
 	public Result<T> handleCommand(Command<T> command) {
 		T dto = getDto(command);

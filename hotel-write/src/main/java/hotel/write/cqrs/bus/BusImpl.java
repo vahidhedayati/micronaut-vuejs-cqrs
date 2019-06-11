@@ -23,6 +23,7 @@ public class BusImpl implements Bus {
 	
 	@Inject 
 	public BusImpl(CommandHandler handler) {
+		System.out.println("-------------------------------------------------------------- BusImpl handler: " + handler.toString()+" "+handler.getClass()+" "+handler);
 		handlers.put(CreateHotelCommand.class.getSimpleName(), handler );
 		//Adds the updateHotelCommand handler
 		handlers.put(UpdateHotelCommand.class.getSimpleName(), handler );
@@ -45,6 +46,7 @@ public class BusImpl implements Bus {
 
 	@SuppressWarnings("unchecked")
 	public <R> Result<R> updateCommand(Command<R> command) {
+		//this.registerHandlerCommand(command, handlers.get(command.getCommandName()));
 		LOG.debug("handle updateCommand: " + command.getCommandName());
 		System.out.println("handle updateCommand: " + command.getCommandName());
 		CommandHandler<Command<R>, R> handler = (CommandHandler<Command<R>, R>) handlers.get(command.getCommandName());
@@ -70,8 +72,10 @@ public class BusImpl implements Bus {
 		}
 
 	}
+
 	
 	public <R> void registerHandlerCommand(Command<R> command, CommandHandler<Command<R>, R> handler)  {
+		System.out.println("------------------------- Registering handler "+handler+" "+command.getCommandName());
 		handlers.putIfAbsent(command.getCommandName(), handler);
 	}
 }
