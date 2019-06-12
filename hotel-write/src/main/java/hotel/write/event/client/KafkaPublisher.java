@@ -7,7 +7,7 @@ import io.micronaut.context.annotation.Primary;
 
 import javax.inject.Inject;
 
-@Primary
+//@Primary
 public class KafkaPublisher implements EventPublisher<Hotel> {
 	
 	@Inject

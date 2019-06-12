@@ -37,7 +37,7 @@ public abstract class AbstractCommandHandler<T> implements CommandHandler<Comman
 		save(dto);
 		System.out.println("handleCommand AbstractCommandHandler - buildEvent -------- WRITE ---------------------------------------- "+dto);
 		//publish( buildEventFlexible(dto));
-        publish( buildEventFlexible(dto));
+        publish( buildEvent(dto));
 		return buildResult(dto);
 	}
 
@@ -47,7 +47,7 @@ public abstract class AbstractCommandHandler<T> implements CommandHandler<Comman
 		System.out.println("handleCommand AbstractCommandHandler - save is called  get Command name "+command.getCommandName());
 		updateCmd(command);
 		System.out.println("handleCommand AbstractCommandHandler - buildEvent -------- WRITE ---------------------------------------- ");
-        publishEdit( updateEvent(dto));
+        publishEdit( buildEvent(dto));
 		//publish(buildEvent(dto));
 
 		System.out.println("handleCommand AbstractCommandHandler - Dto dto "+dto);
@@ -59,7 +59,7 @@ public abstract class AbstractCommandHandler<T> implements CommandHandler<Comman
 		System.out.println("handleCommand AbstractCommandHandler - save is called "+dto);
 		System.out.println("handleCommand AbstractCommandHandler - buildEvent -------- WRITE ---------------------------------------- "+dto);
 		//publish( buildEventFlexible(dto));
-        publishDelete(deleteEvent(dto));
+        publishDelete(buildEvent(dto));
 
 		delCmd(command);
 

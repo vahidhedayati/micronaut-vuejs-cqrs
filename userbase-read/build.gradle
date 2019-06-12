@@ -29,7 +29,14 @@ dependencies {
     implementation "io.micronaut:micronaut-security-jwt"
     runtimeOnly "com.h2database:h2"
     runtimeOnly "io.micronaut:micronaut-discovery-client"
-    implementation "io.micronaut.configuration:micronaut-kafka"
+
+    //implementation "io.micronaut.configuration:micronaut-kafka"
+
+    implementation "com.geteventstore:eventstore-client_2.10:2.0.3"
+    implementation "com.typesafe.akka:akka-actor_2.11:2.4.0"
+    implementation "org.reactivestreams:reactive-streams:1.0.0"
+
+
     testImplementation  "io.micronaut:micronaut-inject-java"
     testImplementation  "org.junit.jupiter:junit-jupiter-api"
     testImplementation  "io.micronaut.test:micronaut-test-junit5"

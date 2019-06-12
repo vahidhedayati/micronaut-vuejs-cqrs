@@ -88,11 +88,20 @@ subprojects { project ->
               apply plugin: "java"
               if ((project.path.contains(':queryservice'))||
                       project.name == 'commandapp' ||
+                      project.name == 'hotelread' ||
+                      project.name == 'hotelwrite' ||
                       project.path.contains(':backend')||
                       project.path.contains(':userbase')) {
-                  compile "io.micronaut.configuration:micronaut-kafka"
+                 // compile "io.micronaut.configuration:micronaut-kafka"
+
+                  compile "com.geteventstore:eventstore-client_2.10:2.0.3"
+                  compile "com.typesafe.akka:akka-actor_2.11:2.4.0"
+                  //compile "com.geteventstore:eventstore-client:6.0.0"
               }
               if (project.name != 'something' && !project.path.contains(':someFunction') && !project.path.contains(':frontend')) {
+                  //compile "com.geteventstore:eventstore-client"
+                  //compile "com.typesafe.akka:akka-actor_2.13"
+
 
                   annotationProcessor "io.micronaut:micronaut-inject-java"
                   annotationProcessor "io.micronaut:micronaut-validation"
@@ -109,7 +118,7 @@ subprojects { project ->
                   //For backend validation these 2 dependencies are required:
                   compile "io.micronaut:micronaut-validation"
                   compile "io.micronaut.configuration:micronaut-hibernate-validator"
-
+                  compile "org.reactivestreams:reactive-streams:1.0.0"
 
                   runtime "com.h2database:h2"
                   compile "io.micronaut:micronaut-security-jwt"

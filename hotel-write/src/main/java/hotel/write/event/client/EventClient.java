@@ -1,10 +1,6 @@
 package hotel.write.event.client;
 
 import hotel.write.event.AbstractEvent;
-import io.micronaut.configuration.kafka.annotation.KafkaClient;
-import io.micronaut.configuration.kafka.annotation.KafkaKey;
-import io.micronaut.configuration.kafka.annotation.Topic;
-import io.micronaut.messaging.annotation.Body;
 
 
 /**
@@ -13,15 +9,18 @@ import io.micronaut.messaging.annotation.Body;
  * @param <T>
  */
 
-@KafkaClient
+//@KafkaClient
 public interface EventClient<T> {
 
-    @Topic("hotelCreated1")
-    void sendEvent(@KafkaKey String hotelId, @Body AbstractEvent<T> hotelEvent);
+  //  @Topic("hotelCreated1")
+    //void sendEvent(@KafkaKey String hotelId, @Body AbstractEvent<T> hotelEvent);
+  void sendEvent( String hotelId, AbstractEvent<T> hotelEvent);
 
-    @Topic("hotelEdit1")
-    void sendEventEdit(@KafkaKey String hotelId, @Body AbstractEvent<T> hotelEvent);
-
-    @Topic("hotelDelete1")
-    void sendEventDelete(@KafkaKey String hotelId, @Body AbstractEvent<T> hotelEvent);
+    //@Topic("hotelEdit1")
+    //void sendEventEdit(@KafkaKey String hotelId, @Body AbstractEvent<T> hotelEvent);
+    void sendEventEdit(String hotelId, AbstractEvent<T> hotelEvent);
+    //@Topic("hotelDelete1")
+    //void sendEventDelete(@KafkaKey String hotelId, @Body AbstractEvent<T> hotelEvent);
+    void sendEventDelete(String hotelId, AbstractEvent<T> hotelEvent);
 }
+

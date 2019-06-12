@@ -60,24 +60,28 @@ we can host the read service on 25 servers and the write service on two. The pro
 
 
 References:
+
+> https://github.com/mfarache/micronaut-cqrs-kafka
+
+> https://stackoverflow.com/questions/17708489/using-kafka-as-a-cqrs-eventstore-good-idea
+> https://eventstore.org/blog/20140904/event-store-3.0.0-client-api-for-jvm-clients/
+
 > https://microservices.io/patterns/data/cqrs.html
 
 > htps://www.kennybastani.com/2017/01/building-event-driven-microservices.html
 
 > https://www.e4developer.com/2018/03/11/cqrs-a-simple-explanation/
 
-
 > https://developer.ibm.com/articles/cl-build-app-using-microservices-and-cqrs-trs/ -https://github.com/feliciatucci/cqrs-sample
-
 
 > https://github.com/jrajani/mini-bank  -- https://www.youtube.com/watch?v=d3Ks40u0tO8
 
 > https://medium.com/@qasimsoomro/building-microservices-using-node-js-with-ddd-cqrs-and-event-sourcing-part-1-of-2-52e0dc3d81df
-
-> https://github.com/mfarache/micronaut-cqrs-kafka
 
 > https://dzone.com/articles/cqrs-by-example-introduction --  https://github.com/asc-lab/java-cqrs-intro
 
 > https://www.youtube.com/watch?v=uTCKzPg0Uak -- https://github.com/sdaschner/scalable-coffee-shop
 
 > https://www.youtube.com/watch?v=JHGkaShoyNs
+
+> https://www.sasaprolic.com/2018/03/why-there-will-be-no-kafka-eventstore.html

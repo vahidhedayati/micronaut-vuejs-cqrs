@@ -1,32 +1,12 @@
 package hotel.read.event.listeners;
 
-import hotel.read.adaptors.models.HotelCreatedCommand;
-import hotel.read.domain.Hotel;
-import hotel.read.domain.interfaces.Hotels;
-import hotel.read.event.HotelCreatedEvent;
-import io.micronaut.configuration.kafka.ConsumerAware;
-import io.micronaut.configuration.kafka.annotation.KafkaKey;
-import io.micronaut.configuration.kafka.annotation.KafkaListener;
-import io.micronaut.configuration.kafka.annotation.Topic;
-import io.micronaut.messaging.annotation.Body;
-import org.apache.kafka.clients.consumer.*;
-import org.apache.kafka.common.TopicPartition;
-
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
-import javax.inject.Inject;
-import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @ThreadSafe
-@KafkaListener
-public class KafkaAddEventListener implements ConsumerRebalanceListener, ConsumerAware {
+//
+// @KafkaListener
+public class KafkaAddEventListener {
+        //implements ConsumerRebalanceListener, ConsumerAware {
 
     //private Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
     //private int listenerCount = 3;
@@ -41,6 +21,7 @@ public class KafkaAddEventListener implements ConsumerRebalanceListener, Consume
    //Collection<TopicPartition> allPartitions=new ArrayList();
 
 
+    /*
     @GuardedBy("kafkaConsumers")
     private final Set<Consumer> kafkaConsumers = new HashSet<>();
 
@@ -80,7 +61,7 @@ public class KafkaAddEventListener implements ConsumerRebalanceListener, Consume
 
     }
 
-
+*/
 /*
     @Topic("hotelEdit1")
     public void consumeEdit( @KafkaKey String hotelCode, @Body HotelUpdateCommandEvent hotelCreatedEvent) {
@@ -110,7 +91,7 @@ public class KafkaAddEventListener implements ConsumerRebalanceListener, Consume
     }
 
 */
-
+/*
     @Override
     public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
         System.out.println("onPartitionsRevoked------------------------------------------------------------------------------------------------");
@@ -130,12 +111,13 @@ public class KafkaAddEventListener implements ConsumerRebalanceListener, Consume
             //   saveOffsetInExternalStore(consumer.position(partition));
         }
     }
+    */
 
 
     /**
      * This triggers a new node to build h2 db up based on existing received kafka events
      * @param partitions
-     */
+     *//*
     @Override
     public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
 
@@ -206,5 +188,6 @@ public class KafkaAddEventListener implements ConsumerRebalanceListener, Consume
             consumer.seek(partition, offset);
         });
     }
+    */
 
 }
