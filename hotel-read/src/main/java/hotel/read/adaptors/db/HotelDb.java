@@ -7,7 +7,6 @@ import hotel.read.domain.Hotel;
 import hotel.read.domain.interfaces.Hotels;
 import hotel.read.implementation.ApplicationConfiguration;
 import hotel.read.implementation.SortingAndOrderArguments;
-import hotel.read.services.read.QueryHotelViewDao;
 import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
 import io.micronaut.spring.tx.annotation.Transactional;
 
@@ -15,7 +14,6 @@ import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
@@ -49,18 +47,21 @@ public class HotelDb implements Hotels {
     @Override
     @Transactional
     public void delete(HotelDeleteCommand cmd) {
+        System.out.println("Doing hotel delete "+cmd.getId());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
     }
     @Override
     @Transactional
     public void update(HotelUpdateCommand cmd) {
-        entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
+        System.out.println("Doing hotel update "+cmd.getName());
+        findById(cmd.getId()).ifPresent(hotel -> entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
                 .setParameter("name", cmd.getName())
                 .setParameter("id", cmd.getId())
                 .setParameter("code", cmd.getCode())
                 .setParameter("phone", cmd.getPhone())
                 .setParameter("email", cmd.getEmail())
-                .executeUpdate();
+                .executeUpdate()
+        );
     }
 
     @Transactional
@@ -73,12 +74,18 @@ public class HotelDb implements Hotels {
     @Transactional
     public void save(Hotel hotel) {
         if (hotel!=null) {
-            System.out.println("Doing hotel Add ahhha "+hotel.getCode());
-            entityManager.persist(hotel);
+            if (!findByCode(hotel.getCode()).isPresent()) {
+               // System.out.println("Error - hotel already added "+hotel.getName());
+            //} else {
+                System.out.println("Doing hotel Add "+hotel.getCode());
+                entityManager.persist(hotel);
+            }
+
             // System.out.println("bus.handleCommand new CreateHotelCommand");
-        } else {
-            System.out.println("Hotel not being added - HOTEL is null --- ERROR ----- ");
         }
+        //else {
+          //  System.out.println("Hotel not being added - HOTEL is null --- ERROR ----- ");
+        //}
 
     }
 
@@ -88,7 +95,7 @@ public class HotelDb implements Hotels {
     @Transactional(readOnly = true)
     public Optional<HotelModel> findAll(@NotNull SortingAndOrderArguments args) {
         //SELECT new map (h.code as code, h.name as name, h.id as id, h.hotelRooms as hotelRooms)
-        System.out.println("Doing search 123 ");
+        //System.out.println("Doing search 123 ");
         String countQueryString= "select count(h) FROM Hotel as  h ";
         String qlString = "FROM Hotel as  h ";
         if (args.getName().isPresent()) {
@@ -98,7 +105,7 @@ public class HotelDb implements Hotels {
         if (args.getOrder().isPresent() && args.getSort().isPresent() && VALID_PROPERTY_NAMES.contains(args.getSort().get())) {
             qlString += " ORDER BY h." + args.getSort().get() + " " + args.getOrder().get().toLowerCase();
         }
-        System.out.println("Query "+qlString);
+       // System.out.println("Query "+qlString);
         TypedQuery<Hotel> query;
         TypedQuery<Long> countQuery;
         //Long countQuery=0L;

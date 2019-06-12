@@ -16,12 +16,12 @@ import io.micronaut.messaging.annotation.Body;
 @KafkaClient
 public interface EventClient<T> {
 
-    @Topic("hotelCreated")
+    @Topic("hotelCreated1")
     void sendEvent(@KafkaKey String hotelId, @Body AbstractEvent<T> hotelEvent);
 
-    @Topic("hotelEdit")
+    @Topic("hotelEdit1")
     void sendEventEdit(@KafkaKey String hotelId, @Body AbstractEvent<T> hotelEvent);
 
-    @Topic("hotelDelete")
+    @Topic("hotelDelete1")
     void sendEventDelete(@KafkaKey String hotelId, @Body AbstractEvent<T> hotelEvent);
 }
