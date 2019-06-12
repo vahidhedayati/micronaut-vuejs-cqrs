@@ -2,29 +2,28 @@ package hotel.write.event.client.eventStore;
 
 import akka.actor.Status;
 import akka.actor.UntypedActor;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
 import eventstore.EsException;
+import eventstore.EventNumber;
 import eventstore.WriteEventsCompleted;
 
 
 public class WriteResult  extends UntypedActor {
-
-    @SuppressWarnings("deprecation")
+    final LoggingAdapter log = Logging.getLogger(getContext().system(), this);
     public void onReceive(Object message) throws Exception {
-        System.out.println("Receieved message"+message);
         if (message instanceof WriteEventsCompleted) {
             final WriteEventsCompleted completed = (WriteEventsCompleted) message;
-            //log.info("range: {}, position: {}", completed.numbersRange(), completed.position());
-        }
-        else if (message instanceof Status.Failure) {
+            //final EventNumber.Exact eventNumber = completed.firstEventNumber();
+            //log.info("eventNumber: {}", eventNumber);
+        } else if (message instanceof Status.Failure) {
             final Status.Failure failure = ((Status.Failure) message);
             final EsException exception = (EsException) failure.cause();
-            //log.error(exception, exception.toString());
-        }
-        else
-        {
+            //log.error("reason: {}, message: {}", exception.reason(), exception.message());
+        } else
             unhandled(message);
-        }
-        context().system().shutdown();
+
+        //context().system().shutdown();
     }
 
 }
