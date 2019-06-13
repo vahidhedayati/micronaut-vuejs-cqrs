@@ -1,10 +1,11 @@
-package gateway.command.controller;
+package command.handler.controller;
 
-import gateway.adaptors.models.implementation.HotelDeleteCommand;
-import gateway.adaptors.models.implementation.HotelSaveCommand;
-import gateway.adaptors.models.implementation.HotelUpdateCommand;
-import gateway.command.clients.HotelWriteClient;
-import gateway.command.clients.UserWriteClient;
+import command.handler.clients.HotelWriteClient;
+import command.handler.clients.UserWriteClient;
+import command.handler.commands.HotelDeleteCommand;
+import command.handler.commands.HotelSaveCommand;
+import command.handler.commands.HotelUpdateCommand;
+import command.handler.models.Hotel;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
@@ -79,7 +80,7 @@ public class GatewayController {
 
         System.out.println("Default save of hotel in gateway");
         Hotel hotel = args.getHotel();
-        hotelWriteClient.save(args.getHotel());
+        hotelWriteClient.save(hotel);
 
         //Hotel hotel = backendClient.save(args);
         //Hotel hotel = hotelWriteClient.save(args.getHotel());

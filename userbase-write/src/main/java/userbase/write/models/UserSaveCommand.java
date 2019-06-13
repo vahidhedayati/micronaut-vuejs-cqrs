@@ -1,4 +1,4 @@
-package userbase.read.models;
+package userbase.write.models;
 
 import javax.validation.constraints.NotBlank;
 

@@ -1,4 +1,4 @@
-package userbase.read.implementations;
+package userbase.write.implementations;
 
 import javax.validation.constraints.NotNull;
 

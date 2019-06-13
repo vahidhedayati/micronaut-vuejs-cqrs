@@ -1,4 +1,4 @@
-package gateway.adaptors.models.implementation;
+package gateway.command.commands;
 
 import javax.validation.constraints.NotBlank;
 

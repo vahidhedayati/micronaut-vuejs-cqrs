@@ -1,7 +1,8 @@
 package gateway.command.controller;
 
-import gateway.adaptors.models.implementation.HotelDeleteCommand;
-import gateway.adaptors.models.implementation.HotelUpdateCommand;
+
+import gateway.command.commands.HotelDeleteCommand;
+import gateway.command.commands.HotelUpdateCommand;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;

@@ -1,12 +1,13 @@
-package userbase.read.controllers;
+package userbase.write.controllers;
 
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.*;
 import io.micronaut.validation.Validated;
-import userbase.read.domain.User;
-import userbase.read.interfaces.Users;
-import userbase.read.models.UserSaveCommand;
-import userbase.read.models.UserUpdateCommand;
+import userbase.write.domain.User;
+import userbase.write.models.UserSaveCommand;
+import userbase.write.models.UserUpdateCommand;
+import userbase.write.implementations.Users;
 
 import javax.validation.Valid;
 import java.net.URI;

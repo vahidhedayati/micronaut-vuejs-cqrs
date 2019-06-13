@@ -1,6 +1,6 @@
 package command.handler.commands;
 
-import gateway.adaptors.models.Hotel;
+import command.handler.models.Hotel;
 import io.micronaut.validation.Validated;
 
 import javax.validation.constraints.NotBlank;

@@ -1,7 +1,8 @@
-package gateway.command.clients;
+package command.handler.clients;
 
-import gateway.adaptors.models.implementation.HotelDeleteCommand;
-import gateway.adaptors.models.implementation.HotelUpdateCommand;
+import command.handler.commands.HotelDeleteCommand;
+import command.handler.commands.HotelUpdateCommand;
+import command.handler.models.Hotel;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
@@ -18,7 +19,7 @@ import javax.validation.Valid;
 public class HotelWriteFallBack implements HotelWriteClient {
 
     @Post(uri = "/", consumes = MediaType.APPLICATION_JSON)
-    public  HttpResponse save(@Body String args) {
+    public  HttpResponse save(@Body Hotel args) {
         System.out.println("Backend app is down using fallback save");
         return  HttpResponse.serverError();
     }

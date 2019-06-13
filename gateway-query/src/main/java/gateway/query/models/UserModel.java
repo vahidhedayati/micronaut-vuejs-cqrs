@@ -1,4 +1,4 @@
-package gateway.adaptors.models;
+package gateway.query.models;
 
 import com.sun.istack.Nullable;
 

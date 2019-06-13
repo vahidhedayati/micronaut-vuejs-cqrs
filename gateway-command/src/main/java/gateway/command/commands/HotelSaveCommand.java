@@ -1,6 +1,6 @@
-package gateway.adaptors.models.implementation;
+package gateway.command.commands;
 
-import gateway.adaptors.models.Hotel;
+
 import io.micronaut.validation.Validated;
 
 import javax.validation.constraints.NotBlank;
@@ -77,7 +77,7 @@ public class HotelSaveCommand {
     }
 
 
-    public Hotel getHotel() {
-       return new Hotel(this.code,this.name, this.phone,this.email);
-    }
+    //public Hotel getHotel() {
+      // return new Hotel(this.code,this.name, this.phone,this.email);
+   // }
 }

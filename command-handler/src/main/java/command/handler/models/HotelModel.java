@@ -1,4 +1,4 @@
-package gateway.adaptors.models;
+package command.handler.models;
 
 import com.sun.istack.Nullable;
 

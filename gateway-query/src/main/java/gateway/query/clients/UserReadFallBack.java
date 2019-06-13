@@ -1,8 +1,9 @@
 package gateway.query.clients;
 
-import gateway.adaptors.models.User;
-import gateway.adaptors.models.UserModel;
+
 import gateway.query.models.SortingAndOrderArguments;
+import gateway.query.models.User;
+import gateway.query.models.UserModel;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Get;

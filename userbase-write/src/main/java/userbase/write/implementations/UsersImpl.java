@@ -1,11 +1,12 @@
-package userbase.read.implementations;
+package userbase.write.implementations;
 
 import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
 import io.micronaut.spring.tx.annotation.Transactional;
-import userbase.read.models.SortingAndOrderArguments;
-import userbase.read.models.UserModel;
-import userbase.read.domain.User;
-import userbase.read.interfaces.Users;
+
+
+import userbase.write.domain.User;
+import userbase.write.models.SortingAndOrderArguments;
+import userbase.write.models.UserModel;
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;

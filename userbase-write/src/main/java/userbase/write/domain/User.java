@@ -1,4 +1,4 @@
-package userbase.read.domain;
+package userbase.write.domain;
 
 import javax.persistence.*;
 import java.util.Date;

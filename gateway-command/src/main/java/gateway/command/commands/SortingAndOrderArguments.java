@@ -1,4 +1,4 @@
-package gateway.adaptors.models.implementation;
+package gateway.command.commands;
 
 import io.micronaut.validation.Validated;
 

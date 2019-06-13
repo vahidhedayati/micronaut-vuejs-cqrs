@@ -1,7 +1,7 @@
 package gateway.query.clients;
 
-import gateway.adaptors.models.Hotel;
-import gateway.adaptors.models.HotelModel;
+import gateway.query.models.Hotel;
+import gateway.query.models.HotelModel;
 import gateway.query.models.SortingAndOrderArguments;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;

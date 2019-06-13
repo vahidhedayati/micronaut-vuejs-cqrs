@@ -2,6 +2,7 @@ package command.handler.clients;
 
 import command.handler.commands.HotelDeleteCommand;
 import command.handler.commands.HotelUpdateCommand;
+import command.handler.models.Hotel;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Delete;
@@ -15,7 +16,7 @@ import javax.validation.Valid;
 public interface HotelWriteClient {
 
     @Post("/")
-    HttpResponse save(@Body String args);
+    HttpResponse save(@Body Hotel args);
 
     @Delete("/{id}")
     HttpResponse delete(Long id, @Body @Valid HotelDeleteCommand cmd);

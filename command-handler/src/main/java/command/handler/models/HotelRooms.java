@@ -1,8 +1,5 @@
-package gateway.adaptors.models;
+package command.handler.models;
 
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

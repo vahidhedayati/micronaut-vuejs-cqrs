@@ -1,6 +1,6 @@
-package userbase.read.init;
+package userbase.write.init;
 
-import userbase.read.domain.User;
+import userbase.write.domain.User;
 
 import java.time.LocalDate;
 import java.time.ZoneId;

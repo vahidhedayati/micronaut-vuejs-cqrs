@@ -1,6 +1,6 @@
 package gateway.command.controller;
 
-import gateway.adaptors.models.implementation.UserUpdateCommand;
+import gateway.command.commands.UserUpdateCommand;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;

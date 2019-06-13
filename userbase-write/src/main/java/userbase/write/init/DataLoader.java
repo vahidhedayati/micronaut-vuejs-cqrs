@@ -1,10 +1,10 @@
-package userbase.read.init;
+package userbase.write.init;
 
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
 import io.micronaut.spring.tx.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
-import userbase.read.implementations.UsersImpl;
+import userbase.write.implementations.UsersImpl;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

@@ -1,7 +1,8 @@
 package gateway.command.clients;
 
-import gateway.adaptors.models.implementation.UserSaveCommand;
-import gateway.adaptors.models.implementation.UserUpdateCommand;
+
+import gateway.command.commands.UserSaveCommand;
+import gateway.command.commands.UserUpdateCommand;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;

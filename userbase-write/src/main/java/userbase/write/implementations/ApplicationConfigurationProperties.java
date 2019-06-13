@@ -1,4 +1,4 @@
-package userbase.read.implementations;
+package userbase.write.implementations;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
 
