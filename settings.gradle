@@ -1,1 +1,1 @@
-include 'frontend', 'hotel-read','gateway', 'userbase-read' ,'hotel-write'
+include 'frontend', 'hotel-read','gateway-command','gateway-query', 'userbase-read' ,'hotel-write', 'command-handler'

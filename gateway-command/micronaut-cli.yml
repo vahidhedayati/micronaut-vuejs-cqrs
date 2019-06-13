@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: gateway.command
+---
+testFramework: junit
+sourceLanguage: java

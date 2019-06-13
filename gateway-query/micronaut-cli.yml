@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: gateway.query
+---
+testFramework: junit
+sourceLanguage: java

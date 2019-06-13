@@ -1,6 +1,6 @@
 micronaut:
   application:
-    name: userbasewrite
+    name: userbase-write
     max: 10
   server:
     port: ${random.port}

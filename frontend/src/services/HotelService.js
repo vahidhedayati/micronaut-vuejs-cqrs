@@ -1,11 +1,15 @@
 
 import axios from 'axios'
-const instance = axios.create({
-  baseURL: `http://localhost:8080/`
-})
+const writeInstance = axios.create({
+    baseURL: `http://localhost:8080/`
+  })
+
+  const readInstance = axios.create({
+    baseURL: `http://localhost:8081/`
+  })
 export default {
   fetchParams (component,params) {
-    return instance.get(component, {params:params })
+    return readInstance.get(component, {params:params })
       .catch((error) => {
       if (error.response) {
       console.log(error.response);
@@ -18,7 +22,7 @@ export default {
   },
 
   fetchBlob (component) {
-    return instance.get(component,{responseType: 'blob', headers: { 'Accept': 'application/vnd.ms-excel' }})
+    return readInstance.get(component,{responseType: 'blob', headers: { 'Accept': 'application/vnd.ms-excel' }})
       .catch((error) => {
       if (error.response) {
       console.log(error.response);
@@ -30,7 +34,7 @@ export default {
   });
   },
   fetchName (component) {
-    return instance.get(component)
+    return readInstance.get(component)
     .catch((error) => {
         if (error.response) {
             console.log(error.response);
@@ -42,7 +46,7 @@ export default {
     });
   },
   fetchRoot (component) {
-    return instance.get(component)
+    return readInstance.get(component)
       .catch((error) => {
       if (error.response) {
       console.log(error.response);
@@ -54,7 +58,7 @@ export default {
   });
   },
   createName (component, params) {
-    return instance.post(component, params)
+    return writeInstance.post(component, params)
     .catch((error) => {
         if (error.response) {
             console.log(error.response);
@@ -66,24 +70,24 @@ export default {
     });
   },
   createNoCatch (component, params) {
-    return instance.post(component, params)
+    return writeInstance.post(component, params)
 
   },
   createRootNoCatch (component, params) {
-    return instance.post(component, params)
+    return writeInstance.post(component, params)
 
   },
   putRootNoCatch (component, params) {
-    return instance.put(component, params)
+    return writeInstance.put(component, params)
 
   },
   patchRootNoCatch (component, params) {
-    return instance.patch(component, params)
+    return writeInstance.patch(component, params)
 
   },
   update(component,params) {
 
-    return instance.patch(component, params)
+    return writeInstance.patch(component, params)
     .catch((error) => {
         if (error.response) {
             console.log(error.response);
@@ -95,13 +99,13 @@ export default {
     });
   },
   deleteAlt (component, params) {
-    return instance.delete(component, params)
+    return writeInstance.delete(component, params)
   },
   deleteNoCatch (component, id) {
-    return instance.delete(component+'/' + id)
+    return writeInstance.delete(component+'/' + id)
   },
   delete (component,id) {
-    return instance.delete(component+'/' + id)
+    return writeInstance.delete(component+'/' + id)
     .catch((error) => {
         if (error.response) {
             console.log(error.response);

@@ -36,19 +36,6 @@ dependencies {
     //implementation "io.micronaut.configuration:micronaut-kafka"
 
 
-   // implementation "com.geteventstore:eventstore-client_2.10:2.0.3"
-  //  implementation "com.typesafe.akka:akka-actor_2.11:2.4.0"
-// https://mvnrepository.com/artifact/org.typelevel/scala-library
-//    compile group: 'org.typelevel', name: 'scala-library', version: '2.12.1'
-    // https://mvnrepository.com/artifact/org.scala-lang/scala-library
-    runtimeOnly  group: 'org.scala-lang', name: 'scala-library', version: '2.12.8'
-
-
-    implementation "com.geteventstore:eventstore-client_2.12:6.0.0"
-    implementation "com.typesafe.akka:akka-actor_2.12:2.5.21"
-
-    implementation "org.reactivestreams:reactive-streams:1.0.0"
-
     testImplementation  "io.micronaut:micronaut-inject-java"
     testImplementation  "org.junit.jupiter:junit-jupiter-api"
     testImplementation  "io.micronaut.test:micronaut-test-junit5"

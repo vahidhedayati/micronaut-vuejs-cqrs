@@ -206,7 +206,7 @@ export default {
            //this.newHotel.email=newName.email
 
            console.log('new newHotel =  '+JSON.stringify( newName))
-           return HotelService.putRootNoCatch('/update/'+newName.id, newName)
+           return HotelService.putRootNoCatch('/update/'+newName.id, JSON.stringify(newName))
              .then((res) => {
              if (res) {
                 console.log('RES: '+JSON.stringify(res));

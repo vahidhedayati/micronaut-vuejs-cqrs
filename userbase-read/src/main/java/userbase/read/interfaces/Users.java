@@ -1,7 +1,7 @@
 package userbase.read.interfaces;
 
 import userbase.read.models.UserModel;
-import userbase.read.domain.User;
+import userbase.read.models.User;
 import userbase.read.models.SortingAndOrderArguments;
 
 import javax.validation.constraints.NotBlank;

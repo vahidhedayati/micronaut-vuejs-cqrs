@@ -125,7 +125,7 @@ export default {
       //This will call parent page with this action and pass this newly created object to it
       //this.$emit('add-hotel',hotel)
 
-       return HotelService.createRootNoCatch('/',this.hotel)
+       return HotelService.createRootNoCatch('/',JSON.stringify(this.hotel))
               .then((res) => {
               if (res) {
                 if (res.data) {

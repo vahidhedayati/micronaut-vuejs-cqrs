@@ -1,7 +1,6 @@
 package userbase.read.models;
 
 import com.sun.istack.Nullable;
-import userbase.read.domain.User;
 
 import java.util.List;
 

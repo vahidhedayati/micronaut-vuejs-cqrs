@@ -4,7 +4,7 @@ import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
 import io.micronaut.spring.tx.annotation.Transactional;
 import userbase.read.models.SortingAndOrderArguments;
 import userbase.read.models.UserModel;
-import userbase.read.domain.User;
+import userbase.read.models.User;
 import userbase.read.interfaces.Users;
 
 import javax.inject.Singleton;

@@ -94,9 +94,9 @@ subprojects { project ->
                       project.path.contains(':userbase')) {
                  // compile "io.micronaut.configuration:micronaut-kafka"
 
-                  compile "com.geteventstore:eventstore-client_2.12:6.0.0"
-                  compile "com.typesafe.akka:akka-actor_2.12:2.5.21"
-                  runtime  group: 'org.scala-lang', name: 'scala-library', version: '2.12.8'
+                //  compile "com.geteventstore:eventstore-client_2.12:6.0.0"
+                //  compile "com.typesafe.akka:akka-actor_2.12:2.5.21"
+                 // runtime  group: 'org.scala-lang', name: 'scala-library', version: '2.12.8'
                   //compile "com.geteventstore:eventstore-client:6.0.0"
               }
               if (project.name != 'something' && !project.path.contains(':someFunction') && !project.path.contains(':frontend')) {

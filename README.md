@@ -15,7 +15,8 @@ A basic theory can be seen here
 
 #### [Youtube part one - running two instances of hotel-read app test](https://www.youtube.com/watch?v=W9kOuBWG4KA)
 
- 
+
+This project is incomplete will be marked as working - when this message is removed - and instructions are updated properly
 
 
 Running app
@@ -25,7 +26,7 @@ Running app
 ##### To start all applications in 2 sessions run:
 Session  1
 ```
-./gradlew hotel-read:run  frontend:start gateway:run hotel-write:run userbase-read:run  --parallel
+./gradlew hotel-read:run  userbase-read:run frontend:start gateway-command:run gateway-query:run command-handler:run hotel-write:run  userbase-write:run  --parallel
 ```
 
 ###### Advanced: 
@@ -34,7 +35,8 @@ Session  1
 
 Session  1
 ```
-kill -9 $(netstat -pln 2>/dev/null |grep LISTEN|grep node|awk '{print $7}'|awk -F"/" '{print $1}');  ./gradlew hotel-read:run frontend:start gateway:run  hotel-write:run userbase-read:run  --parallel
+kill -9 $(netstat -pln 2>/dev/null |grep LISTEN|grep node|awk '{print $7}'|awk -F"/" '{print $1}');
+./gradlew hotel-read:run  userbase-read:run frontend:start gateway-command:run gateway-query:run command-handler:run hotel-write:run  userbase-write:run   --parallel
 ```
 
 

@@ -1,6 +1,6 @@
 micronaut:
   application:
-    name: userbaseread
+    name: userbase-read
     max: 10
   server:
     port: ${random.port}
