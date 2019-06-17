@@ -1,7 +1,7 @@
 
 import axios from 'axios'
 const writeInstance = axios.create({
-    baseURL: `http://localhost:8080/`
+    baseURL: `http://localhost:8082/`
   })
 
   const readInstance = axios.create({
@@ -73,7 +73,7 @@ export default {
     return writeInstance.post(component, params)
 
   },
-  createRootNoCatch (component, params) {
+  postCall (component, params) {
     return writeInstance.post(component, params)
 
   },

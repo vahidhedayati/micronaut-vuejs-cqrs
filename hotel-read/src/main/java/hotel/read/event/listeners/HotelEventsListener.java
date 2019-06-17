@@ -5,6 +5,7 @@ import hotel.read.domain.Hotel;
 import hotel.read.domain.interfaces.Hotels;
 import hotel.read.event.AbstractEvent;
 import hotel.read.event.HotelCreatedEvent;
+import hotel.read.services.read.QueryHotelViewDao;
 import io.micronaut.context.event.ApplicationEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

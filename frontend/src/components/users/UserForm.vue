@@ -48,7 +48,7 @@ export default {
  //  props: ['countries', 'reload','fetchCountries','sortSearch'],
   data: function () {
     return {
-      user:{username:'',password:'', firstname:'', surname:'', updateUser:{id:''}},
+      user:{username:'',password:'', firstname:'', surname:'', updateUser:{id:''},eventType:'UserSaveCommand'},
     }
   },
   created: function () {
@@ -60,7 +60,8 @@ export default {
       //This will call parent page with this action and pass this newly created object to it
       //this.$emit('add-user',user)
 
-       return HotelService.createRootNoCatch('/user/',this.user)
+//       return HotelService.post('/user/',this.user)
+      return HotelService.postCall('/user',JSON.stringify(this.user))
               .then((res) => {
               if (res) {
                 if (res.data) {

@@ -75,7 +75,7 @@ export default {
           //newHotel:{name:'',code:'',updateUser:{id:''}, phone:'',email:''},
           showHotel:null,
           updatedHotel:{},
-          deleteHotel:{id:''},
+          deleteHotel:{id:'',eventType:'HotelDeleteCommand'},
           serverURL: process.env.SERVER_URL,
           showForm: false,
           config: {
@@ -160,8 +160,10 @@ export default {
            if (event.value==='delete') {
              if (confirm('Delete record?')) {
                console.log('delete '+id)
+
                this.deleteHotel.id=id;
-               return HotelService.deleteAlt('/delete/'+id, this.deleteHotel)
+               //return HotelService.deleteAlt('/delete/'+id, this.deleteHotel)
+               return HotelService.postCall('/hotel',JSON.stringify(this.deleteHotel))
                  .then((res) => {
                  if (res) {
                    console.log('RES: '+JSON.stringify(res));
@@ -197,6 +199,7 @@ export default {
          },
          save() {
            const newName = this.updatedHotel;
+           newName.eventType='HotelUpdateCommand'
            console.log('new Name =  '+JSON.stringify(newName))
            //+newName.id
            //this.newHotel.id=newName.id
@@ -206,7 +209,8 @@ export default {
            //this.newHotel.email=newName.email
 
            console.log('new newHotel =  '+JSON.stringify( newName))
-           return HotelService.putRootNoCatch('/update/'+newName.id, JSON.stringify(newName))
+           //return HotelService.putRootNoCatch('/update/'+newName.id, JSON.stringify(newName))
+           return HotelService.postCall('/hotel',JSON.stringify(newName))
              .then((res) => {
              if (res) {
                 console.log('RES: '+JSON.stringify(res));

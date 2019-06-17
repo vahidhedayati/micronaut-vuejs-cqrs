@@ -1,6 +1,6 @@
 package hotel.write.event;
 
-import hotel.write.model.HotelUpdateCommand;
+import hotel.write.commands.HotelUpdateCommand;
 
 import java.io.Serializable;
 

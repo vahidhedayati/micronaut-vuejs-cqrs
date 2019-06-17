@@ -33,7 +33,7 @@ dependencies {
 
 ///https://stackoverflow.com/questions/33334456/flink-scala-version-conflict
 
-    //implementation "io.micronaut.configuration:micronaut-kafka"
+    implementation "io.micronaut.configuration:micronaut-kafka"
 
 
     testImplementation  "io.micronaut:micronaut-inject-java"

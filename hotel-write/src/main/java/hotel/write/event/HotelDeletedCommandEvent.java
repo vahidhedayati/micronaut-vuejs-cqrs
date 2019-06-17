@@ -1,6 +1,6 @@
 package hotel.write.event;
 
-import hotel.write.model.HotelDeleteCommand;
+import hotel.write.commands.HotelDeleteCommand;
 
 import java.io.Serializable;
 

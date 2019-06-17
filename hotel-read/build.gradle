@@ -30,7 +30,7 @@ dependencies {
     runtimeOnly "com.h2database:h2"
     runtimeOnly "io.micronaut:micronaut-discovery-client"
 
-    //implementation "io.micronaut.configuration:micronaut-kafka"
+    implementation "io.micronaut.configuration:micronaut-kafka"
 
     //implementation "com.geteventstore:eventstore-client_2.12:6.0.0"
    // implementation "com.typesafe.akka:akka-actor_2.12:2.5.21"

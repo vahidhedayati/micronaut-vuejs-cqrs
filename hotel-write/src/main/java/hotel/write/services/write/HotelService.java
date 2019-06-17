@@ -1,12 +1,12 @@
 package hotel.write.services.write;
 
-import hotel.write.commands.CreateHotelCommand;
-import hotel.write.commands.DeleteHotelCommand;
-import hotel.write.commands.UpdateHotelCommand;
+import hotel.write.commands.commandActions.CreateHotelCommand;
+import hotel.write.commands.commandActions.DeleteHotelCommand;
+import hotel.write.commands.commandActions.UpdateHotelCommand;
 import hotel.write.cqrs.bus.Bus;
 import hotel.write.domain.Hotel;
-import hotel.write.model.HotelDeleteCommand;
-import hotel.write.model.HotelUpdateCommand;
+import hotel.write.commands.HotelDeleteCommand;
+import hotel.write.commands.HotelUpdateCommand;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;

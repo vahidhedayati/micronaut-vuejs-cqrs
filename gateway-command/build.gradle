@@ -28,6 +28,7 @@ dependencies {
     runtimeOnly "com.h2database:h2"
     runtimeOnly "io.micronaut:micronaut-discovery-client"
     testImplementation  "io.micronaut:micronaut-inject-java"
+    implementation "io.micronaut.configuration:micronaut-kafka"
     testImplementation  "org.junit.jupiter:junit-jupiter-api"
     testImplementation  "io.micronaut.test:micronaut-test-junit5"
     testImplementation  "org.junit.jupiter:junit-jupiter-engine"

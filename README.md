@@ -26,7 +26,7 @@ Running app
 ##### To start all applications in 2 sessions run:
 Session  1
 ```
-./gradlew hotel-read:run  userbase-read:run frontend:start gateway-command:run gateway-query:run command-handler:run hotel-write:run  userbase-write:run  --parallel
+./gradlew hotel-read:run  userbase-read:run frontend:start gateway-command:run gateway-query:run hotel-write:run  userbase-write:run  --parallel
 ```
 
 ###### Advanced: 
@@ -36,7 +36,7 @@ Session  1
 Session  1
 ```
 kill -9 $(netstat -pln 2>/dev/null |grep LISTEN|grep node|awk '{print $7}'|awk -F"/" '{print $1}');
-./gradlew hotel-read:run  userbase-read:run frontend:start gateway-command:run gateway-query:run command-handler:run hotel-write:run  userbase-write:run   --parallel
+./gradlew hotel-read:run  userbase-read:run frontend:start gateway-command:run gateway-query:run hotel-write:run  userbase-write:run   --parallel
 ```
 
 

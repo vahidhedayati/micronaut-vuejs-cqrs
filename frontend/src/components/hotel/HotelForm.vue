@@ -78,7 +78,8 @@ export default {
     return {
       valid: true,
       errors: [],
-      hotel:{name:'AAAAAAAAAAAAA',code:'AAAA',phone:'+44-123456789', email:'aa@aa.com', updateUser:{id:''}}
+      hotel:{name:'AAAAAAAAAAAAA',code:'AAAA',phone:'+44-123456789', email:'aa@aa.com', updateUser:{id:''},eventType:'HotelSaveCommand'},
+      event: {aggregator:'hotel', eventType:'save'}
     }
   },
   components: {
@@ -125,7 +126,7 @@ export default {
       //This will call parent page with this action and pass this newly created object to it
       //this.$emit('add-hotel',hotel)
 
-       return HotelService.createRootNoCatch('/',JSON.stringify(this.hotel))
+       return HotelService.postCall('/hotel',this.hotel)
               .then((res) => {
               if (res) {
                 if (res.data) {

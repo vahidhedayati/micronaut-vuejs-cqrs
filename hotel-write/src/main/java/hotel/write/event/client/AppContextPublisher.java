@@ -2,7 +2,6 @@ package hotel.write.event.client;
 
 import hotel.write.domain.Hotel;
 import hotel.write.event.AbstractEvent;
-import hotel.write.model.HotelSaveCommand;
 import io.micronaut.context.annotation.Primary;
 import io.micronaut.context.event.ApplicationEventPublisher;
 

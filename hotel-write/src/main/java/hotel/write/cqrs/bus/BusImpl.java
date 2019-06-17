@@ -1,12 +1,10 @@
 package hotel.write.cqrs.bus;
 
-import hotel.write.commands.CreateHotelCommand;
-import hotel.write.commands.DeleteHotelCommand;
-import hotel.write.commands.UpdateHotelCommand;
-import hotel.write.domain.Hotel;
+import hotel.write.commands.commandActions.CreateHotelCommand;
+import hotel.write.commands.commandActions.DeleteHotelCommand;
+import hotel.write.commands.commandActions.UpdateHotelCommand;
 import hotel.write.model.Command;
 import hotel.write.model.CommandHandler;
-import hotel.write.model.HotelUpdateCommand;
 import hotel.write.model.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

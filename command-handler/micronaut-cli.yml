@@ -1,5 +1,0 @@
-profile: service
-defaultPackage: command.handler
----
-testFramework: junit
-sourceLanguage: java

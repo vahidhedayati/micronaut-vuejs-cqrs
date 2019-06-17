@@ -103,6 +103,8 @@ subprojects { project ->
                   //compile "com.geteventstore:eventstore-client"
                   //compile "com.typesafe.akka:akka-actor_2.13"
 
+                  compile "io.micronaut.configuration:micronaut-kafka"
+
 
                   annotationProcessor "io.micronaut:micronaut-inject-java"
                   annotationProcessor "io.micronaut:micronaut-validation"

@@ -1,9 +1,9 @@
 package hotel.write.controller;
 
 import hotel.write.domain.Hotel;
-import hotel.write.model.HotelDeleteCommand;
-import hotel.write.model.HotelSaveCommand;
-import hotel.write.model.HotelUpdateCommand;
+import hotel.write.commands.HotelDeleteCommand;
+import hotel.write.commands.HotelSaveCommand;
+import hotel.write.commands.HotelUpdateCommand;
 import hotel.write.services.write.HotelService;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;

@@ -8,16 +8,16 @@ getCommandName: CreateHotelCommand
 handle command: CreateHotelCommand
 getCommandName: CreateHotelCommand
 hotel:null,AAAAAAAAAAAAA
-handleCommand AbstractCommandHandler - save is called hotel.write.model.HotelSaveCommand@360d46bb 
+handleCommand AbstractCommandHandler - save is called hotel.write.commands.HotelSaveCommand@360d46bb 
 --- from abstract class save hotel:null,AAAAAAAAAAAAA
 ```
 
-[handleCommand AbstractCommandHandler - save is called hotel.write.model.HotelSaveCommand@360d46bb --- from abstract class save hotel:null,AAAAAAAAAAAAA](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/master/commandservice/src/main/java/commandservice/commands/AbstractCommandHandler.java#L32-L40)
+[handleCommand AbstractCommandHandler - save is called hotel.write.commands.HotelSaveCommand@360d46bb --- from abstract class save hotel:null,AAAAAAAAAAAAA](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/master/commandservice/src/main/java/commandservice/commands/AbstractCommandHandler.java#L32-L40)
 
 
 ```
 Adding hotel to arrayList
-handleCommand AbstractCommandHandler - buildEvent hotel.write.model.HotelSaveCommand@360d46bb
+handleCommand AbstractCommandHandler - buildEvent hotel.write.commands.HotelSaveCommand@360d46bb
 build event hotel:null,AAAAAAAAAAAAA
 publisher.publish(hotel.write.event.HotelCreatedEvent@236eeaae
  KafkaPublisher publishing: hotel.write.event.HotelCreatedEvent@236eeaae
@@ -102,8 +102,8 @@ io.micronaut.messaging.exceptions.MessagingClientException: Exception sending pr
         at io.micronaut.aop.chain.InterceptorChain.proceed(InterceptorChain.java:146)
         at hotel.write.event.client.EventClient$Intercepted.sendCode(Unknown Source)
         at hotel.write.event.client.KafkaPublisher.publish(KafkaPublisher.java:19)
-        at hotel.write.commands.AbstractCommandHandler.publish(AbstractCommandHandler.java:51)
-        at hotel.write.commands.AbstractCommandHandler.handleCommand(AbstractCommandHandler.java:38)
+        at hotel.write.commandHandlers.AbstractCommandHandler.publish(AbstractCommandHandler.java:51)
+        at hotel.write.commandHandlers.AbstractCommandHandler.handleCommand(AbstractCommandHandler.java:38)
         at hotel.write.cqrs.bus.BusImpl.handleCommand(BusImpl.java:32)
         at hotel.write.services.write.HotelService.addHotel(HotelService.java:17)
         at hotel.write.controller.HotelWriteEndpoint.save(HotelWriteEndpoint.java:25)

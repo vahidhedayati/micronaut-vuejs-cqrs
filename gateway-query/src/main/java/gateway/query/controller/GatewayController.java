@@ -11,6 +11,7 @@ import io.micronaut.http.annotation.Get;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -37,14 +38,17 @@ public class GatewayController {
          */
         if (hotelModel.isPresent() ) {
             hotelModel.flatMap(hotelModel1 -> {
-                hotelModel1.getInstanceList().flatMap(hotel-> {
-                    hotel.forEach(hotel1 -> {
-                        hotel1.setUpdateUser(userReadClient.findById(hotel1.getUpdateUserId()).get());
-                        //hotel1.setUpdateUser(userClient.findByUsername("admin").get());
-                    });
+                Optional<List<Hotel>> instanceList = hotelModel1.getInstanceList();
+                if (instanceList.isPresent()) {
+                    instanceList.flatMap(hotel-> {
+                        hotel.forEach(hotel1 -> {
+                            hotel1.setUpdateUser(userReadClient.findById(hotel1.getUpdateUserId()).get());
+                            //hotel1.setUpdateUser(userClient.findByUsername("admin").get());
+                        });
 
-                    return Optional.of(hotel);
-                });
+                        return Optional.of(hotel);
+                    });
+                }
                 return Optional.of(hotelModel1);
             });
         }

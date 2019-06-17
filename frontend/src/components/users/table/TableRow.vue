@@ -59,7 +59,8 @@ export default {
         return {
           response: [],
           errors: [],
-          newUser:{username:'',firstname:'',surname:'',updateUser:{id:''}},
+          newUser:{username:'',firstname:'',surname:'',updateUser:{id:''},eventType:'UserUpdateCommand'},
+          deleteUser:{id:'',eventType:'UserDeleteCommand'},
           showUser:null,
           updatedUser:{},
           serverURL: process.env.SERVER_URL,
@@ -147,7 +148,10 @@ export default {
              if (confirm('Delete record?')) {
                console.log('delete '+id)
 
-               return HotelService.deleteNoCatch('/user/', id)
+               //return HotelService.deleteNoCatch('/user/', id)
+               this.deleteUser.id=id;
+
+               return HotelService.postCall('/user',JSON.stringify(this.deleteUser))
                  .then((res) => {
                  if (res) {
                    console.log('RES: '+JSON.stringify(res));
@@ -189,7 +193,8 @@ export default {
            this.newUser.code=newName.code
            this.newUser.name=newName.name
            console.log('new newUser =  '+JSON.stringify( this.newUser))
-           return HotelService.putRootNoCatch('/user/update/'+newName.id, this.newUser)
+           return HotelService.postCall('/user',JSON.stringify(this.newUser))
+          // return HotelService.putRootNoCatch('/user/update/'+newName.id, this.newUser)
              .then((res) => {
              if (res) {
                 console.log('RES: '+JSON.stringify(res));

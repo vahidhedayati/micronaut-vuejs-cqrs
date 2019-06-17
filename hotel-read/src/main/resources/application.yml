@@ -1,6 +1,6 @@
 micronaut:
   application:
-    name: hotelread
+    name: hotel-read
     max: 10
   server:
     port: ${random.port}
