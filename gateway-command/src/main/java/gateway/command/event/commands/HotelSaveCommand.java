@@ -1,25 +1,34 @@
 package gateway.command.event.commands;
 
+import com.sun.istack.Nullable;
+
 import java.io.Serializable;
 
 
 public class HotelSaveCommand extends Command {
 
 
+    @Nullable
     private Long id;
 
-
+    @Nullable
     private String code;
 
-
+    @Nullable
     private String name;
 
+    @Nullable
     private String phone;
 
+    @Nullable
     private String email;
 
+    @Nullable
+    private Long updateUserId;
 
-    public HotelSaveCommand() {}
+    public HotelSaveCommand() {
+        super();
+    }
 
     public HotelSaveCommand(String code, String name) {
         this.name = name;
@@ -65,5 +74,14 @@ public class HotelSaveCommand extends Command {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+
+    public Long getUpdateUserId() {
+        return updateUserId;
+    }
+
+    public void setUpdateUserId(Long updateUserId) {
+        this.updateUserId = updateUserId;
     }
 }

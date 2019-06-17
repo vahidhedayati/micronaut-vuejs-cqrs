@@ -1,6 +1,8 @@
 package gateway.command.event.commands;
 
 
+import com.sun.istack.Nullable;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,22 +11,23 @@ import java.util.List;
 public class HotelCreatedCommand extends Command  {
 
 
-
+    @Nullable
     private String code;
 
-
+    @Nullable
     private String name;
-
+    @Nullable
     private String phone;
-
+    @Nullable
     private String email;
 
-
+    @Nullable
     private Long updateUserId;
 
-
+    @Nullable
     private Date lastUpdated;
 
+    @Nullable
     private List<HotelRoomsCreateCommand> hotelRooms;
 
     public HotelCreatedCommand() {

@@ -2,94 +2,68 @@ package gateway.command.controller;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import gateway.command.event.commands.*;
-import gateway.command.event.kafka.EventEnvelope;
-import gateway.command.event.kafka.KafkaEventPublisher;
-import gateway.command.event.kafka.KafkaSender;
-import gateway.command.serialize.JsonDeserializer;
-import gateway.command.serialize.JsonSerializer;
+import gateway.command.event.commands.Command;
+import gateway.command.event.commands.HotelDeleteCommand;
+import gateway.command.event.commands.HotelSaveCommand;
+import gateway.command.event.commands.HotelUpdateCommand;
+import gateway.command.event.kafka.EventPublisher;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
-import io.micronaut.http.codec.CodecConfiguration;
 import io.micronaut.http.codec.MediaTypeCodecRegistry;
-import io.micronaut.http.server.netty.jackson.JsonViewMediaTypeCodecFactory;
 import io.micronaut.jackson.codec.JsonMediaTypeCodec;
-import io.micronaut.runtime.ApplicationConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-
 @Slf4j
 @Controller("/")
 public class GatewayController  {
-    //ObjectMapper viewMapper = objectMapper.copy();
 
+    @Inject
     protected MediaTypeCodecRegistry mediaTypeCodecRegistry;
-    //@Inject
-  //private KafkaEventPublisher eventPublisher;
-   //@Inject
-    //private final ObjectMapper objectMapper;
-   // public GatewayController(ObjectMapper objectMapper) {
-       // this.objectMapper = objectMapper;
-   //}
-   //private final ObjectMapper objectMapper;
+
+    @Inject
+    protected EventPublisher eventPublisher;
+
+
+    private final EventPublisher eventPublisher1;
+
+    public GatewayController(EventPublisher eventPublisher1) {
+        this.eventPublisher1 = eventPublisher1;
+    }
+
+    Map<String, Class> commandClasses = new HashMap<String,Class>() {
+        {
+            put(HotelSaveCommand.class.getSimpleName(), HotelSaveCommand.class);
+            put(HotelUpdateCommand.class.getSimpleName(), HotelUpdateCommand.class);
+            put(HotelDeleteCommand.class.getSimpleName(), HotelDeleteCommand.class);
+        }
+    };
 
     /**
      *
      * @param topic
-     * @param eventType
+     * @param eventType using the jsonProperty we actually extract eventType from the @Body string JSON String
+     *                  The 3rd input is actual form. we post /hotel and json content there isn't actually 3 parameters
+     *                  provided
      * @param
      * @return
      */
     @Post(uri = "/{topic}", consumes = MediaType.APPLICATION_JSON)
     public HttpResponse process(String topic, @JsonProperty("eventType") String eventType, @Body String formInput)  {
 
-        /*
-        Map<String,Command> commands = new HashMap<String,Command>() {
-            {
-                put(HotelSaveCommand.class.getSimpleName(), new HotelSaveCommand());
-                put(HotelUpdateCommand.class.getSimpleName(), new HotelUpdateCommand());
-                put(HotelDeleteCommand.class.getSimpleName(), new HotelDeleteCommand());
-            }
-        };
-        */
-
-        System.out.println("--------------------------------------------------------------------"+eventType);
-       // try {
-       //     Object  obj = objectMapper.readValue(formInput, HotelSaveCommand.class);
-        //} catch (IOException e) {
-        //    throw new RuntimeException(e);
-      //  }
-        //return json;
-
-        //Command command = commands.get(eventType);
-        //command.
         JsonMediaTypeCodec mediaTypeCodec = (JsonMediaTypeCodec) mediaTypeCodecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
                 .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
 
-      //  Object obj = objectMapper.readValue(formInput,HotelSaveCommand.class);
-        //System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  obj = "+obj.getClass());
-        HotelSaveCommand command =  mediaTypeCodec.decode(HotelSaveCommand.class,formInput); //MapCommand.findCommand(formInput,HotelSaveCommand.class);
-        if (command!=null) {
-            System.out.println("22222 --------------------------------------------------------------------" + eventType);
-
-            System.out.println(command + " is name --------------------------------- ---------------------------" + command.getClass());
-        }
-        //eventPublisher.publish(topic,);
+        System.out.println(" command to be rn ");
+        Command cmd = (Command) mediaTypeCodec.decode(commandClasses.get(eventType),formInput);
+        System.out.println(" command "+cmd);
+        eventPublisher1.publish(topic,cmd);
         return HttpResponse.accepted();
     }
-
-
-
 
 }
