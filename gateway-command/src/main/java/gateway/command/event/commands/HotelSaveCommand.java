@@ -2,8 +2,6 @@ package gateway.command.event.commands;
 
 import com.sun.istack.Nullable;
 
-import java.io.Serializable;
-
 
 public class HotelSaveCommand extends Command {
 

@@ -31,7 +31,13 @@ public class JsonDeserializer<T> implements Deserializer<T> {
             throw new RuntimeException(e);
         }
     }
-
+    public T deserialize(String data) {
+        try {
+            return mapper.readValue(data, clazz);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     @Override
     public void close() {
 

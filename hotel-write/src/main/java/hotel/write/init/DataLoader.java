@@ -34,8 +34,14 @@ public class DataLoader  implements ApplicationEventListener<ServerStartupEvent>
 		for ( final Hotel hotel : hotels ) {
 			//System.out.println(" working on "+hotel.getCode());
 			//hotelDb.add(hotel);
+
 			//This submits hotel to be added as well as an event to any listeners of kafka hotel-add stream
-			hotelService.addHotel(hotel);
+			//TODO Enable
+			// ----> hotelService.addHotel(hotel);
+
+
+
+
             //Hotel hotel1 =  DemoHotelsFactory.addHotel(hotel);
            // hotelDb.add(hotel1);
 

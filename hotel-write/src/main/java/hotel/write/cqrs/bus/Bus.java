@@ -8,9 +8,6 @@ public interface Bus {
 
 	public <R> Result<R> handleCommand(Command<R> command);
 
-	public <R> Result<R> updateCommand(Command<R> command);
-
-	public <R> Result<R> deleteCommand(Command<R> command);
 	
 	public <R> void registerHandlerCommand(Command<R> command, CommandHandler<Command<R>, R> handler) ;
 

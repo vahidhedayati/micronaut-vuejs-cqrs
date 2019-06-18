@@ -1,11 +1,15 @@
-package hotel.write.event.kafka;
+package hotel.write.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import hotel.write.commands.Command;
+import io.micronaut.context.annotation.Primary;
+import io.micronaut.runtime.server.EmbeddedServer;
 
 import java.util.UUID;
 
+@Primary
 public class KafkaEventPublisher implements EventPublisher {
 
     private final ObjectMapper objectMapper;
@@ -18,12 +22,15 @@ public class KafkaEventPublisher implements EventPublisher {
 
 
     @Override
-    public <T extends Command> void publish(String topic, T command) {
-
+    public <T extends Command> void publish(EmbeddedServer embeddedServer, String topic, T command) {
+        System.out.println(" About to send to kafka"+topic);
         String eventType = command.getClass().getSimpleName();
 
-        EventEnvelope envelope = new EventEnvelope(eventType,command);
+        //EventEnvelope envelope = new EventEnvelope(embeddedServer,eventType,command);
+        EventEnvelope envelope = new EventEnvelope();
         String value = serializeEnvelope(envelope);
+
+        System.out.println(" About to send to kafka"+topic+" ------------"+value);
 
         kafkaSender.send(topic, UUID.randomUUID().toString(), value);
     }

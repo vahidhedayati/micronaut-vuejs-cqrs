@@ -1,10 +1,9 @@
 package hotel.write.commands;
 
 
+import com.sun.istack.Nullable;
 import hotel.write.domain.Hotel;
-import hotel.write.domain.HotelRooms;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,22 +12,24 @@ import java.util.List;
 public class HotelCreatedCommand extends Command  {
 
 
+    @Nullable
     private String code;
 
-
+    @Nullable
     private String name;
-
+    @Nullable
     private String phone;
-
+    @Nullable
     private String email;
 
-
+    @Nullable
     private Long updateUserId;
 
-
+    @Nullable
     private Date lastUpdated;
 
-    private List<HotelRooms> hotelRooms;
+    @Nullable
+    private List<HotelRoomsCreateCommand> hotelRooms;
 
     public HotelCreatedCommand() {
 
@@ -50,7 +51,7 @@ public class HotelCreatedCommand extends Command  {
         this.hotelRooms = new ArrayList<>();
     }
 
-    public HotelCreatedCommand(String code, String name, String phone, String email, Long updateUserId,  Date lastUpdated, List<HotelRooms> hotelRooms) {
+    public HotelCreatedCommand(String code, String name, String phone, String email, Long updateUserId,  Date lastUpdated, List<HotelRoomsCreateCommand> hotelRooms) {
         this.code = code;
         this.name = name;
         this.phone = phone;
@@ -60,6 +61,8 @@ public class HotelCreatedCommand extends Command  {
         this.lastUpdated = lastUpdated;
         this.hotelRooms = hotelRooms;
     }
+
+
     public HotelCreatedCommand(Hotel h) {
         this.code = h.getCode();
         this.name = h.getName();
@@ -67,11 +70,11 @@ public class HotelCreatedCommand extends Command  {
         this.email = h.getEmail();
         this.updateUserId = h.getUpdateUserId();
         this.lastUpdated = h.getLastUpdated();
-        this.hotelRooms = h.getHotelRooms();
+      //  this.hotelRooms = new HotelRoomsCreateCommand(h.getHotelRooms());
     }
 
     public Hotel createHotel() {
-        return new Hotel(this.code,this.name, this.phone, this.email, this.updateUserId, this.hotelRooms, this.lastUpdated);
+        return new Hotel(this.code,this.name, this.phone, this.email, this.updateUserId);
     }
 
     public Date getLastUpdated() {
@@ -92,7 +95,7 @@ public class HotelCreatedCommand extends Command  {
         this.name = n;
     }
 
-    public List<HotelRooms> getHotelRooms() {
+    public List<HotelRoomsCreateCommand> getHotelRooms() {
         return hotelRooms;
     }
 
@@ -119,8 +122,5 @@ public class HotelCreatedCommand extends Command  {
     public void setUpdateUserId(Long updateUserId) {
         this.updateUserId = updateUserId;
     }
-
-
-
 
 }

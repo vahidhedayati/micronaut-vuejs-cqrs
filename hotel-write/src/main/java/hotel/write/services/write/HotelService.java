@@ -1,5 +1,7 @@
 package hotel.write.services.write;
 
+import hotel.write.commands.HotelCreatedCommand;
+import hotel.write.commands.HotelSaveCommand;
 import hotel.write.commands.commandActions.CreateHotelCommand;
 import hotel.write.commands.commandActions.DeleteHotelCommand;
 import hotel.write.commands.commandActions.UpdateHotelCommand;
@@ -17,19 +19,25 @@ public class HotelService {
     @Inject
     private Bus bus;
 
+    public void save(HotelSaveCommand cmd) {
+        bus.handleCommand(new CreateHotelCommand(new HotelCreatedCommand(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail())));
+    }
     public void addHotel(Hotel m) {
+        System.out.println("bus.handleCommand new CreateHotelCommand --------------------------------------------  ");
+        bus.handleCommand(new CreateHotelCommand(new HotelCreatedCommand(m)));
+    }
+    public void addHotel(HotelCreatedCommand m) {
         System.out.println("bus.handleCommand new CreateHotelCommand --------------------------------------------  ");
         bus.handleCommand(new CreateHotelCommand(m));
     }
-
     public void addCodeName(String code,String name) {
         System.out.println("bus.handleCommand new CreateHotelCommand");
-        bus.handleCommand(new CreateHotelCommand(new Hotel(code,name)));
+        bus.handleCommand(new CreateHotelCommand(new HotelCreatedCommand(code,name)));
     }
 
 
     public void deleteById(HotelDeleteCommand cmd) {
-        bus.deleteCommand(new DeleteHotelCommand(cmd));
+        bus.handleCommand(new DeleteHotelCommand(cmd));
 
         //findById(id).ifPresent(hotel -> entityManager.remove(hotel));
     }
@@ -39,7 +47,9 @@ public class HotelService {
     public void update(@NotNull Long id, HotelUpdateCommand command) {
 
 
-        bus.updateCommand(new UpdateHotelCommand(command));
+        bus.handleCommand(new UpdateHotelCommand(command));
     }
+
+
 
 }

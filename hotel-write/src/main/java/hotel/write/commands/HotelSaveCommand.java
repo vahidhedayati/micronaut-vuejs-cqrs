@@ -1,25 +1,38 @@
 package hotel.write.commands;
 
-import java.io.Serializable;
+import com.sun.istack.Nullable;
+import io.micronaut.validation.Validated;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+@Validated
+public class HotelSaveCommand extends Command {
 
 
-public class HotelSaveCommand  extends Command  {
-
-
-    private Long id;
-
-
+    @NotBlank
+    @Pattern(regexp = "(?=.*[A-Z]).{2,3}", message = "field_three_char")
     private String code;
 
-
+    @NotNull
+    @NotBlank
+    @Size(max = 10, min=3)
     private String name;
 
+    @NotBlank
     private String phone;
 
+    @NotBlank
     private String email;
 
+    @Nullable
+    private Long updateUserId;
 
-    public HotelSaveCommand() {}
+    public HotelSaveCommand() {
+        super();
+    }
 
     public HotelSaveCommand(String code, String name) {
         this.name = name;
@@ -59,11 +72,12 @@ public class HotelSaveCommand  extends Command  {
         this.email = email;
     }
 
-    public Long getId() {
-        return id;
+
+    public Long getUpdateUserId() {
+        return updateUserId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUpdateUserId(Long updateUserId) {
+        this.updateUserId = updateUserId;
     }
 }

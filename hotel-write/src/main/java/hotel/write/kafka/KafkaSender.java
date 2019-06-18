@@ -1,4 +1,4 @@
-package hotel.write.event.kafka;
+package hotel.write.kafka;
 
 import io.micronaut.configuration.kafka.annotation.KafkaClient;
 import org.apache.kafka.clients.producer.Producer;

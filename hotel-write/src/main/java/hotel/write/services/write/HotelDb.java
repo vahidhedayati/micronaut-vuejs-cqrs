@@ -1,13 +1,14 @@
-package hotel.read.adaptors.db;
+package hotel.write.services.write;
 
-import hotel.read.adaptors.models.HotelDeleteCommand;
-import hotel.read.adaptors.models.HotelModel;
-import hotel.read.adaptors.models.HotelUpdateCommand;
-import hotel.read.domain.Hotel;
-import hotel.read.domain.interfaces.Hotels;
-import hotel.read.implementation.ApplicationConfiguration;
-import hotel.read.implementation.SortingAndOrderArguments;
+
+import hotel.write.commands.HotelDeleteCommand;
+import hotel.write.commands.HotelUpdateCommand;
+import hotel.write.domain.Hotel;
+import hotel.write.domain.interfaces.HotelsEventInterface;
+import hotel.write.implementations.ApplicationConfiguration;
+import hotel.write.kafka.EventPublisher;
 import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
+import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.spring.tx.annotation.Transactional;
 
 import javax.inject.Singleton;
@@ -22,7 +23,7 @@ import java.util.Optional;
 //imlpements Hotels
 
 @Singleton
-public class HotelDb implements Hotels {
+public class HotelDb implements HotelsEventInterface {
 
 
 
@@ -30,12 +31,14 @@ public class HotelDb implements Hotels {
     private EntityManager entityManager;
     private final ApplicationConfiguration applicationConfiguration;
 
+    private final EventPublisher publisher;
+    private final EmbeddedServer embeddedServer;
 
-
-    public HotelDb(@CurrentSession EntityManager entityManager,
-                     ApplicationConfiguration applicationConfiguration) {
+    public HotelDb(@CurrentSession EntityManager entityManager, ApplicationConfiguration applicationConfiguration, EventPublisher publisher, EmbeddedServer embeddedServer) {
         this.entityManager = entityManager;
         this.applicationConfiguration = applicationConfiguration;
+        this.publisher = publisher;
+        this.embeddedServer = embeddedServer;
     }
 
     @Override
@@ -92,45 +95,6 @@ public class HotelDb implements Hotels {
 
 
     private final static List<String> VALID_PROPERTY_NAMES = Arrays.asList("id", "name", "code", "lastUpdated", "phone","email");
-
-    @Transactional(readOnly = true)
-    public Optional<HotelModel> findAll(@NotNull SortingAndOrderArguments args) {
-        //SELECT new map (h.code as code, h.name as name, h.id as id, h.hotelRooms as hotelRooms)
-        //System.out.println("Doing search 123 ");
-        String countQueryString= "select count(h) FROM Hotel as  h ";
-        String qlString = "FROM Hotel as  h ";
-        if (args.getName().isPresent()) {
-            qlString += " where lower(h.name) like (:name) ";
-            countQueryString += " where lower(h.name) like (:name) ";
-        }
-        if (args.getOrder().isPresent() && args.getSort().isPresent() && VALID_PROPERTY_NAMES.contains(args.getSort().get())) {
-            qlString += " ORDER BY h." + args.getSort().get() + " " + args.getOrder().get().toLowerCase();
-        }
-       // System.out.println("Query "+qlString);
-        TypedQuery<Hotel> query;
-        TypedQuery<Long> countQuery;
-        //Long countQuery=0L;
-        if (args.getName().isPresent()) {
-            query=entityManager.createQuery(qlString, Hotel.class).setParameter("name",'%'+args.getName().get().toLowerCase()+'%');
-            countQuery=entityManager.createQuery(countQueryString, Long.class).setParameter("name",'%'+args.getName().get().toLowerCase()+'%');
-        } else {
-            query=entityManager.createQuery(qlString, Hotel.class);
-            countQuery=entityManager.createQuery(countQueryString, Long.class);
-        }
-
-        query.setMaxResults(args.getMax().orElseGet(applicationConfiguration::getMax));
-        args.getOffset().ifPresent(query::setFirstResult);
-        //countQuery.setMaxResults(1);
-        HotelModel model = new HotelModel();
-        //System.out.println(" "+(countQuery.getFirstResult())+"1 sss ssss");
-        model.setInstanceList(Optional.of(query.getResultList()));//.flatMap(hotel -> {}));
-        //System.out.println(" "+(countQuery.getSingleResult())+"0 sss ssss");
-        model.setInstanceTotal(countQuery.getSingleResult());
-
-        model.setNumberOfPages(model.getInstanceTotal()/args.getMax().get());
-        //System.out.println(" "+model.getInstanceTotal()+" "+model.getNumberOfPages()+" "+model.getInstanceList());
-        return Optional.of(model); //Single.just(model);
-    }
 
 
 

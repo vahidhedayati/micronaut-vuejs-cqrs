@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @ThreadSafe
 @KafkaListener
-public class KafkaAddEventListener implements ConsumerRebalanceListener, ConsumerAware {
+public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAware {
 
 
 
@@ -43,13 +43,13 @@ public class KafkaAddEventListener implements ConsumerRebalanceListener, Consume
         //}
     }
 
-    //protected static final Logger LOG = LoggerFactory.getLogger(KafkaAddEventListener.class);
+    //protected static final Logger LOG = LoggerFactory.getLogger(KafkaEventListener.class);
 
     @Inject
     private Hotels dao;
     //private QueryHotelViewDao dao;
 
-    @Topic("hotel")
+    @Topic("hotelRead")
     public void consume( @KafkaKey String hotelCode, @Body HotelCreatedEvent hotelCreatedEvent) {
         if (hotelCode!=null) {
             // LOG.debug("KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER hotelCreated "+hotelCode);

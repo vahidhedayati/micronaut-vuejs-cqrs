@@ -1,18 +1,12 @@
 package hotel.write.commandHandlers;
 
-import hotel.write.commands.*;
-import hotel.write.commands.commandActions.CreateHotelCommand;
-import hotel.write.commands.commandActions.DeleteHotelCommand;
-import hotel.write.commands.commandActions.UpdateHotelCommand;
+import hotel.write.commands.HotelSaveCommand;
 import hotel.write.domain.Hotel;
 import hotel.write.domain.interfaces.HotelsEventInterface;
-import hotel.write.event.*;
-import hotel.write.event.HotelSaveCommandEvent;
-
 import hotel.write.kafka.EventPublisher;
-import hotel.write.model.*;
 import hotel.write.model.Command;
-import hotel.write.services.write.Dao;
+import hotel.write.model.HotelSaveResult;
+import hotel.write.model.Result;
 import io.micronaut.context.annotation.Primary;
 import io.micronaut.runtime.server.EmbeddedServer;
 import org.slf4j.Logger;
@@ -26,17 +20,17 @@ import javax.inject.Singleton;
  *
  */
 @Singleton
-@Primary
-public class CreateHotelHandler extends AbstractCommandHandler<HotelSaveCommand>{
+//@Primary
+public class SaveHotelHandler extends AbstractCommandHandler<HotelSaveCommand>{
 
-	protected static final Logger LOG = LoggerFactory.getLogger(CreateHotelHandler.class);
+	protected static final Logger LOG = LoggerFactory.getLogger(SaveHotelHandler.class);
 	@Inject
 	private HotelsEventInterface dao;
 
 	private EmbeddedServer embeddedServer;
 
 	@Inject
-	public CreateHotelHandler(EventPublisher publisher,EmbeddedServer embeddedServer) {
+	public SaveHotelHandler(EventPublisher publisher, EmbeddedServer embeddedServer) {
 		super(publisher,embeddedServer);
         System.out.println("Create Hotel handler");
 	}

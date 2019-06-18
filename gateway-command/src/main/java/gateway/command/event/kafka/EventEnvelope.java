@@ -9,34 +9,41 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
-public class EventEnvelope {
+public class EventEnvelope { //extends Command {
 
-    protected String eventType;
-    EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer.class);
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    String eventType;
+
+    //EmbeddedServer embeddedServer ;//= ApplicationContext.run(EmbeddedServer.class);
+    //private static ObjectMapper objectMapper = new ObjectMapper();
     //Stores time of event
-    private final Instant instant;
+    Instant instant;
     //Stores a random transaction Id
-    private final UUID transactionId;
+    //private final UUID transactionId;
 
     //Stores current hostname/port - for other useful stuff in future perhaps websocket connect back to this host
-    protected final String host;
-    protected final int port;
+    String host;
+    int port;
+
+    public Command getEventData() {
+        return eventData;
+    }
 
     private Command eventData;
 
-
+/*
     protected EventEnvelope() {
         instant = Instant.now();
         transactionId=UUID.randomUUID();
         host = embeddedServer.getHost();
         port = embeddedServer.getPort();
     }
-
-    protected EventEnvelope(final Instant instant,final UUID transactionId, final String host, final int port) {
+*/
+    protected EventEnvelope(final Instant instant,
+                            //final UUID transactionId,
+                            final String host, final int port) {
         Objects.requireNonNull(instant);
         this.instant = instant;
-        this.transactionId=transactionId;
+        //this.transactionId=transactionId;
         this.host=host;
         this.port=port;
     }
@@ -45,9 +52,9 @@ public class EventEnvelope {
         return instant;
     }
 
-    public UUID getTransactionId() {
-        return transactionId;
-    }
+    //public UUID getTransactionId() {
+        //return transactionId;
+    //}
 
     public String getHost() {
         return host;
@@ -66,12 +73,15 @@ public class EventEnvelope {
     }
 
 
-    protected EventEnvelope(String eventType,Command eventData) {
+    protected EventEnvelope(EmbeddedServer embeddedServer, String eventType,Command eventData) {
+       // this.embeddedServer=embeddedServer;
         this.eventData=eventData;
         this.eventType=eventType;
         instant = Instant.now();
-        transactionId=UUID.randomUUID();
+       // transactionId=UUID.randomUUID();
         host = embeddedServer.getHost();
         port = embeddedServer.getPort();
     }
+
+
 }

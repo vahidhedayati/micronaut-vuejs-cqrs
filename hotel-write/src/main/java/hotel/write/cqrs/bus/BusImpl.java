@@ -42,35 +42,6 @@ public class BusImpl implements Bus {
 		
 	}
 
-	@SuppressWarnings("unchecked")
-	public <R> Result<R> updateCommand(Command<R> command) {
-		//this.registerHandlerCommand(command, handlers.get(command.getCommandName()));
-		LOG.debug("handle updateCommand: " + command.getCommandName());
-		System.out.println("handle updateCommand: " + command.getCommandName());
-		CommandHandler<Command<R>, R> handler = (CommandHandler<Command<R>, R>) handlers.get(command.getCommandName());
-		if (handler!=null) {
-			System.out.println("handle updateCommand OK : handler.updateCommand(command) " + command.getCommandName());
-			return (Result<R>) handler.updateCommand(command);
-		} else {
-			System.out.println("handle updateCommand failed --"+handlers);
-			return null;
-		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public <R> Result<R> deleteCommand(Command<R> command) {
-		LOG.debug("handle deleteCommand: " + command.getCommandName());
-		System.out.println("handle deleteCommand: " + command.getCommandName());
-		CommandHandler<Command<R>, R> handler = (CommandHandler<Command<R>, R>) handlers.get(command.getCommandName());
-		if (handler!=null) {
-			return (Result<R>) handler.deleteCommand(command);
-		} else {
-			return null;
-		}
-
-	}
-
 	
 	public <R> void registerHandlerCommand(Command<R> command, CommandHandler<Command<R>, R> handler)  {
 		System.out.println("------------------------- Registering handler "+handler+" "+command.getCommandName());

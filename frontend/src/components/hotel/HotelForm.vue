@@ -78,8 +78,8 @@ export default {
     return {
       valid: true,
       errors: [],
-      hotel:{name:'AAAAAAAAAAAAA',code:'AAAA',phone:'+44-123456789', email:'aa@aa.com', updateUser:{id:''},eventType:'HotelSaveCommand'},
-      event: {aggregator:'hotel', eventType:'save'}
+      hotel:{name:'AAAAAAAAAAAAA',code:'AAAA',phone:'+44-123456789', email:'aa@aa.com', updateUser:{id:''},eventType:'HotelSaveCommand'}
+
     }
   },
   components: {

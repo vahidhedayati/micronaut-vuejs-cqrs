@@ -81,7 +81,7 @@ public class HotelCreatedCommand implements Serializable  {
 
 
     public String getCode() {
-    	return this.code;
+        return this.code;
     }
 
 
@@ -124,5 +124,5 @@ public class HotelCreatedCommand implements Serializable  {
 
 
 
-    
+
 }
