@@ -1,7 +1,6 @@
 package hotel.write.init;
 
 import hotel.write.domain.Hotel;
-import hotel.write.services.write.HotelDaoWriteDb;
 import hotel.write.services.write.HotelService;
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
@@ -17,7 +16,7 @@ import java.util.List;
 public class DataLoader  implements ApplicationEventListener<ServerStartupEvent> {
 
 	@Inject
-	private HotelDaoWriteDb hotelDb;
+	private HotelService hotelDb;
 
 	@Inject
 	private HotelService hotelService;

@@ -2,7 +2,7 @@ package hotel.read.controller;
 
 import hotel.read.adaptors.models.HotelModel;
 import hotel.read.domain.Hotel;
-import hotel.read.domain.interfaces.Hotels;
+import hotel.read.domain.interfaces.HotelsInterface;
 import hotel.read.implementation.SortingAndOrderArguments;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
@@ -17,9 +17,9 @@ import java.util.Optional;
 @Controller("/")
 public class HotelController {
 
-    protected final Hotels hotels;
+    protected final HotelsInterface hotels;
 
-    public HotelController(Hotels hotels) {
+    public HotelController(HotelsInterface hotels) {
         this.hotels = hotels;
     }
 

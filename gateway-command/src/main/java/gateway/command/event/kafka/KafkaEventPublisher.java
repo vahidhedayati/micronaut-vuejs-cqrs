@@ -5,10 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gateway.command.event.commands.Command;
 import io.micronaut.context.annotation.Primary;
 import io.micronaut.runtime.server.EmbeddedServer;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
-import java.util.UUID;
 import java.util.concurrent.Future;
 
 @Primary
@@ -25,32 +23,19 @@ public class KafkaEventPublisher implements EventPublisher {
 
     @Override
     public <T extends Command> void publish(EmbeddedServer embeddedServer, String topic, T command) {
-        System.out.println(" About to send to kafka  topic: "+topic);
-
-        command.setEventType(command.getClass().getSimpleName());
-
-        /*
-
-            //TODO - having issues extracting this on hotel-write - the actual object or command seems to work
-            //TODO - this is preferred method since it contains useful information it gets stuck on trying to put together eventData
-            //TODO - Which is the extended class I understand why not sure what the fix would be having tried a few things already
-
-            EventEnvelope envelope = new EventEnvelope(embeddedServer,eventType,command);
-            String value = serializeEnvelope(envelope);
-            System.out.println(" About to send to kafka"+topic+" ------------"+value);
-
-          //  Future<RecordMetadata> recordMetadataFuture = kafkaSender.send(topic, envelope.getTransactionId().toString(), value);
-        Future<RecordMetadata> recordMetadataFuture = kafkaSender.send(topic,UUID.randomUUID().toString(), value);
-
-*/
+        /**
+         * This sets up some default context of command bean including timestap - uuid -
+         * current host / port creating command object
+         */
+        command.initiate(embeddedServer,command.getClass().getSimpleName());
 
         /**
          * This is using the default extended command object generating json string and passing to who ever listens in to the
          * dynamic topic being listened to
          */
-        String value1 =serializeCommand(command);
-        System.out.println("  kafka topic: "+topic+" ------------ Serialized values: "+value1);
-        Future<RecordMetadata> recordMetadataFuture = kafkaSender.send(topic,   command.getEventType()+"_"+UUID.randomUUID().toString(), value1);
+        String value =serializeCommand(command);
+        System.out.println("  kafka topic: "+topic+" ------------ Serialized values: "+value);
+        Future<RecordMetadata> recordMetadataFuture = kafkaSender.send(topic,   command.getTransactionId(), value);
 
         System.out.println(" "+recordMetadataFuture.toString());
     }
@@ -66,13 +51,4 @@ public class KafkaEventPublisher implements EventPublisher {
         return json;
     }
 
-    private String serializeEnvelope(EventEnvelope envelope) {
-        String json;
-        try {
-            json = objectMapper.writeValueAsString(envelope);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        return json;
-    }
 }

@@ -1,13 +1,24 @@
-package hotel.read.adaptors.models;
+package hotel.read.commands;
+
+import com.sun.istack.Nullable;
+import io.micronaut.validation.Validated;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
-public class HotelSaveCommand {
+@Validated
+public class HotelSaveCommand extends Command {
+
 
     @NotBlank
+    @Pattern(regexp = "(?=.*[A-Z]).{2,3}", message = "field_three_char")
     private String code;
 
+    @NotNull
     @NotBlank
+    @Size(max = 10, min=3)
     private String name;
 
     @NotBlank
@@ -16,11 +27,14 @@ public class HotelSaveCommand {
     @NotBlank
     private String email;
 
+    @Nullable
+    private Long updateUserId;
 
+    public HotelSaveCommand() {
+        super();
+    }
 
-    public HotelSaveCommand() {}
-
-    public HotelSaveCommand(String code,String name) {
+    public HotelSaveCommand(String code, String name) {
         this.name = name;
         this.code=code;
     }
@@ -57,5 +71,13 @@ public class HotelSaveCommand {
     public void setEmail(String email) {
         this.email = email;
     }
-}
 
+
+    public Long getUpdateUserId() {
+        return updateUserId;
+    }
+
+    public void setUpdateUserId(Long updateUserId) {
+        this.updateUserId = updateUserId;
+    }
+}

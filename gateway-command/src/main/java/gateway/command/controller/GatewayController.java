@@ -21,19 +21,11 @@ import io.micronaut.websocket.CloseReason;
 import io.micronaut.websocket.WebSocketBroadcaster;
 import io.micronaut.websocket.WebSocketSession;
 import io.micronaut.websocket.annotation.*;
-import io.netty.channel.*;
-import io.netty.channel.group.ChannelGroup;
-import io.netty.channel.group.DefaultChannelGroup;
-import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.websocketx.*;
-import io.netty.util.CharsetUtil;
-import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -56,14 +48,14 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
     protected MediaTypeCodecRegistry mediaTypeCodecRegistry;
 
 
-    private final EventPublisher eventPublisher1;
+    private final EventPublisher eventPublisher;
 
 
 
     @Inject
-    public GatewayController(EmbeddedServer embeddedServer,EventPublisher eventPublisher1,WebSocketBroadcaster broadcaster) {
+    public GatewayController(EmbeddedServer embeddedServer,EventPublisher eventPublisher,WebSocketBroadcaster broadcaster) {
         this.embeddedServer=embeddedServer;
-        this.eventPublisher1 = eventPublisher1;
+        this.eventPublisher = eventPublisher;
         this.broadcaster=broadcaster;
     }
 
@@ -142,7 +134,7 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
         System.out.println(" command to be rn "+eventType);
         Command cmd = (Command) mediaTypeCodec.decode(commandClasses.get(eventType),formInput);
         System.out.println(" command "+cmd);
-        eventPublisher1.publish(embeddedServer,topic,cmd);
+        eventPublisher.publish(embeddedServer,topic,cmd);
         return HttpResponse.accepted();
     }
 

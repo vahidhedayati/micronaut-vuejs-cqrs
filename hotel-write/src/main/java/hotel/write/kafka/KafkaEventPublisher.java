@@ -2,7 +2,6 @@ package hotel.write.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import hotel.write.commands.Command;
 import io.micronaut.context.annotation.Primary;
 import io.micronaut.runtime.server.EmbeddedServer;
@@ -14,6 +13,7 @@ public class KafkaEventPublisher implements EventPublisher {
 
     private final ObjectMapper objectMapper;
     private final KafkaSender kafkaSender;
+
     public KafkaEventPublisher(ObjectMapper objectMapper,KafkaSender kafkaSender) {
         this.objectMapper = objectMapper;
         this.kafkaSender=kafkaSender;
@@ -24,22 +24,23 @@ public class KafkaEventPublisher implements EventPublisher {
     @Override
     public <T extends Command> void publish(EmbeddedServer embeddedServer, String topic, T command) {
         System.out.println(" About to send to kafka"+topic);
-        String eventType = command.getClass().getSimpleName();
+        //String eventType = command.getClass().getSimpleName();
 
-        //EventEnvelope envelope = new EventEnvelope(embeddedServer,eventType,command);
-        EventEnvelope envelope = new EventEnvelope();
-        String value = serializeEnvelope(envelope);
+        String value = serializeCommand(command);
 
         System.out.println(" About to send to kafka"+topic+" ------------"+value);
+        System.out.println(" Transaction ID  ---------------------------------------------- "+command.getTransactionId());
 
-        kafkaSender.send(topic, UUID.randomUUID().toString(), value);
+        //kafkaSender.send(topic, command.getEventType()+"_"+command.getTransactionId().toString(), value);
+        kafkaSender.send(topic, command.getTransactionId(), value);
     }
 
 
-    private String serializeEnvelope(EventEnvelope envelope) {
+    @Override
+    public <T extends Command> String serializeCommand( T command) {
         String json;
         try {
-            json = objectMapper.writeValueAsString(envelope);
+            json = objectMapper.writeValueAsString(command);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

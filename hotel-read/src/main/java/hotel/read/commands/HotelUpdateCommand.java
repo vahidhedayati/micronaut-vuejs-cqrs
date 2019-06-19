@@ -1,11 +1,11 @@
-package hotel.read.adaptors.models;
+package hotel.read.commands;
 
 import hotel.read.domain.Hotel;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class HotelUpdateCommand {
+public class HotelUpdateCommand  extends Command  {
 
     @NotNull
     private Long id;
@@ -91,7 +91,7 @@ public class HotelUpdateCommand {
         this.email = email;
     }
 
-    //public Hotel createHotel() {
-       // return new Hotel(this.id,this.code,this.name, this.phone, this.email);
-   // }
+    public Hotel createHotel() {
+        return new Hotel(this.id,this.code,this.name, this.phone, this.email);
+    }
 }

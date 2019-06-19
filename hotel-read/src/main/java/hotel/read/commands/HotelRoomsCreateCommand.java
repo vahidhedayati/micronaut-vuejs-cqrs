@@ -1,10 +1,10 @@
-package hotel.read.adaptors.models;
+package hotel.read.commands;
 
 
 import java.math.BigDecimal;
 
 
-public class HotelRoomsCreateCommand  {
+public class HotelRoomsCreateCommand extends  Command {
 
     public HotelRoomsCreateCommand() { }
 

@@ -5,7 +5,6 @@ import hotel.write.commands.Command;
 import hotel.write.commands.HotelDeleteCommand;
 import hotel.write.commands.HotelSaveCommand;
 import hotel.write.commands.HotelUpdateCommand;
-import hotel.write.kafka.EventEnvelope;
 import hotel.write.services.write.HotelService;
 import io.micronaut.configuration.kafka.ConsumerAware;
 import io.micronaut.configuration.kafka.annotation.KafkaKey;
@@ -34,7 +33,7 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
 
     Map<String, Class> commandClasses = new HashMap<String,Class>() {
         {
-            put(EventEnvelope.class.getSimpleName(), EventEnvelope.class);
+
             put(HotelSaveCommand.class.getSimpleName(), HotelSaveCommand.class);
             put(HotelUpdateCommand.class.getSimpleName(), HotelUpdateCommand.class);
             put(HotelDeleteCommand.class.getSimpleName(), HotelDeleteCommand.class);
@@ -77,51 +76,32 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
 
                 System.out.println(eventType+" is current eventType ");
                 Command cmd = (Command) mediaTypeCodec.decode(commandClasses.get(eventType),hotelCreatedEvent);
-                System.out.println(" command "+cmd);
+               // System.out.println(" command "+cmd);
 
-                //eventPublisher1.publish(embeddedServer,topic,cmd);
-                //Hotel hotel = args.getHotel();
-                //hotelWriteClient.save(hotel);
-                //EventEnvelope cmd =  hotelCreatedEvent.getDtoFromEvent();
-                // System.out.println(" command "+cmd);
-                //eventPublisher1.publish(embeddedServer,topic,cmd);
-                //Hotel hotel = args.getHotel();
-                //hotelWriteClient.save(hotel);
-
-                //EventEnvelope cmd =  hotelCreatedEvent.getDtoFromEvent();
-                System.out.println("Default save of hotel in gateway ---------------- command "+cmd);
+                //System.out.println("Default save of hotel in hotel-write ---------------- command "+cmd);
                 if (hotelCreatedEvent !=null ) {
                     final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
 
-                final Set<ConstraintViolation<Command>> constraintViolations = validator.validate(cmd);
-                if (constraintViolations.size() > 0) {
-                    Set<String> violationMessages = new HashSet<String>();
+                    final Set<ConstraintViolation<Command>> constraintViolations = validator.validate(cmd);
+                    if (constraintViolations.size() > 0) {
+                        Set<String> violationMessages = new HashSet<String>();
 
-                    for (ConstraintViolation<?> constraintViolation : constraintViolations) {
-                        violationMessages.add(constraintViolation.getMessage());
-                        //violationMessages.add(constraintViolation.getPropertyPath() + ": " + constraintViolation.getMessage());
+                        for (ConstraintViolation<?> constraintViolation : constraintViolations) {
+                            violationMessages.add(constraintViolation.getMessage());
+                            //violationMessages.add(constraintViolation.getPropertyPath() + ": " + constraintViolation.getMessage());
+                        }
+                        System.out.println(" HOTEL-WRITE VALIDATION ERROR - COMMAND BUS FAILED VALIDATION::: 01 ---->"+violationMessages);
+                        // throw new ValidationException("Hotel is not valid:\n" + violationMessages);
+                        //TODO - We need to websocket back and pickup
+                        /// return HttpResponse.badRequest(violationMessages);
+                    } else {
+                        System.out.println(" HOTEL-WRITE ALL good ---->"+cmd.getClass());
+                        if (cmd instanceof HotelSaveCommand) {
+                            System.out.println("Saving item sending to  hotel");
+                            dao.save((HotelSaveCommand) cmd);
+                        }
                     }
-                    System.out.println(" HOTEL-WRITE VALIDATION ERROR - COMMAND BUS FAILED VALIDATION::: 01 ---->"+violationMessages);
-//            throw new ValidationException("Hotel is not valid:\n" + violationMessages);
-
-                    //TODO - We need to websocket back and pickup
-                    /// return HttpResponse.badRequest(violationMessages);
-                } else {
-
-                    //Hotel h= cmd.createHotel();
-                    //if (h !=null ) {
-                    //  dao.save(h);
-                    //}
-
-                    System.out.println(" HOTEL-WRITE ALL good ---->"+cmd.getClass());
-                    if (cmd instanceof HotelSaveCommand) {
-                        System.out.println("Saving item sending to  hotel");
-                        dao.save((HotelSaveCommand) cmd);
-                    }
-
-
-                }
 
                 }
 
@@ -137,19 +117,12 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
         System.out.println("onPartitionsRevoked------------------------------------------------------------------------------------------------");
         // partitions.iterator().forEachRemaining();
         // save offsets here
-
-
         for(TopicPartition partition: partitions) {
             synchronized (partition) {
-                // kafkaConsumers.forEach(consumer -> {
-                //synchronized (kafkaConsumers) {
                 System.out.println("  onPartitionsRevoked parition : " + partition + ' ');
                 // + consumer.position(partition));
                 //consumer.seek(partition,1);
-                // }
-                // });
             }
-            //   saveOffsetInExternalStore(consumer.position(partition));
         }
     }
 

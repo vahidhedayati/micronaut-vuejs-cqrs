@@ -1,17 +1,17 @@
 package hotel.read.domain.interfaces;
 
-import hotel.read.adaptors.models.HotelDeleteCommand;
 import hotel.read.adaptors.models.HotelModel;
-import hotel.read.adaptors.models.HotelUpdateCommand;
+import hotel.read.commands.HotelCreatedCommand;
+import hotel.read.commands.HotelDeleteCommand;
+import hotel.read.commands.HotelSaveCommand;
+import hotel.read.commands.HotelUpdateCommand;
 import hotel.read.domain.Hotel;
 import hotel.read.implementation.SortingAndOrderArguments;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.Optional;
 
-public interface Hotels {
+public interface HotelsInterface {
 
 	Optional<Hotel> findById(@NotNull Long id);
 
@@ -20,11 +20,10 @@ public interface Hotels {
 
 	Optional<Hotel> findByCode(String code);
 	void save(Hotel hotel);
+	void save(HotelSaveCommand hotelSaveCommand);
+	void save(HotelCreatedCommand hotelCreatedCommand);
 	void delete(HotelDeleteCommand hotel);
 	void update(HotelUpdateCommand hotel);
-	//Single<List<Hotel>> listAll(Map input);
-
-	//Maybe<Hotel> reolveCode(String code);
 
 	Hotel getByCode(String code);
 	

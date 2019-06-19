@@ -1,33 +1,46 @@
 package hotel.read.event.listeners;
 
-import hotel.read.adaptors.models.HotelCreatedCommand;
-import hotel.read.domain.Hotel;
-import hotel.read.domain.interfaces.Hotels;
-import hotel.read.event.HotelCreatedEvent;
+
+import hotel.read.commands.Command;
+import hotel.read.commands.HotelDeleteCommand;
+import hotel.read.commands.HotelSaveCommand;
+import hotel.read.commands.HotelUpdateCommand;
+import hotel.read.services.read.HotelService;
 import io.micronaut.configuration.kafka.ConsumerAware;
 import io.micronaut.configuration.kafka.annotation.KafkaKey;
 import io.micronaut.configuration.kafka.annotation.KafkaListener;
 import io.micronaut.configuration.kafka.annotation.Topic;
-import io.micronaut.messaging.annotation.Body;
-import org.apache.kafka.clients.consumer.*;
+import io.micronaut.http.MediaType;
+import io.micronaut.http.codec.MediaTypeCodecRegistry;
+import io.micronaut.jackson.codec.JsonMediaTypeCodec;
+import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.TopicPartition;
 
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 import javax.inject.Inject;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @ThreadSafe
 @KafkaListener
 public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAware {
 
+    Map<String, Class> commandClasses = new HashMap<String,Class>() {
+        {
+            put(HotelSaveCommand.class.getSimpleName(), HotelSaveCommand.class);
+            put(HotelUpdateCommand.class.getSimpleName(), HotelUpdateCommand.class);
+            put(HotelDeleteCommand.class.getSimpleName(), HotelDeleteCommand.class);
+        }
+    };
+
+    @Inject
+    protected MediaTypeCodecRegistry mediaTypeCodecRegistry;
 
 
    // @GuardedBy("kafkaConsumers")
@@ -46,29 +59,36 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
     //protected static final Logger LOG = LoggerFactory.getLogger(KafkaEventListener.class);
 
     @Inject
-    private Hotels dao;
-    //private QueryHotelViewDao dao;
+    private HotelService dao;
+
 
     @Topic("hotelRead")
-    public void consume( @KafkaKey String hotelCode, @Body HotelCreatedEvent hotelCreatedEvent) {
-        if (hotelCode!=null) {
-            // LOG.debug("KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER hotelCreated "+hotelCode);
-            //System.out.println("READ --------------- KAKFA hotelCreated EVENT RECEIVED AT CUSTOM APPLICATION LISTENER  hotelCreated ---"+hotelCreatedEvent.getDtoFromEvent()+" "+hotelCode);
-            System.out.println("READ --------------- KAKFA hotelCreated EVENT RECEIVED AT CUSTOM APPLICATION LISTENER  hotelCreated --- "+hotelCode);
-            HotelCreatedCommand cmd =  hotelCreatedEvent.getDtoFromEvent();
-            if (cmd !=null ) {
-                Hotel h= cmd.createHotel();
-                if (h !=null ) {
-                    dao.save(h);
+    public void consume(@KafkaKey String hotelCode,  String hotelCreatedEvent) {
+        System.out.println("_____> READ --------------- KAKFA "+hotelCode);
+        if (hotelCode.contains("_")) {
+            String eventType = hotelCode.split("_")[0];
+            if (hotelCode!=null) {
+                // LOG.debug("KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER hotelCreated "+hotelCode);
+                //System.out.println("READ --------------- KAKFA hotelCreated EVENT RECEIVED AT CUSTOM APPLICATION LISTENER  hotelCreated ---"+hotelCreatedEvent.getDtoFromEvent()+" "+hotelCode);
+                System.out.println("_____> READ --------------- KAKFA hotelCreated EVENT RECEIVED AT CUSTOM APPLICATION LISTENER  --- "+hotelCode+ " -- event "+hotelCreatedEvent);
+
+                JsonMediaTypeCodec mediaTypeCodec = (JsonMediaTypeCodec) mediaTypeCodecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
+                        .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
+
+                System.out.println(eventType+" is current eventType ");
+                Command cmd = (Command) mediaTypeCodec.decode(commandClasses.get(eventType),hotelCreatedEvent);
+                // System.out.println(" command "+cmd);
+
+                System.out.println(" HOTEL-READ ALL good ---->"+cmd.getClass());
+                if (cmd instanceof HotelSaveCommand) {
+                    System.out.println("Saving item sending to  hotel");
+                    dao.save((HotelSaveCommand) cmd);
                 }
+
             }
 
-
-
         }
-
     }
-
 
 
     @Override
@@ -76,19 +96,12 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
         System.out.println("onPartitionsRevoked------------------------------------------------------------------------------------------------");
         // partitions.iterator().forEachRemaining();
         // save offsets here
-
-
         for(TopicPartition partition: partitions) {
             synchronized (partition) {
-                // kafkaConsumers.forEach(consumer -> {
-                //synchronized (kafkaConsumers) {
                 System.out.println("  onPartitionsRevoked parition : " + partition + ' ');
                 // + consumer.position(partition));
                 //consumer.seek(partition,1);
-                // }
-                // });
             }
-            //   saveOffsetInExternalStore(consumer.position(partition));
         }
     }
 

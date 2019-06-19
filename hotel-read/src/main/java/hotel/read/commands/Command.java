@@ -1,4 +1,4 @@
-package gateway.command.event.commands;
+package hotel.read.commands;
 
 
 import io.micronaut.runtime.server.EmbeddedServer;
@@ -24,8 +24,7 @@ public abstract class Command implements Action {
     public void initiate(EmbeddedServer embeddedServer, String eventType) {
         this.eventType=eventType;
         this.instant = Instant.now();
-        //We add eventType to transaction id - which is then parsed as part of the actual topic item key received
-        this.transactionId=eventType+"_"+UUID.randomUUID().toString();
+        this.transactionId=UUID.randomUUID().toString();
         this.host = embeddedServer.getHost();
         this.port = embeddedServer.getPort();
     }

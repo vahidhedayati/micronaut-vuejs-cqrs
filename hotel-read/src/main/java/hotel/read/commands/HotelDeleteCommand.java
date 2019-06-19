@@ -1,8 +1,10 @@
-package hotel.read.adaptors.models;
+package hotel.read.commands;
+
+import hotel.read.domain.Hotel;
 
 import javax.validation.constraints.NotNull;
 
-public class HotelDeleteCommand {
+public class HotelDeleteCommand  extends Command  {
 
     @NotNull
     private Long id;
@@ -24,6 +26,10 @@ public class HotelDeleteCommand {
     }
     public void setId(String id) {
         this.id = Long.valueOf(id);
+    }
+
+    public Hotel getHotel() {
+        return new Hotel(this.id);
     }
 
 }
