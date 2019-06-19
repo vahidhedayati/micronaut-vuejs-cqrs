@@ -5,23 +5,13 @@ import java.util.Date;
 
 public class UserSaveCommand extends Command {
 
-
-    @NotBlank
     private String username;
-
-    @NotBlank
     private String password;
 
-
-    @NotBlank
     private String firstname;
 
-
-    @NotBlank
     private String surname;
 
-
-    @NotBlank
     private Date lastUpdated;
 
     public UserSaveCommand() {}

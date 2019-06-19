@@ -73,6 +73,8 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
                 if (cmd instanceof HotelSaveCommand) {
                     System.out.println("Saving read hote");
                     dao.save((HotelSaveCommand) cmd);
+                } else if (cmd instanceof HotelCreatedCommand) {
+                    dao.save((HotelCreatedCommand) cmd);
                 }
 
             }

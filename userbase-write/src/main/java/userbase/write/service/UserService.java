@@ -86,14 +86,16 @@ public class UserService implements Users {
         return user;
     }
 
+    @Transactional
     @Override
     public void save(UserSaveCommand cmd) {
         System.out.println("Doing user save "+cmd.getUsername());
         publishEvent(cmd);
-        User user = new User(cmd.getUsername(),cmd.getPassword(),cmd.getFirstname(),cmd.getSurname());
+        User user = new User(cmd.getUsername(),cmd.getPassword(),cmd.getFirstname(),cmd.getSurname(),cmd.getLastUpdated());
         entityManager.persist(user);
     }
 
+    @Transactional
     @Override
     public void delete(UserDeleteCommand cmd) {
         publishEvent(cmd);
@@ -101,6 +103,7 @@ public class UserService implements Users {
         findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
     }
 
+    @Transactional
     @Override
     public void update(UserUpdateCommand cmd) {
         publishEvent(cmd);

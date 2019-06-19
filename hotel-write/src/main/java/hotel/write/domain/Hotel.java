@@ -177,7 +177,9 @@ public class Hotel {
     public void setUpdateUserId(Long updateUserId) {
         this.updateUserId = updateUserId;
     }
-
+    public void setHotelRooms(List<HotelRooms> hotelRooms) {
+        this.hotelRooms = hotelRooms;
+    }
     @Override
     public String toString() {
         return "hotel{" +

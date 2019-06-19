@@ -131,20 +131,23 @@ public class UserService implements Users {
         return user;
     }
 
+
+    @Transactional
     @Override
     public void save(UserSaveCommand cmd) {
         System.out.println("Doing user save "+cmd.getUsername());
-        User user = new User(cmd.getUsername(),cmd.getPassword(),cmd.getFirstname(),cmd.getSurname());
+        User user = new User(cmd.getUsername(),cmd.getPassword(),cmd.getFirstname(),cmd.getSurname(),cmd.getLastUpdated());
         entityManager.persist(user);
     }
 
+    @Transactional
     @Override
     public void delete(UserDeleteCommand cmd) {
         System.out.println("Doing user delete "+cmd.getId());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
     }
 
-
+    @Transactional
     @Override
     public void update(UserUpdateCommand cmd) {
         System.out.println("Doing user update "+cmd.getUsername());

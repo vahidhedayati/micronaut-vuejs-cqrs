@@ -116,11 +116,12 @@ public class HotelService implements HotelsInterface {
             entityManager.persist(hotel);
         }
     }
+
+    @Override
     @Transactional
     public void save(HotelCreatedCommand cmd) {
-        System.out.println("Doing HotelCreatedCommand save "+cmd.getName());
+        System.out.println("Doing READ  HotelCreatedCommand save "+cmd.getName());
         Hotel hotel = new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(),cmd.getUpdateUserId(),cmd.getLastUpdated());
-
         List<HotelRooms> hotelRooms = new ArrayList<>();
         if (!findByCode(hotel.getCode()).isPresent()) {
             entityManager.persist(hotel);
@@ -130,16 +131,18 @@ public class HotelService implements HotelsInterface {
             }
             hotel.setHotelRooms(hotelRooms);
             entityManager.persist(hotel);
-         //   save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(),cmd.getUpdateUserId(),hotelRooms,cmd.getLastUpdated()));
         }
+
     }
 
+    @Override
     @Transactional
     public void save(HotelSaveCommand cmd) {
         System.out.println("Doing hotel save "+cmd.getName());
         save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail()));
     }
 
+    @Override
     @Transactional
     public void save(Hotel hotel) {
         if (hotel!=null) {
