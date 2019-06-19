@@ -1,8 +1,7 @@
 package hotel.write.domain.interfaces;
 
 
-
-import hotel.write.commands.HotelCreatedCommand;
+import hotel.write.commands.HotelCreateCommand;
 import hotel.write.commands.HotelDeleteCommand;
 import hotel.write.commands.HotelSaveCommand;
 import hotel.write.commands.HotelUpdateCommand;
@@ -20,7 +19,7 @@ public interface HotelsInterface {
 	Optional<Hotel> findByCode(String code);
 	void save(Hotel hotel);
 	void save(HotelSaveCommand hotelSaveCommand);
-	void save(HotelCreatedCommand hotelCreatedCommand);
+	void save(HotelCreateCommand hotelCreatedCommand);
 	void delete(HotelDeleteCommand hotel);
 	void update(HotelUpdateCommand hotel);
 	//Single<List<Hotel>> listAll(Map input);

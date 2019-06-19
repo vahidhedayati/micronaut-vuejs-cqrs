@@ -1,6 +1,6 @@
 package gateway.command.init;
 
-import gateway.command.event.commands.HotelCreatedCommand;
+import gateway.command.event.commands.HotelCreateCommand;
 import gateway.command.event.commands.HotelRoomsCreateCommand;
 
 import java.math.BigDecimal;
@@ -13,8 +13,8 @@ import java.util.List;
 public class DemoHotelsFactory {
 
 	
-	static List<HotelCreatedCommand> defaultHotels() {
-		List<HotelCreatedCommand> hotels = new ArrayList<HotelCreatedCommand>();
+	static List<HotelCreateCommand> defaultHotels() {
+		List<HotelCreateCommand> hotels = new ArrayList<HotelCreateCommand>();
 		hotels.add(addHotel("HILL","Hilton - London Bridge","aa@aa.com","+44-111111111111"));
 
 
@@ -54,8 +54,8 @@ public class DemoHotelsFactory {
     }
 	
 	
-	static HotelCreatedCommand addHotel(String code,String name, String email, String phone) {
-		HotelCreatedCommand hotel = new HotelCreatedCommand(code,name ,phone,email,1L,
+	static HotelCreateCommand addHotel(String code,String name, String email, String phone) {
+		HotelCreateCommand hotel = new HotelCreateCommand(code,name ,phone,email,1L,
 				Date.from(LocalDate.parse( "2019-01-10" ).plusDays( 10 ).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()),addRooms());
 		return hotel;
 	}

@@ -15,7 +15,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.TopicPartition;
 import userbase.read.commands.Command;
 import userbase.read.commands.UserSaveCommand;
-import userbase.read.commands.UserUpdateCommand;
+import userbase.read.commands.UserSavedCommand;
+import userbase.read.commands.UserUpdatedCommand;
 import userbase.read.service.UserService;
 
 import javax.annotation.Nonnull;
@@ -33,8 +34,8 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
     Map<String, Class> commandClasses = new HashMap<String,Class>() {
         {
 
-            put(UserSaveCommand.class.getSimpleName(), UserSaveCommand.class);
-            put(UserUpdateCommand.class.getSimpleName(), UserUpdateCommand.class);
+            put(UserSavedCommand.class.getSimpleName(), UserSavedCommand.class);
+            put(UserUpdatedCommand.class.getSimpleName(), UserUpdatedCommand.class);
         }
     };
     @Inject
@@ -82,8 +83,10 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
                         //TODO - We need to websocket back and pickup
                         /// return HttpResponse.badRequest(violationMessages);
                     } else {
-                        if (cmd instanceof UserSaveCommand) {
-                            dao.save((UserSaveCommand) cmd);
+                        if (cmd instanceof UserSavedCommand) {
+                            dao.save((UserSavedCommand) cmd);
+                        } else if (cmd instanceof UserUpdatedCommand) {
+                            dao.update((UserUpdatedCommand) cmd);
                         }
                     }
 

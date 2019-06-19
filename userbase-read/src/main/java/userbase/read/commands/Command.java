@@ -15,7 +15,7 @@ public abstract class Command implements Action {
     private Instant instant;
 
     //Stores a random transaction Id
-    private String transactionId;
+    private UUID transactionId;
 
     //Stores current hostname/port - for other useful stuff in future perhaps websocket connect back to this host
     private String host;
@@ -24,7 +24,7 @@ public abstract class Command implements Action {
     public void initiate(EmbeddedServer embeddedServer, String eventType) {
         this.eventType=eventType;
         this.instant = Instant.now();
-        this.transactionId=UUID.randomUUID().toString();
+        this.transactionId=UUID.randomUUID();
         this.host = embeddedServer.getHost();
         this.port = embeddedServer.getPort();
     }
@@ -49,11 +49,11 @@ public abstract class Command implements Action {
         this.instant = instant;
     }
 
-    public String getTransactionId() {
+    public UUID getTransactionId() {
         return transactionId;
     }
 
-    public void setTransactionId(String transactionId) {
+    public void setTransactionId(UUID transactionId) {
         this.transactionId = transactionId;
     }
 

@@ -9,11 +9,8 @@ import hotel.read.domain.interfaces.HotelsInterface;
 import hotel.read.implementation.ApplicationConfiguration;
 import hotel.read.implementation.SortingAndOrderArguments;
 import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
-import io.micronaut.http.codec.MediaTypeCodecRegistry;
-import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.spring.tx.annotation.Transactional;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -85,20 +82,20 @@ public class HotelService implements HotelsInterface {
         model.setInstanceTotal(countQuery.getSingleResult());
 
         model.setNumberOfPages(model.getInstanceTotal()/args.getMax().get());
-        System.out.println(" SEARCH ::: "+model.getInstanceTotal()+" "+model.getNumberOfPages()+" "+model.getInstanceList());
+      //  System.out.println(" SEARCH ::: "+model.getInstanceTotal()+" "+model.getNumberOfPages()+" "+model.getInstanceList());
         return Optional.of(model); //Single.just(model);
     }
 
     @Override
     @Transactional
-    public void delete(HotelDeleteCommand cmd) {
+    public void delete(HotelDeletedCommand cmd) {
         System.out.println("Doing hotel delete "+cmd.getId());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
     }
 
     @Override
     @Transactional
-    public void update(HotelUpdateCommand cmd) {
+    public void update(HotelUpdatedCommand cmd) {
         System.out.println("Doing hotel update "+cmd.getName());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
                 .setParameter("name", cmd.getName())
@@ -137,7 +134,7 @@ public class HotelService implements HotelsInterface {
 
     @Override
     @Transactional
-    public void save(HotelSaveCommand cmd) {
+    public void save(HotelSavedCommand cmd) {
         System.out.println("Doing hotel save "+cmd.getName());
         save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail()));
     }

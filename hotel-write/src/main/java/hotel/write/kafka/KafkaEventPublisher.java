@@ -32,7 +32,7 @@ public class KafkaEventPublisher implements EventPublisher {
         System.out.println(" Transaction ID  ---------------------------------------------- "+command.getTransactionId());
 
         //kafkaSender.send(topic, command.getEventType()+"_"+command.getTransactionId().toString(), value);
-        kafkaSender.send(topic, command.getTransactionId(), value);
+        kafkaSender.send(topic,command.getEventType()+"_"+ command.getTransactionId().toString(), value);
     }
 
 

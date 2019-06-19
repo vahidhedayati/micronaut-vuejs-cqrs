@@ -1,17 +1,13 @@
 package gateway.command.init;
 
-import gateway.command.event.commands.Command;
-import gateway.command.event.commands.HotelCreatedCommand;
+import gateway.command.event.commands.HotelCreateCommand;
 import gateway.command.event.commands.UserSaveCommand;
 import gateway.command.event.kafka.EventPublisher;
 import io.micronaut.context.event.ApplicationEventListener;
-import io.micronaut.http.codec.MediaTypeCodecRegistry;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
-import io.micronaut.spring.tx.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 
@@ -31,8 +27,8 @@ public class DataLoader  implements ApplicationEventListener<ServerStartupEvent>
 	@Override
 	public void onApplicationEvent(ServerStartupEvent event) {
 		System.out.println("Starting COMMAND GATEWAY ------------------------------------------------------------ ");
-		List<HotelCreatedCommand> hotels = DemoHotelsFactory.defaultHotels();
-		for (HotelCreatedCommand cmd : hotels ) {
+		List<HotelCreateCommand> hotels = DemoHotelsFactory.defaultHotels();
+		for (HotelCreateCommand cmd : hotels ) {
 			eventPublisher.publish(embeddedServer,"hotel",cmd);
 		}
 		List<UserSaveCommand> users = DemoUsersFactory.defaultUsers();

@@ -30,7 +30,7 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
 
     Map<String, Class> commandClasses = new HashMap<String,Class>() {
         {
-            put(HotelCreatedCommand.class.getSimpleName(), HotelCreatedCommand.class);
+            put(HotelCreateCommand.class.getSimpleName(), HotelCreateCommand.class);
             put(HotelSaveCommand.class.getSimpleName(), HotelSaveCommand.class);
             put(HotelUpdateCommand.class.getSimpleName(), HotelUpdateCommand.class);
             put(HotelDeleteCommand.class.getSimpleName(), HotelDeleteCommand.class);
@@ -87,8 +87,12 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
                     } else {
                         if (cmd instanceof HotelSaveCommand) {
                             dao.save((HotelSaveCommand) cmd);
-                        } else if (cmd instanceof HotelCreatedCommand) {
-                            dao.save((HotelCreatedCommand) cmd);
+                        } else if (cmd instanceof HotelCreateCommand) {
+                            dao.save((HotelCreateCommand) cmd);
+                        } else if (cmd instanceof HotelUpdateCommand) {
+                            dao.update((HotelUpdateCommand) cmd);
+                        } else if (cmd instanceof HotelDeleteCommand) {
+                            dao.delete((HotelDeleteCommand) cmd);
                         }
                     }
                 }

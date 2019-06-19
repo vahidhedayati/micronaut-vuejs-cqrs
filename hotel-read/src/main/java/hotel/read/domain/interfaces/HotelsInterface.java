@@ -2,9 +2,9 @@ package hotel.read.domain.interfaces;
 
 import hotel.read.adaptors.models.HotelModel;
 import hotel.read.commands.HotelCreatedCommand;
-import hotel.read.commands.HotelDeleteCommand;
-import hotel.read.commands.HotelSaveCommand;
-import hotel.read.commands.HotelUpdateCommand;
+import hotel.read.commands.HotelDeletedCommand;
+import hotel.read.commands.HotelSavedCommand;
+import hotel.read.commands.HotelUpdatedCommand;
 import hotel.read.domain.Hotel;
 import hotel.read.implementation.SortingAndOrderArguments;
 
@@ -20,10 +20,10 @@ public interface HotelsInterface {
 
 	Optional<Hotel> findByCode(String code);
 	void save(Hotel hotel);
-	void save(HotelSaveCommand hotelSaveCommand);
+	void save(HotelSavedCommand hotelSaveCommand);
 	void save(HotelCreatedCommand hotelCreatedCommand);
-	void delete(HotelDeleteCommand hotel);
-	void update(HotelUpdateCommand hotel);
+	void delete(HotelDeletedCommand hotel);
+	void update(HotelUpdatedCommand hotel);
 
 	Hotel getByCode(String code);
 	

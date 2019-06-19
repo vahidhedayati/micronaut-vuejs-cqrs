@@ -89,8 +89,11 @@ public class UserService implements Users {
     @Transactional
     @Override
     public void save(UserSaveCommand cmd) {
-        System.out.println("Doing user save "+cmd.getUsername());
+
+        cmd.setEventType("UserSavedCommand");
         publishEvent(cmd);
+
+        System.out.println("Doing user save "+cmd.getUsername());
         User user = new User(cmd.getUsername(),cmd.getPassword(),cmd.getFirstname(),cmd.getSurname(),cmd.getLastUpdated());
         entityManager.persist(user);
     }
@@ -98,7 +101,9 @@ public class UserService implements Users {
     @Transactional
     @Override
     public void delete(UserDeleteCommand cmd) {
+        cmd.setEventType("UserDeletedCommand");
         publishEvent(cmd);
+
         System.out.println("Doing User delete "+cmd.getId());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
     }
@@ -106,7 +111,9 @@ public class UserService implements Users {
     @Transactional
     @Override
     public void update(UserUpdateCommand cmd) {
+        cmd.setEventType("UserUpdatedCommand");
         publishEvent(cmd);
+
         System.out.println("Doing user update "+cmd.getUsername());
         findById(cmd.getId()).ifPresent(user -> entityManager.createQuery("UPDATE User h  SET username = :username, password = :password, firstname=:firstname, surname=:surname where id = :id")
                 .setParameter("username", cmd.getUsername())

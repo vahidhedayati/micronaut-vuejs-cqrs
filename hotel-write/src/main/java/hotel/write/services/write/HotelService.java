@@ -52,6 +52,7 @@ public class HotelService implements HotelsInterface {
     @Override
     @Transactional
     public void delete(HotelDeleteCommand cmd) {
+        cmd.setEventType("HotelDeletedCommand");
         publishEvent(cmd);
         System.out.println("Doing hotel delete "+cmd.getId());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
@@ -60,7 +61,10 @@ public class HotelService implements HotelsInterface {
     @Override
     @Transactional
     public void update(HotelUpdateCommand cmd) {
+
+        cmd.setEventType("HotelUpdatedCommand");
         publishEvent(cmd);
+
         System.out.println("Doing hotel update "+cmd.getName());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
                 .setParameter("name", cmd.getName())
@@ -89,9 +93,12 @@ public class HotelService implements HotelsInterface {
 
     @Override
     @Transactional
-    public void save(HotelCreatedCommand cmd) {
-        System.out.println("Doing hotel HotelCreatedCommand save  "+cmd.getName());
+    public void save(HotelCreateCommand cmd) {
+
+        cmd.setEventType("HotelCreatedCommand");
         publishEvent(cmd);
+
+        System.out.println("Doing hotel HotelCreatedCommand save  "+cmd.getName());
         Hotel hotel = new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(),cmd.getUpdateUserId(),cmd.getLastUpdated());
         List<HotelRooms> hotelRooms = new ArrayList<>();
         if (!findByCode(hotel.getCode()).isPresent()) {
@@ -109,6 +116,7 @@ public class HotelService implements HotelsInterface {
     @Transactional
     public void save(HotelSaveCommand cmd) {
         System.out.println("Doing hotel save "+cmd.getName());
+        cmd.setEventType("HotelSavedCommand");
         publishEvent(cmd);
         save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail()));
     }

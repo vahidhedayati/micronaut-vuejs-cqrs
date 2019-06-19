@@ -31,9 +31,9 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
     Map<String, Class> commandClasses = new HashMap<String,Class>() {
         {
             put(HotelCreatedCommand.class.getSimpleName(), HotelCreatedCommand.class);
-            put(HotelSaveCommand.class.getSimpleName(), HotelSaveCommand.class);
-            put(HotelUpdateCommand.class.getSimpleName(), HotelUpdateCommand.class);
-            put(HotelDeleteCommand.class.getSimpleName(), HotelDeleteCommand.class);
+            put(HotelSavedCommand.class.getSimpleName(), HotelSavedCommand.class);
+            put(HotelUpdatedCommand.class.getSimpleName(), HotelUpdatedCommand.class);
+            put(HotelDeletedCommand.class.getSimpleName(), HotelDeletedCommand.class);
         }
     };
 
@@ -70,11 +70,15 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
                 JsonMediaTypeCodec mediaTypeCodec = (JsonMediaTypeCodec) mediaTypeCodecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
                         .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
                 Command cmd = (Command) mediaTypeCodec.decode(commandClasses.get(eventType),hotelCreatedEvent);
-                if (cmd instanceof HotelSaveCommand) {
+                if (cmd instanceof HotelSavedCommand) {
                     System.out.println("Saving read hote");
-                    dao.save((HotelSaveCommand) cmd);
+                    dao.save((HotelSavedCommand) cmd);
                 } else if (cmd instanceof HotelCreatedCommand) {
                     dao.save((HotelCreatedCommand) cmd);
+                } else if (cmd instanceof HotelUpdatedCommand) {
+                    dao.update((HotelUpdatedCommand) cmd);
+                } else if (cmd instanceof HotelDeletedCommand) {
+                    dao.delete((HotelDeletedCommand) cmd);
                 }
 
             }

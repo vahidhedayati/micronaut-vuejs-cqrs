@@ -7,6 +7,7 @@ import io.micronaut.context.annotation.Primary;
 import io.micronaut.runtime.server.EmbeddedServer;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
+import java.util.UUID;
 import java.util.concurrent.Future;
 
 @Primary
@@ -35,7 +36,7 @@ public class KafkaEventPublisher implements EventPublisher {
          */
         String value =serializeCommand(command);
         System.out.println("  kafka topic: "+topic+" ------------ Serialized values: "+value);
-        Future<RecordMetadata> recordMetadataFuture = kafkaSender.send(topic,   command.getTransactionId(), value);
+        Future<RecordMetadata> recordMetadataFuture = kafkaSender.send(topic,  command.getEventType()+"_"+ command.getTransactionId().toString(), value);
 
         System.out.println(" "+recordMetadataFuture.toString());
     }
