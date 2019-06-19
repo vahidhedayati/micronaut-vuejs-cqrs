@@ -27,10 +27,14 @@
          <label>Email:</label>
          <input type="text" v-model="hotel.email" />
        </div>
-
-
-        <!-- if the user is logged in this is value is preset by their ID after the page has been loaded -->
-        <input type="hidden"  v-model="hotel.updateUser.id">
+       <div>
+         <label>Update Username:</label>
+         <input type="text" v-model="hotel.updateUserName" />
+       </div>
+       <div>
+         <label>Update UserId:</label>
+         <input type="text" v-model="hotel.updateUserId" />
+       </div>
 
    <div class="col-sm-2">
       <div class="input-group">
@@ -78,7 +82,7 @@ export default {
     return {
       valid: true,
       errors: [],
-      hotel:{name:'AAAAAAAAAAAAA',code:'AAAA',phone:'+44-123456789', email:'aa@aa.com', updateUser:{id:''},eventType:'HotelSaveCommand'}
+      hotel:{name:'AAAAAAAAAAAAA',code:'AAAA',phone:'+44-123456789', email:'aa@aa.com', updateUserName:'Admin' , updateUserId:'1L',eventType:'HotelSaveCommand'}
 
     }
   },

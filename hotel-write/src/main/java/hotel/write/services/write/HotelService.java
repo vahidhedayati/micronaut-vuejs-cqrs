@@ -1,6 +1,7 @@
 package hotel.write.services.write;
 
 
+import hotel.write.clients.UserReadClient;
 import hotel.write.commands.*;
 import hotel.write.domain.Hotel;
 import hotel.write.domain.HotelRooms;
@@ -30,17 +31,19 @@ public class HotelService implements HotelsInterface {
     @PersistenceContext
     private EntityManager entityManager;
     private final ApplicationConfiguration applicationConfiguration;
-
+    private final UserReadClient userReadClient;
 
     private final EmbeddedServer embeddedServer;
     protected static final String topic = "hotelRead";
     private final EventPublisher eventPublisher;
 
-    public HotelService(@CurrentSession EntityManager entityManager, ApplicationConfiguration applicationConfiguration, EventPublisher eventPublisher, EmbeddedServer embeddedServer) {
+    public HotelService(@CurrentSession EntityManager entityManager, ApplicationConfiguration applicationConfiguration,
+                        EventPublisher eventPublisher, EmbeddedServer embeddedServer,UserReadClient userReadClient) {
         this.entityManager = entityManager;
         this.applicationConfiguration = applicationConfiguration;
         this.eventPublisher = eventPublisher;
         this.embeddedServer = embeddedServer;
+        this.userReadClient=userReadClient;
     }
 
     @Override
@@ -63,7 +66,15 @@ public class HotelService implements HotelsInterface {
     public void update(HotelUpdateCommand cmd) {
 
         cmd.setEventType("HotelUpdatedCommand");
+
+
+        //HotelUpdatedCommand cmd1 = (HotelUpdatedCommand)cmd;
+        //cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).get().getUsername());
+
         publishEvent(cmd);
+
+
+
 
         System.out.println("Doing hotel update "+cmd.getName());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
@@ -96,7 +107,10 @@ public class HotelService implements HotelsInterface {
     public void save(HotelCreateCommand cmd) {
 
         cmd.setEventType("HotelCreatedCommand");
-        publishEvent(cmd);
+        HotelCreatedCommand cmd1 = (HotelCreatedCommand)cmd;
+        cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).get().getUsername());
+
+        publishEvent(cmd1);
 
         System.out.println("Doing hotel HotelCreatedCommand save  "+cmd.getName());
         Hotel hotel = new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(),cmd.getUpdateUserId(),cmd.getLastUpdated());
@@ -117,7 +131,12 @@ public class HotelService implements HotelsInterface {
     public void save(HotelSaveCommand cmd) {
         System.out.println("Doing hotel save "+cmd.getName());
         cmd.setEventType("HotelSavedCommand");
-        publishEvent(cmd);
+
+        HotelSavedCommand cmd1 = (HotelSavedCommand)cmd;
+        cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).get().getUsername());
+
+        publishEvent(cmd1);
+
         save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail()));
     }
 

@@ -26,15 +26,8 @@ public class Hotel {
     @Column(name = "email")
     private String email;
 
-
     @Column(name = "update_user_id")
     private Long updateUserId;
-
-    //@ElementCollection
-    //@CollectionTable(name = "hotel_rooms", joinColumns = @JoinColumn(name = "hotel_id"))
-    //private List<HotelRooms> rooms;
-
-
 
     @Column(name = "hotelRooms")
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -42,6 +35,20 @@ public class Hotel {
 
     @Column(name = "lastUpdated")
     private Date lastUpdated;
+
+
+    /**
+     * This is the only variation between hotel-read and hotel-write
+     * hotel-read being modelling of the read side of CQRS retains a model exactly as shown on screen
+     * in this case we only bound to user object in RX Java previously to collect the username based on id:
+     *
+     * https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/working-basic/gateway/src/main/java/gateway/adaptors/web/GatewayController.java#L49-L61
+     *
+     *
+     * This is happening here as it stores HotelSavedCommand or HotelCreatedCommand
+     */
+    @Column(name = "update_user_name")
+    private String updateUserName;
 
 
 
@@ -61,7 +68,26 @@ public class Hotel {
         this.hotelRooms = hotelRooms;
         this.lastUpdated = lastUpdated;
     }
-
+    public Hotel(String code, String name, String phone, String email, Long updateUserId,  Date lastUpdated, String updateUserName) {
+        this.code = code;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.updateUserId = updateUserId;
+        this.hotelRooms = new ArrayList<>();;
+        this.lastUpdated = lastUpdated;
+        this.updateUserName = updateUserName;
+    }
+    public Hotel(String code, String name, String phone, String email, Long updateUserId,  String updateUserName) {
+        this.code = code;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.updateUserId = updateUserId;
+        this.hotelRooms = new ArrayList<>();;
+        this.lastUpdated = new Date();
+        this.updateUserName = updateUserName;
+    }
     public Hotel(String code, String name) {
         this.code = code;
         this.name=name;
@@ -127,6 +153,16 @@ public class Hotel {
         this.lastUpdated = lastUpdated;
     }
 
+    public Hotel(String code, String name, String phone, String email, Long updateUserId, List<HotelRooms> hotelRooms, Date lastUpdated, String updateUserName) {
+        this.code = code;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.updateUserId = updateUserId;
+        this.hotelRooms = hotelRooms;
+        this.lastUpdated = lastUpdated;
+        this.updateUserName = updateUserName;
+    }
 
     public Date getLastUpdated() {
         return this.lastUpdated;

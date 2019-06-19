@@ -17,25 +17,26 @@ import java.util.Optional;
 @Slf4j
 @Controller("/")
 public class GatewayController {
-   // @Inject
-   // Validator validator;
 
     private final HotelReadClient hotelReadClient;
-    private final UserReadClient userReadClient;
 
-    public GatewayController(HotelReadClient hotelReadClient,UserReadClient userReadClient) {
-        this.userReadClient=userReadClient;
+    public GatewayController(HotelReadClient hotelReadClient) {
+      //  this.userReadClient=userReadClient;
         this.hotelReadClient = hotelReadClient;
     }
 
     @Get(uri="/list{?args*}" , consumes = MediaType.APPLICATION_JSON)
     public Optional<HotelModel> findAll(SortingAndOrderArguments args) {
         //System.out.println("Trying to find"+args.getValues());
-        Optional<HotelModel> hotelModel =  hotelReadClient.findAll(args);
         /**
          * We bind in userClient and have a slightly different modelled hotel on gateway application which has a User updateUser
          * defined - this binds in via flatMap to bind in actual user for given user -
+         *
+         *
+         * None of this happens any morel hotel read models bits it needs as it receives from hotel-write
          */
+        /*
+        Optional<HotelModel> hotelModel =  hotelReadClient.findAll(args);
         if (hotelModel.isPresent() ) {
             hotelModel.flatMap(hotelModel1 -> {
                 Optional<List<Hotel>> instanceList = hotelModel1.getInstanceList();
@@ -53,6 +54,9 @@ public class GatewayController {
             });
         }
         return hotelModel;
+        */
+
+        return hotelReadClient.findAll(args);
     }
 
     @Get("/{id}")
