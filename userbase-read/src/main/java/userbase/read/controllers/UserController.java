@@ -5,7 +5,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.validation.Validated;
 import io.reactivex.annotations.Nullable;
-import userbase.read.models.User;
+import userbase.read.domain.User;
 import userbase.read.interfaces.Users;
 import userbase.read.models.SortingAndOrderArguments;
 import userbase.read.models.UserModel;

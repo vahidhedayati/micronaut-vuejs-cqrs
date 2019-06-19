@@ -1,6 +1,4 @@
-package hotel.write.commands;
-
-import hotel.write.domain.Hotel;
+package userbase.read.commands;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -40,14 +38,6 @@ public class HotelUpdateCommand  extends Command  {
         this.email = email;
     }
 
-    public HotelUpdateCommand(Hotel h) {
-        this.id = h.getId();
-        this.name = h.getName();
-        this.code = h.getCode();
-        this.name = h.getName();
-        this.phone = h.getPhone();
-        this.email = h.getEmail();
-    }
 
     public Long getId() {
         return id;
@@ -90,6 +80,5 @@ public class HotelUpdateCommand  extends Command  {
     public void setEmail(String email) {
         this.email = email;
     }
-
 
 }

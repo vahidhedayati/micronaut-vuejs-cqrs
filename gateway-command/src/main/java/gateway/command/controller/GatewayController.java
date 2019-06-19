@@ -3,10 +3,7 @@ package gateway.command.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import gateway.command.event.ProcessEvent;
-import gateway.command.event.commands.Command;
-import gateway.command.event.commands.HotelDeleteCommand;
-import gateway.command.event.commands.HotelSaveCommand;
-import gateway.command.event.commands.HotelUpdateCommand;
+import gateway.command.event.commands.*;
 import gateway.command.event.kafka.EventPublisher;
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.http.HttpResponse;
@@ -65,6 +62,8 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
             put(HotelSaveCommand.class.getSimpleName(), HotelSaveCommand.class);
             put(HotelUpdateCommand.class.getSimpleName(), HotelUpdateCommand.class);
             put(HotelDeleteCommand.class.getSimpleName(), HotelDeleteCommand.class);
+            put(UserSaveCommand.class.getSimpleName(), UserSaveCommand.class);
+            put(UserUpdateCommand.class.getSimpleName(), UserUpdateCommand.class);
         }
     };
 

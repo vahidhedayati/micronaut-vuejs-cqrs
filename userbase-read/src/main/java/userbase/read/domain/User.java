@@ -1,9 +1,10 @@
-package userbase.read.models;
+package userbase.read.domain;
 
 import javax.persistence.*;
 import java.util.Date;
 
-
+@Entity
+@Table(name = "user")
 public class User {
 
     public User() { }

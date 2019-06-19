@@ -1,12 +1,10 @@
-package userbase.write.models;
+package userbase.read.commands;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.util.Date;
 
-public class UserUpdateCommand {
+public class UserSaveCommand extends Command {
 
-    @NotNull
-    private Long id;
 
     @NotBlank
     private String username;
@@ -23,22 +21,25 @@ public class UserUpdateCommand {
     private String surname;
 
 
-    public UserUpdateCommand() {}
+    @NotBlank
+    private Date lastUpdated;
 
-    public UserUpdateCommand(@NotNull Long id, @NotBlank String username, @NotBlank String password, @NotBlank String firstname, @NotBlank String surname) {
-        this.id = id;
+    public UserSaveCommand() {}
+
+    public UserSaveCommand(@NotBlank String username, @NotBlank String password, @NotBlank String firstname, @NotBlank String surname) {
+
         this.username = username;
         this.password = password;
         this.firstname = firstname;
         this.surname = surname;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public UserSaveCommand(@NotBlank String username, @NotBlank String password, @NotBlank String firstname, @NotBlank String surname, @NotBlank Date lastUpdated) {
+        this.username = username;
+        this.password = password;
+        this.firstname = firstname;
+        this.surname = surname;
+        this.lastUpdated = lastUpdated;
     }
 
     public String getUsername() {
@@ -71,5 +72,13 @@ public class UserUpdateCommand {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

@@ -1,7 +1,5 @@
 package hotel.read.commands;
 
-import hotel.read.domain.Hotel;
-
 import javax.validation.constraints.NotNull;
 
 public class HotelDeleteCommand  extends Command  {
@@ -28,8 +26,6 @@ public class HotelDeleteCommand  extends Command  {
         this.id = Long.valueOf(id);
     }
 
-    public Hotel getHotel() {
-        return new Hotel(this.id);
-    }
+
 
 }

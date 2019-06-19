@@ -1,6 +1,6 @@
-package userbase.write.init;
+package gateway.command.init;
 
-import userbase.write.domain.User;
+import gateway.command.event.commands.UserSaveCommand;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -11,8 +11,8 @@ import java.util.List;
 public class DemoUsersFactory {
 
 	
-	static List<User> defaultUsers() {
-		List<User> users = new ArrayList<User>();
+	static List<UserSaveCommand> defaultUsers() {
+		List<UserSaveCommand> users = new ArrayList<UserSaveCommand>();
 		users.add(addUser("admin","password", "Alan", "Wollenstein"));
 		users.add(addUser("susan","password", "Susan", "Jones"));
 		users.add(addUser("bill","password", "Billy", "Smith"));
@@ -22,8 +22,8 @@ public class DemoUsersFactory {
     }
 	
 	
-	static User addUser(String username,String password,String firstname,String surname) {
-		User user = new User(username,password ,firstname,surname,
+	static UserSaveCommand addUser(String username,String password,String firstname,String surname) {
+		UserSaveCommand user = new UserSaveCommand(username,password ,firstname,surname,
 				Date.from(LocalDate.parse( "2019-01-10" ).plusDays( 10 ).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
 		return user;
 	}

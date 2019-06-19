@@ -1,19 +1,25 @@
-package hotel.read.commands;
+package userbase.write.commands;
+
+import com.sun.istack.Nullable;
+import io.micronaut.validation.Validated;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
-public class HotelUpdateCommand  extends Command  {
+@Validated
+public class HotelSaveCommand extends Command {
+
+
+    @NotBlank
+    @Pattern(regexp = "(?=.*[A-Z]).{2,3}", message = "field_three_char")
+    private String code;
 
     @NotNull
-    private Long id;
-
     @NotBlank
+    @Size(max = 10, min=3)
     private String name;
-
-
-    @NotBlank
-    private String code;
 
     @NotBlank
     private String phone;
@@ -21,33 +27,18 @@ public class HotelUpdateCommand  extends Command  {
     @NotBlank
     private String email;
 
+    @Nullable
+    private Long updateUserId;
 
-    public HotelUpdateCommand() {}
+    public HotelSaveCommand() {
+        super();
+    }
 
-    public HotelUpdateCommand(Long id, String name, String code) {
-        this.id = id;
+    public HotelSaveCommand(String code, String name) {
         this.name = name;
         this.code=code;
     }
 
-    public HotelUpdateCommand(@NotNull Long id, @NotBlank String name, @NotBlank String code, @NotBlank String phone, @NotBlank String email) {
-        this.id = id;
-        this.name = name;
-        this.code = code;
-        this.phone = phone;
-        this.email = email;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public void setId(String id) {
-        this.id = Long.valueOf(id);
-    }
     public String getName() {
         return name;
     }
@@ -55,6 +46,7 @@ public class HotelUpdateCommand  extends Command  {
     public void setName(String name) {
         this.name = name;
     }
+
 
     public String getCode() {
         return code;
@@ -81,4 +73,11 @@ public class HotelUpdateCommand  extends Command  {
     }
 
 
+    public Long getUpdateUserId() {
+        return updateUserId;
+    }
+
+    public void setUpdateUserId(Long updateUserId) {
+        this.updateUserId = updateUserId;
+    }
 }

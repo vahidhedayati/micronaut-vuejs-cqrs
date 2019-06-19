@@ -8,8 +8,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "hotel")
-//@NoArgsConstructor
-//@Getter
 public class Hotel {
 
     @Id
@@ -35,6 +33,8 @@ public class Hotel {
     //@ElementCollection
     //@CollectionTable(name = "hotel_rooms", joinColumns = @JoinColumn(name = "hotel_id"))
     //private List<HotelRooms> rooms;
+
+
 
     @Column(name = "hotelRooms")
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -177,7 +177,9 @@ public class Hotel {
     public void setUpdateUserId(Long updateUserId) {
         this.updateUserId = updateUserId;
     }
-
+    public void setHotelRooms(List<HotelRooms> hotelRooms) {
+        this.hotelRooms = hotelRooms;
+    }
     @Override
     public String toString() {
         return "hotel{" +

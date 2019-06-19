@@ -1,10 +1,7 @@
 package hotel.read.event.listeners;
 
 
-import hotel.read.commands.Command;
-import hotel.read.commands.HotelDeleteCommand;
-import hotel.read.commands.HotelSaveCommand;
-import hotel.read.commands.HotelUpdateCommand;
+import hotel.read.commands.*;
 import hotel.read.services.read.HotelService;
 import io.micronaut.configuration.kafka.ConsumerAware;
 import io.micronaut.configuration.kafka.annotation.KafkaKey;
@@ -22,10 +19,10 @@ import org.apache.kafka.common.TopicPartition;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @ThreadSafe
 @KafkaListener
@@ -33,6 +30,7 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
 
     Map<String, Class> commandClasses = new HashMap<String,Class>() {
         {
+            put(HotelCreatedCommand.class.getSimpleName(), HotelCreatedCommand.class);
             put(HotelSaveCommand.class.getSimpleName(), HotelSaveCommand.class);
             put(HotelUpdateCommand.class.getSimpleName(), HotelUpdateCommand.class);
             put(HotelDeleteCommand.class.getSimpleName(), HotelDeleteCommand.class);
@@ -64,24 +62,16 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
 
     @Topic("hotelRead")
     public void consume(@KafkaKey String hotelCode,  String hotelCreatedEvent) {
-        System.out.println("_____> READ --------------- KAKFA "+hotelCode);
-        if (hotelCode.contains("_")) {
+        if (hotelCode!=null && hotelCode.contains("_")) {
             String eventType = hotelCode.split("_")[0];
-            if (hotelCode!=null) {
+            if (eventType!=null) {
                 // LOG.debug("KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER hotelCreated "+hotelCode);
-                //System.out.println("READ --------------- KAKFA hotelCreated EVENT RECEIVED AT CUSTOM APPLICATION LISTENER  hotelCreated ---"+hotelCreatedEvent.getDtoFromEvent()+" "+hotelCode);
-                System.out.println("_____> READ --------------- KAKFA hotelCreated EVENT RECEIVED AT CUSTOM APPLICATION LISTENER  --- "+hotelCode+ " -- event "+hotelCreatedEvent);
-
+                System.out.println("_____> HOTELREAD  EVENT: "+eventType+"--------------- KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER  --- "+hotelCode+ " -- event "+hotelCreatedEvent);
                 JsonMediaTypeCodec mediaTypeCodec = (JsonMediaTypeCodec) mediaTypeCodecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
                         .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
-
-                System.out.println(eventType+" is current eventType ");
                 Command cmd = (Command) mediaTypeCodec.decode(commandClasses.get(eventType),hotelCreatedEvent);
-                // System.out.println(" command "+cmd);
-
-                System.out.println(" HOTEL-READ ALL good ---->"+cmd.getClass());
                 if (cmd instanceof HotelSaveCommand) {
-                    System.out.println("Saving item sending to  hotel");
+                    System.out.println("Saving read hote");
                     dao.save((HotelSaveCommand) cmd);
                 }
 

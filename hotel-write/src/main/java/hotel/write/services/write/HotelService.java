@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 
 
-
 @Singleton
 public class HotelService implements HotelsInterface {
 
@@ -34,15 +33,8 @@ public class HotelService implements HotelsInterface {
 
 
     private final EmbeddedServer embeddedServer;
-
     protected static final String topic = "hotelRead";
-    @Inject
-    protected MediaTypeCodecRegistry mediaTypeCodecRegistry;
-
-
     private final EventPublisher eventPublisher;
-
-
 
     public HotelService(@CurrentSession EntityManager entityManager, ApplicationConfiguration applicationConfiguration, EventPublisher eventPublisher, EmbeddedServer embeddedServer) {
         this.entityManager = entityManager;
@@ -110,6 +102,7 @@ public class HotelService implements HotelsInterface {
 
     @Transactional
     public void save(HotelSaveCommand cmd) {
+        System.out.println("Doing hotel save "+cmd.getName());
         publishEvent(cmd);
         save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail()));
     }

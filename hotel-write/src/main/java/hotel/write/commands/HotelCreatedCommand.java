@@ -2,7 +2,6 @@ package hotel.write.commands;
 
 
 import com.sun.istack.Nullable;
-import hotel.write.domain.Hotel;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,8 +49,17 @@ public class HotelCreatedCommand extends Command  {
         this.lastUpdated=new Date();
         this.hotelRooms = new ArrayList<>();
     }
+    public HotelCreatedCommand(String code, String name, String phone, String email, Date lastUpdated) {
+        this.code = code;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.updateUserId = 1L;
+        this.lastUpdated=lastUpdated;
+        this.hotelRooms = new ArrayList<>();
+    }
 
-    public HotelCreatedCommand(String code, String name, String phone, String email, Long updateUserId,  Date lastUpdated, List<HotelRoomsCreateCommand> hotelRooms) {
+    public HotelCreatedCommand(String code, String name, String phone, String email, Long updateUserId, Date lastUpdated, List<HotelRoomsCreateCommand> hotelRooms) {
         this.code = code;
         this.name = name;
         this.phone = phone;
@@ -61,21 +69,17 @@ public class HotelCreatedCommand extends Command  {
         this.lastUpdated = lastUpdated;
         this.hotelRooms = hotelRooms;
     }
+    public HotelCreatedCommand(String code, String name, String phone, String email, Long updateUserId, Date lastUpdated) {
+        this.code = code;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.updateUserId = updateUserId;
 
+        this.lastUpdated = lastUpdated;
 
-    public HotelCreatedCommand(Hotel h) {
-        this.code = h.getCode();
-        this.name = h.getName();
-        this.phone = h.getPhone();
-        this.email = h.getEmail();
-        this.updateUserId = h.getUpdateUserId();
-        this.lastUpdated = h.getLastUpdated();
-      //  this.hotelRooms = new HotelRoomsCreateCommand(h.getHotelRooms());
     }
 
-    public Hotel createHotel() {
-        return new Hotel(this.code,this.name, this.phone, this.email, this.updateUserId);
-    }
 
     public Date getLastUpdated() {
         return this.lastUpdated;

@@ -1,6 +1,7 @@
-package hotel.write.init;
+package gateway.command.init;
 
-import hotel.write.domain.Hotel;
+import gateway.command.event.commands.HotelCreatedCommand;
+import gateway.command.event.commands.HotelRoomsCreateCommand;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,8 +13,8 @@ import java.util.List;
 public class DemoHotelsFactory {
 
 	
-	static List<Hotel> defaultHotels() {
-		List<Hotel> hotels = new ArrayList<Hotel>();
+	static List<HotelCreatedCommand> defaultHotels() {
+		List<HotelCreatedCommand> hotels = new ArrayList<HotelCreatedCommand>();
 		hotels.add(addHotel("HILL","Hilton - London Bridge","aa@aa.com","+44-111111111111"));
 
 
@@ -53,21 +54,21 @@ public class DemoHotelsFactory {
     }
 	
 	
-	static Hotel addHotel(String code,String name, String email, String phone) {
-
-		Hotel hotel = addHotel(new Hotel(code,name ,phone,email,
-				Date.from(LocalDate.parse( "2019-01-10" ).plusDays( 10 ).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())));
+	static HotelCreatedCommand addHotel(String code,String name, String email, String phone) {
+		HotelCreatedCommand hotel = new HotelCreatedCommand(code,name ,phone,email,1L,
+				Date.from(LocalDate.parse( "2019-01-10" ).plusDays( 10 ).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()),addRooms());
 		return hotel;
 	}
 
-	static Hotel addHotel(Hotel hotel) {
+	static List<HotelRoomsCreateCommand>  addRooms() {
+		List<HotelRoomsCreateCommand> hotelRooms=new ArrayList<>();
 		//Some generic values of room types for each hotel added
-		hotel.rooms().addBaseRoomTypes(hotel,"SING",new BigDecimal("45.00"), 200L);
-		hotel.rooms().addBaseRoomTypes(hotel,"DOUB",new BigDecimal("65.00"), 200L);
-		hotel.rooms().addBaseRoomTypes(hotel,"TWIN",new BigDecimal("65.00"), 200L);
-		hotel.rooms().addBaseRoomTypes(hotel,"TRIP",new BigDecimal("85.00"), 200L);
-		hotel.rooms().addBaseRoomTypes( hotel,"FAM",new BigDecimal("95.00"), 200L);
-		return hotel;
+		hotelRooms.add(new HotelRoomsCreateCommand("SING",new BigDecimal("45.00"), 200L));
+		hotelRooms.add(new HotelRoomsCreateCommand("DOUB",new BigDecimal("65.00"), 200L));
+		hotelRooms.add(new HotelRoomsCreateCommand("TWIN",new BigDecimal("65.00"), 200L));
+		hotelRooms.add(new HotelRoomsCreateCommand("TRIP",new BigDecimal("85.00"), 200L));
+		hotelRooms.add(new HotelRoomsCreateCommand( "FAM",new BigDecimal("95.00"), 200L));
+		return hotelRooms;
 	}
 
 	

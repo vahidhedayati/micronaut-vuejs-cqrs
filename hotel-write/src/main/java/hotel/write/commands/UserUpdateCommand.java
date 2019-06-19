@@ -1,9 +1,9 @@
-package userbase.read.models;
+package hotel.write.commands;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class UserUpdateCommand {
+public class UserUpdateCommand extends Command {
 
     @NotNull
     private Long id;

@@ -1,16 +1,16 @@
-package hotel.write.commands;
+package gateway.command.event.commands;
 
 import javax.validation.constraints.NotNull;
 
-public class HotelDeleteCommand  extends Command  {
+public class UserDeleteCommand extends Command {
 
     @NotNull
     private Long id;
 
 
-    public HotelDeleteCommand() {}
+    public UserDeleteCommand() {}
 
-    public HotelDeleteCommand(Long id) {
+    public UserDeleteCommand(Long id) {
         this.id = id;
 
     }
@@ -25,7 +25,6 @@ public class HotelDeleteCommand  extends Command  {
     public void setId(String id) {
         this.id = Long.valueOf(id);
     }
-
 
 
 }

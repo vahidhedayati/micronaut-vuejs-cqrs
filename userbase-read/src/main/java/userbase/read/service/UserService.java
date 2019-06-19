@@ -1,11 +1,17 @@
-package userbase.read.implementations;
+package userbase.read.service;
 
 import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
 import io.micronaut.spring.tx.annotation.Transactional;
-import userbase.read.models.SortingAndOrderArguments;
-import userbase.read.models.UserModel;
-import userbase.read.models.User;
+import userbase.read.commands.UserDeleteCommand;
+import userbase.read.commands.UserSaveCommand;
+import userbase.read.commands.UserUpdateCommand;
+import userbase.read.domain.User;
+import userbase.read.implementations.MyApplicationConfiguration;
 import userbase.read.interfaces.Users;
+import userbase.read.models.SortingAndOrderArguments;
+
+import userbase.read.models.UserModel;
+
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
@@ -18,15 +24,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Singleton
-public class UsersImpl implements Users {
+public class UserService implements Users {
 
     @PersistenceContext
     private EntityManager entityManager;
     private final MyApplicationConfiguration myApplicationConfiguration;
 
 
-    public UsersImpl(@CurrentSession EntityManager entityManager,
-                     MyApplicationConfiguration myApplicationConfiguration) {
+    public UserService(@CurrentSession EntityManager entityManager,
+                       MyApplicationConfiguration myApplicationConfiguration) {
         this.entityManager = entityManager;
         this.myApplicationConfiguration = myApplicationConfiguration;
     }
@@ -123,6 +129,33 @@ public class UsersImpl implements Users {
         User user = new User(username,password,firstname,surname);
         entityManager.persist(user);
         return user;
+    }
+
+    @Override
+    public void save(UserSaveCommand cmd) {
+        System.out.println("Doing user save "+cmd.getUsername());
+        User user = new User(cmd.getUsername(),cmd.getPassword(),cmd.getFirstname(),cmd.getSurname());
+        entityManager.persist(user);
+    }
+
+    @Override
+    public void delete(UserDeleteCommand cmd) {
+        System.out.println("Doing user delete "+cmd.getId());
+        findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
+    }
+
+
+    @Override
+    public void update(UserUpdateCommand cmd) {
+        System.out.println("Doing user update "+cmd.getUsername());
+        findById(cmd.getId()).ifPresent(user -> entityManager.createQuery("UPDATE User h  SET username = :username, password = :password, firstname=:firstname, surname=:surname where id = :id")
+                .setParameter("username", cmd.getUsername())
+                .setParameter("id", cmd.getId())
+                .setParameter("password", cmd.getPassword())
+                .setParameter("firstname", cmd.getFirstname())
+                .setParameter("surname", cmd.getSurname())
+                .executeUpdate()
+        );
     }
 
     @Transactional

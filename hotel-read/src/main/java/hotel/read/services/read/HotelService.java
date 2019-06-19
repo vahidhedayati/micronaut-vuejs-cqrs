@@ -34,9 +34,6 @@ public class HotelService implements HotelsInterface {
     private final ApplicationConfiguration applicationConfiguration;
 
 
-    @Inject
-    protected MediaTypeCodecRegistry mediaTypeCodecRegistry;
-
 
     public HotelService(@CurrentSession EntityManager entityManager, ApplicationConfiguration applicationConfiguration) {
         this.entityManager = entityManager;
@@ -54,8 +51,9 @@ public class HotelService implements HotelsInterface {
 
     @Transactional(readOnly = true)
     public Optional<HotelModel> findAll(@NotNull SortingAndOrderArguments args) {
+
         //SELECT new map (h.code as code, h.name as name, h.id as id, h.hotelRooms as hotelRooms)
-        //System.out.println("Doing search 123 ");
+        System.out.println("Doing search 123 ");
         String countQueryString= "select count(h) FROM Hotel as  h ";
         String qlString = "FROM Hotel as  h ";
         if (args.getName().isPresent()) {
@@ -87,7 +85,7 @@ public class HotelService implements HotelsInterface {
         model.setInstanceTotal(countQuery.getSingleResult());
 
         model.setNumberOfPages(model.getInstanceTotal()/args.getMax().get());
-        //System.out.println(" "+model.getInstanceTotal()+" "+model.getNumberOfPages()+" "+model.getInstanceList());
+        System.out.println(" SEARCH ::: "+model.getInstanceTotal()+" "+model.getNumberOfPages()+" "+model.getInstanceList());
         return Optional.of(model); //Single.just(model);
     }
 
@@ -120,19 +118,25 @@ public class HotelService implements HotelsInterface {
     }
     @Transactional
     public void save(HotelCreatedCommand cmd) {
+        System.out.println("Doing HotelCreatedCommand save "+cmd.getName());
         Hotel hotel = new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(),cmd.getUpdateUserId(),cmd.getLastUpdated());
+
         List<HotelRooms> hotelRooms = new ArrayList<>();
         if (!findByCode(hotel.getCode()).isPresent()) {
+            entityManager.persist(hotel);
             for (HotelRoomsCreateCommand rmc  : cmd.getHotelRooms() ) {
                 HotelRooms hotelRooms1 = new HotelRooms(hotel,rmc.getRoomType(),rmc.getPrice(), rmc.getStockTotal());
                 hotelRooms.add(hotelRooms1);
             }
-            save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(),cmd.getUpdateUserId(),hotelRooms,cmd.getLastUpdated()));
+            hotel.setHotelRooms(hotelRooms);
+            entityManager.persist(hotel);
+         //   save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(),cmd.getUpdateUserId(),hotelRooms,cmd.getLastUpdated()));
         }
     }
 
     @Transactional
     public void save(HotelSaveCommand cmd) {
+        System.out.println("Doing hotel save "+cmd.getName());
         save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail()));
     }
 

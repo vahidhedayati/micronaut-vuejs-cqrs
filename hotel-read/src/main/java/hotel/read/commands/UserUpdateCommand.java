@@ -1,9 +1,12 @@
-package userbase.read.models;
+package hotel.read.commands;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
-public class UserSaveCommand {
+public class UserUpdateCommand extends Command {
 
+    @NotNull
+    private Long id;
 
     @NotBlank
     private String username;
@@ -20,17 +23,23 @@ public class UserSaveCommand {
     private String surname;
 
 
-    public UserSaveCommand() {}
+    public UserUpdateCommand() {}
 
-    public UserSaveCommand(@NotBlank String username, @NotBlank String password, @NotBlank String firstname, @NotBlank String surname) {
-
+    public UserUpdateCommand(@NotNull Long id, @NotBlank String username, @NotBlank String password, @NotBlank String firstname, @NotBlank String surname) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.firstname = firstname;
         this.surname = surname;
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
@@ -63,5 +72,4 @@ public class UserSaveCommand {
     public void setSurname(String surname) {
         this.surname = surname;
     }
-
 }

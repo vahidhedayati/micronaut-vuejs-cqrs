@@ -1,8 +1,9 @@
-package userbase.write.models;
+package hotel.write.commands;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
-public class UserSaveCommand {
+public class UserSaveCommand extends Command {
 
 
     @NotBlank
@@ -20,6 +21,9 @@ public class UserSaveCommand {
     private String surname;
 
 
+    @NotBlank
+    private Date lastUpdated;
+
     public UserSaveCommand() {}
 
     public UserSaveCommand(@NotBlank String username, @NotBlank String password, @NotBlank String firstname, @NotBlank String surname) {
@@ -30,7 +34,13 @@ public class UserSaveCommand {
         this.surname = surname;
     }
 
-
+    public UserSaveCommand(@NotBlank String username, @NotBlank String password, @NotBlank String firstname, @NotBlank String surname, @NotBlank Date lastUpdated) {
+        this.username = username;
+        this.password = password;
+        this.firstname = firstname;
+        this.surname = surname;
+        this.lastUpdated = lastUpdated;
+    }
 
     public String getUsername() {
         return username;
@@ -64,4 +74,11 @@ public class UserSaveCommand {
         this.surname = surname;
     }
 
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
 }

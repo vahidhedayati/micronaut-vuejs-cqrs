@@ -1,8 +1,6 @@
-package hotel.write.event.listeners;
+package userbase.write.listeners;
 
 
-import hotel.write.commands.*;
-import hotel.write.services.write.HotelService;
 import io.micronaut.configuration.kafka.ConsumerAware;
 import io.micronaut.configuration.kafka.annotation.KafkaKey;
 import io.micronaut.configuration.kafka.annotation.KafkaListener;
@@ -15,6 +13,10 @@ import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.TopicPartition;
+import userbase.write.commands.Command;
+import userbase.write.commands.UserSaveCommand;
+import userbase.write.commands.UserUpdateCommand;
+import userbase.write.service.UserService;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
@@ -30,44 +32,39 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
 
     Map<String, Class> commandClasses = new HashMap<String,Class>() {
         {
-            put(HotelCreatedCommand.class.getSimpleName(), HotelCreatedCommand.class);
-            put(HotelSaveCommand.class.getSimpleName(), HotelSaveCommand.class);
-            put(HotelUpdateCommand.class.getSimpleName(), HotelUpdateCommand.class);
-            put(HotelDeleteCommand.class.getSimpleName(), HotelDeleteCommand.class);
+
+            put(UserSaveCommand.class.getSimpleName(), UserSaveCommand.class);
+            put(UserUpdateCommand.class.getSimpleName(), UserUpdateCommand.class);
         }
     };
     @Inject
     protected MediaTypeCodecRegistry mediaTypeCodecRegistry;
-
-
-   // @GuardedBy("kafkaConsumers")
-  //  private final Set<Consumer> kafkaConsumers = new HashSet<>();
 
     private Consumer consumer;
 
     @Override
     public void setKafkaConsumer(@Nonnull final Consumer consumer) {
         this.consumer=consumer;
-       // synchronized (kafkaConsumers) {
-       //     this.kafkaConsumers.add(consumer);
-        //}
     }
 
-    //protected static final Logger LOG = LoggerFactory.getLogger(KafkaEventListener.class);
-
     @Inject
-    private HotelService dao;
+    private UserService dao;
 
-    @Topic("hotel")
+    @Topic("user")
     public void consume(@KafkaKey String hotelCode,  String hotelCreatedEvent) {
         if (hotelCode!=null &&  hotelCode.contains("_")) {
             String eventType = hotelCode.split("_")[0];
             if (eventType!=null) {
                 // LOG.debug("KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER hotelCreated "+hotelCode);
-                System.out.println("_____> HOTELWRITE  EVENT: "+eventType+"--------------- KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER  --- "+hotelCode+ " -- event "+hotelCreatedEvent);
+                System.out.println("_____> USERWRITE  EVENT: "+eventType+"--------------- KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER  --- "+hotelCode+ " -- event "+hotelCreatedEvent);
                 JsonMediaTypeCodec mediaTypeCodec = (JsonMediaTypeCodec) mediaTypeCodecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
                         .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
+
+
                 Command cmd = (Command) mediaTypeCodec.decode(commandClasses.get(eventType),hotelCreatedEvent);
+               // System.out.println(" command "+cmd);
+
+                //System.out.println("Default save of hotel in hotel-write ---------------- command "+cmd);
                 if (hotelCreatedEvent !=null ) {
                     final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
@@ -80,18 +77,22 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
                             violationMessages.add(constraintViolation.getMessage());
                             //violationMessages.add(constraintViolation.getPropertyPath() + ": " + constraintViolation.getMessage());
                         }
-                        System.out.println(" HOTEL-WRITE VALIDATION ERROR - COMMAND BUS FAILED VALIDATION::: 01 ---->"+violationMessages);
+                        System.out.println(" USER-WRITE VALIDATION ERROR - COMMAND BUS FAILED VALIDATION::: 01 ---->"+violationMessages);
                         // throw new ValidationException("Hotel is not valid:\n" + violationMessages);
                         //TODO - We need to websocket back and pickup
                         /// return HttpResponse.badRequest(violationMessages);
                     } else {
-                        if (cmd instanceof HotelSaveCommand) {
-                            dao.save((HotelSaveCommand) cmd);
+                        if (cmd instanceof UserSaveCommand) {
+                            dao.save((UserSaveCommand) cmd);
                         }
                     }
+
                 }
+
             }
+
         }
+
     }
 
 

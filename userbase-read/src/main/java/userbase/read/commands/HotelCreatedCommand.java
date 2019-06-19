@@ -1,4 +1,4 @@
-package gateway.command.event.commands;
+package userbase.read.commands;
 
 
 import com.sun.istack.Nullable;

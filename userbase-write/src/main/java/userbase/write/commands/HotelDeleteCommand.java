@@ -1,4 +1,4 @@
-package hotel.write.commands;
+package userbase.write.commands;
 
 import javax.validation.constraints.NotNull;
 
