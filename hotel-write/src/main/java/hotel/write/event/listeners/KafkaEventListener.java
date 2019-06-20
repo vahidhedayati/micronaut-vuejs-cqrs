@@ -1,15 +1,22 @@
 package hotel.write.event.listeners;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import hotel.write.commands.*;
 import hotel.write.services.write.HotelService;
+import hotel.write.websocket.ChatClientWebSocket;
+import hotel.write.websocket.WebsocketMessage;
 import io.micronaut.configuration.kafka.ConsumerAware;
 import io.micronaut.configuration.kafka.annotation.KafkaKey;
 import io.micronaut.configuration.kafka.annotation.KafkaListener;
 import io.micronaut.configuration.kafka.annotation.Topic;
 import io.micronaut.http.MediaType;
+import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.codec.MediaTypeCodecRegistry;
 import io.micronaut.jackson.codec.JsonMediaTypeCodec;
+import io.micronaut.runtime.server.EmbeddedServer;
+import io.micronaut.websocket.RxWebSocketClient;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -28,6 +35,13 @@ import java.util.*;
 @KafkaListener
 public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAware {
 
+    private final ObjectMapper objectMapper;
+    final EmbeddedServer embeddedServer;
+
+    @Inject
+    @Client("http://localhost:8082")
+    RxWebSocketClient webSocketClient;
+
     Map<String, Class> commandClasses = new HashMap<String,Class>() {
         {
             put(HotelCreateCommand.class.getSimpleName(), HotelCreateCommand.class);
@@ -36,6 +50,11 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
             put(HotelDeleteCommand.class.getSimpleName(), HotelDeleteCommand.class);
         }
     };
+
+    public KafkaEventListener(ObjectMapper objectMapper,EmbeddedServer embeddedServer) {
+        this.objectMapper=objectMapper;
+        this.embeddedServer=embeddedServer;
+    }
     @Inject
     protected MediaTypeCodecRegistry mediaTypeCodecRegistry;
 
@@ -74,16 +93,52 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
 
                     final Set<ConstraintViolation<Command>> constraintViolations = validator.validate(cmd);
                     if (constraintViolations.size() > 0) {
-                        Set<String> violationMessages = new HashSet<String>();
+                        HashMap<String,String> violationMessages = new HashMap<>();
 
                         for (ConstraintViolation<?> constraintViolation : constraintViolations) {
-                            violationMessages.add(constraintViolation.getMessage());
+                            violationMessages.put(constraintViolation.getPropertyPath().toString(),constraintViolation.getMessage());
                             //violationMessages.add(constraintViolation.getPropertyPath() + ": " + constraintViolation.getMessage());
                         }
                         System.out.println(" HOTEL-WRITE VALIDATION ERROR - COMMAND BUS FAILED VALIDATION::: 01 ---->"+violationMessages);
                         // throw new ValidationException("Hotel is not valid:\n" + violationMessages);
                         //TODO - We need to websocket back and pickup
                         /// return HttpResponse.badRequest(violationMessages);
+                        WebsocketMessage msg  =new WebsocketMessage();
+                        msg.setCurrentUser(cmd.getCurrentUser());
+                        msg.setErrors(violationMessages);
+                        msg.setEventType("errorForm");
+                        if (cmd.getSession()!=null ) {
+
+
+                            System.out.println("Websocket Session found hooray - sending "+serializeMessage(msg));
+                            cmd.getSession().send(serializeMessage(msg));
+                        } else {
+                           // WebSocketClient wsClient = embeddedServer.getApplicationContext().createBean(WebSocketClient, "https://ws-api.upstox.com")
+                            /*
+                            WebSocketClient client;
+                            final String url = "ws://"+cmd.getHost()+":"+cmd.getPort()+"/ws/process";
+
+                                client = new WebSocketClient();
+                            }
+                            System.out.print("Socket connection from: "+hostName+"\n");
+                            //final String url = "ws://localhost:9000";
+                            try {
+                                client.open();
+                                //Keep connection open and add it to the existing connCurrent Maps
+                                BootService.addSocket(hostName,client);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            return session.send("{ hostName:"+hostName+"}", MediaType.APPLICATION_JSON_TYPE);
+                            */
+                            //GatewayClient client = webSocketClient.connect(GatewayClient.class, "/ws/process".toString()).blockingFirst();
+                            ChatClientWebSocket chatClient = webSocketClient.connect(ChatClientWebSocket.class, "/ws/process").blockingFirst();
+                            chatClient.send(serializeMessage(msg));
+
+                            System.out.println("Websocket Session found oh dear - this is an issue "+cmd.getCurrentUser());
+                        }
+
                     } else {
                         if (cmd instanceof HotelSaveCommand) {
                             dao.save((HotelSaveCommand) cmd);
@@ -100,6 +155,16 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
         }
     }
 
+
+    public String serializeMessage(WebsocketMessage command) {
+        String json;
+        try {
+            json = objectMapper.writeValueAsString(command);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return json;
+    }
 
     @Override
     public void onPartitionsRevoked(Collection<TopicPartition> partitions) {

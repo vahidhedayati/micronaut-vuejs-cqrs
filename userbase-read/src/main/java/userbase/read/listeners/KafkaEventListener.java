@@ -64,7 +64,7 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
 
                 //System.out.println("Default save of hotel in hotel-read ---------------- command "+cmd);
                 if (hotelCreatedEvent !=null ) {
-                    final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+                    /*final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
 
                     final Set<ConstraintViolation<Command>> constraintViolations = validator.validate(cmd);
@@ -73,13 +73,17 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
 
                         for (ConstraintViolation<?> constraintViolation : constraintViolations) {
                             violationMessages.add(constraintViolation.getMessage());
-                            //violationMessages.add(constraintViolation.getPropertyPath() + ": " + constraintViolation.getMessage());
+                                //violationMessages.add(constraintViolation.getPropertyPath() + ": " + constraintViolation.getMessage());
                         }
                         System.out.println(" USER-WRITE VALIDATION ERROR - COMMAND BUS FAILED VALIDATION::: 01 ---->"+violationMessages);
                         // throw new ValidationException("Hotel is not valid:\n" + violationMessages);
                         //TODO - We need to websocket back and pickup
                         /// return HttpResponse.badRequest(violationMessages);
+
                     } else {
+
+                    */
+
                         if (cmd instanceof UserSavedCommand) {
                             dao.save((UserSavedCommand) cmd);
                         } else if (cmd instanceof UserUpdatedCommand) {
@@ -89,7 +93,7 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
                         }
                     }
 
-                }
+                //}
 
             }
 

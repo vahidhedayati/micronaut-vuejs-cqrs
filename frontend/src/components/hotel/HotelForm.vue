@@ -1,6 +1,10 @@
 <template id="add-hotel-template" xmlns="http://www.w3.org/1999/xhtml">
   <div id="validated-form">
-
+    <ul id="logs">
+      <li v-for="log in logs" class="log">
+        {{ log.event }}: {{ log.data }}
+      </li>
+    </ul>
      <div id="inputRow" class="row">
           <div class="col-sm-3">
             <div class="input-group">
@@ -41,10 +45,11 @@
       &nbsp
       </div>
         <div class="btn-group" role="group" aria-label="Add new vehicle">
-          <button type="button" class="btn btn-success" @click.prevent="submitForm()">Add hotel</button>
+          <button type="button" :disabled="submitted==true" class="btn btn-success" @click.prevent="submitForm()">Add hotel</button>
         </div>
       </div>
   </div>
+
   </div>
 </template>
 
@@ -76,13 +81,31 @@ const validatePhone = phone => {
 
   return { valid: true, error: null };
 }
+/*
+const socket = new WebSocket("ws://localhost:8082/ws/process")
+socket.onmessage = function(msg){
+  emitter.$emit("message", msg.data)
+  console.log("Gt message"+msg.data)
+}
+socket.onerror = function(err){
+  emitter.$emit("error", err)
+}
+*/
 export default {
  //  props: ['countries', 'reload','fetchCountries','sortSearch'],
   data: function () {
     return {
+      message: "",
+      currentUser:"",
+      logs: [],
+
+      socket: null,
+      //socketIo:{currentUser:'', errors:{}, success:false, },
+      submitted:false,
+      status: "disconnected",
       valid: true,
       errors: [],
-      hotel:{name:'AAAAAAAAAAAAA',code:'AAAA',phone:'+44-123456789', email:'aa@aa.com', updateUserName:'Admin' , updateUserId:'1L',eventType:'HotelSaveCommand'}
+      hotel:{currentUser:'', name:'AAAAAAAAAAAAA',code:'AAAA',phone:'+44-123456789', email:'aa@aa.com', updateUserName:'Admin' , updateUserId:'1',eventType:'HotelSaveCommand'}
 
     }
   },
@@ -95,9 +118,63 @@ export default {
   created: function () {
     //this.authRecord=JSON.parse(localStorage.getItem('vuex')).auth.isAuthenticated;
     //this.hotel.updateUser.id=this.authRecord.id;
+
+
+    /**
+     * This is also sent as part of form submission - meaning to actually properly use this validation which is processed
+     * via events to an undefined command handler - the currentUser is stored in physical Command.java object that exists on
+     * all microservices
+     */
+    this.hotel.currentUser=Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
+
+    this.connect();
+
+  },
+  mounted() {
+    this.socket.on('MESSAGE', (data) => {
+      console.log("received  "+data)
+
+//           this.$emit('hotel-errors',data);
+    this.logs.push({ event: "Recieved message", msg });
+  });
   },
    methods: {
-     submitForm () {
+     connect() {
+       console.log("About to connect to websocket")
+       this.socket = new WebSocket("ws://localhost:8082/ws/process");
+       this.socket.onopen = () => {
+         this.status = "connected";
+         this.logs.push({ event: "Connected to", data: 'ws://localhost:8082'})
+         console.log("Connected ")
+        // this.socket.send(this.hotel.currentUser)
+         this.socket.send(JSON.stringify({currentUser:this.hotel.currentUser,eventType:'userForm'}));
+         /**
+          * we only get a message back when something has gone wrong in gateway-command process action
+          */
+
+
+       };
+
+     },
+     disconnect() {
+       this.socket.close();
+       this.status = "disconnected";
+       this.logs = [];
+     },
+     sendMessage() {
+       console.log("Sending message "+this.hotel.currentUser)
+       this.socket.send(JSON.stringify({currentUser:this.hotel.currentUser,eventType:'userForm'}));
+       //this.logs.push({ event: "Sent message", data: this.message });
+       this.message = "";
+     },
+     submitForm (e) {
+      // if (this.postSuccess==false) {
+         //  e.preventDefault();
+       this.submitted=true;
+      // }
+       //this.message="current user "+this.currentUser;
+
+
        this.errors=[];
        const validName = validateName(this.hotel.name);
        this.errors.push(validName.error);
@@ -118,8 +195,11 @@ export default {
         * IF form is valid for submission submit it - otherwise fail front end validation:
         */
        if (this.valid) {
-         console.log('submitting valid form')
+         console.log('submitting valid form'+this.hotel.currentUser)
+
         this.submit();
+
+
        } else if (this.errors.length>0) {
          console.log('ERRors on page" '+this.errors)
          this.$emit('hotel-errors',this.errors);
