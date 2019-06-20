@@ -137,6 +137,13 @@ export default {
 //           this.$emit('hotel-errors',data);
     this.logs.push({ event: "Recieved message", msg });
   });
+
+    this.socket.onmessage = ({data}) => {
+      console.log("received  "+data)
+
+//           this.$emit('hotel-errors',data);
+      this.logs.push({ event: "Recieved message", data });
+    };
   },
    methods: {
      connect() {
@@ -151,7 +158,12 @@ export default {
          /**
           * we only get a message back when something has gone wrong in gateway-command process action
           */
+         this.socket.onmessage = ({data}) => {
+           console.log("received  "+data)
 
+//           this.$emit('hotel-errors',data);
+           this.logs.push({ event: "Recieved message", data });
+         };
 
        };
 

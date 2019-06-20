@@ -132,7 +132,7 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
                             Map.Entry mapElement = (Map.Entry)hmIterator.next();
 
                             System.out.println("Error being sent"+mapElement.getValue());
-                            userSession.send(mapElement.getValue());
+                            userSession.sendAsync("{ currentUser: "+msg.getCurrentUser()+", error: "+mapElement.getValue()+"}");
 
                         }
                     } else {
