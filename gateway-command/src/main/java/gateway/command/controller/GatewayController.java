@@ -24,9 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -128,13 +126,17 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
                     if (userSession!=null) {
                         System.out.println("Found  "+userSession+" going to send error");
                         Iterator hmIterator = msg.getErrors().entrySet().iterator();
+                        List<String> errors =new ArrayList<>();
                         while (hmIterator.hasNext()) {
                             Map.Entry mapElement = (Map.Entry)hmIterator.next();
 
                             System.out.println("Error being sent"+mapElement.getValue());
-                            userSession.sendAsync("{ currentUser: "+msg.getCurrentUser()+", error: "+mapElement.getValue()+"}");
+                            //userSession.sendAsync("{\"currentUser\":\""+msg.getCurrentUser()+"\", \"errorMessage\":\""+mapElement.getValue()+"\"}");
+                            //errors.add("\"errorMessage\":\""+mapElement.getValue()+"\"");
+                            errors.add("\""+mapElement.getValue()+"\"");
 
                         }
+                        userSession.sendAsync("{\"currentUser\":\""+msg.getCurrentUser()+"\", \"errors\":["+ String.join(", ", errors)+"] }");
                     } else {
                         System.out.println("Could not find user !!");
                     }
