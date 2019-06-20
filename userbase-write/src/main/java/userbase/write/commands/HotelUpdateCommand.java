@@ -23,7 +23,14 @@ public class HotelUpdateCommand  extends Command  {
 
 
     public HotelUpdateCommand() {}
-
+    public HotelUpdateCommand(HotelUpdateCommand cmd) {
+        super((Command) cmd);
+        this.name=cmd.getName();
+        this.code=cmd.getCode();
+        this.email=cmd.getEmail();
+        this.phone=cmd.getPhone();
+        this.id=cmd.getId();
+    }
     public HotelUpdateCommand(Long id, String name, String code) {
         this.id = id;
         this.name = name;
@@ -37,7 +44,6 @@ public class HotelUpdateCommand  extends Command  {
         this.phone = phone;
         this.email = email;
     }
-
 
     public Long getId() {
         return id;
@@ -80,5 +86,6 @@ public class HotelUpdateCommand  extends Command  {
     public void setEmail(String email) {
         this.email = email;
     }
+
 
 }

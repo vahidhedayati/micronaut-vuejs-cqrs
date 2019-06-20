@@ -14,6 +14,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.TopicPartition;
 import userbase.write.commands.Command;
+import userbase.write.commands.UserDeleteCommand;
 import userbase.write.commands.UserSaveCommand;
 import userbase.write.commands.UserUpdateCommand;
 import userbase.write.service.UserService;
@@ -86,6 +87,8 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
                             dao.save((UserSaveCommand) cmd);
                         } else if (cmd instanceof UserUpdateCommand) {
                             dao.update((UserUpdateCommand) cmd);
+                        } else if (cmd instanceof UserDeleteCommand) {
+                            dao.delete((UserDeleteCommand) cmd);
                         }
                     }
 

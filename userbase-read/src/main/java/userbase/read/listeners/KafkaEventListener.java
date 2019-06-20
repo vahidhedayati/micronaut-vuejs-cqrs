@@ -13,10 +13,7 @@ import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.TopicPartition;
-import userbase.read.commands.Command;
-import userbase.read.commands.UserSaveCommand;
-import userbase.read.commands.UserSavedCommand;
-import userbase.read.commands.UserUpdatedCommand;
+import userbase.read.commands.*;
 import userbase.read.service.UserService;
 
 import javax.annotation.Nonnull;
@@ -87,6 +84,8 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
                             dao.save((UserSavedCommand) cmd);
                         } else if (cmd instanceof UserUpdatedCommand) {
                             dao.update((UserUpdatedCommand) cmd);
+                        } else if (cmd instanceof UserDeletedCommand) {
+                            dao.delete((UserDeletedCommand) cmd);
                         }
                     }
 

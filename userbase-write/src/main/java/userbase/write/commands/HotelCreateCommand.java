@@ -33,6 +33,16 @@ public class HotelCreateCommand extends Command  {
     public HotelCreateCommand() {
 
     }
+    public HotelCreateCommand(HotelCreateCommand cmd) {
+        super((Command) cmd);
+        this.code=cmd.getCode();
+        this.name=cmd.getName();
+        this.phone=cmd.getPhone();
+        this.email=cmd.getEmail();
+        this.updateUserId=cmd.getUpdateUserId();
+        this.lastUpdated=cmd.getLastUpdated();
+        this.hotelRooms=cmd.getHotelRooms();
+    }
 
     public HotelCreateCommand(String code, String name) {
         this.code = code;

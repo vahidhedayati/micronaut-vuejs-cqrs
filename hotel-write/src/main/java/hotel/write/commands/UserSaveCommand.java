@@ -16,6 +16,15 @@ public class UserSaveCommand extends Command {
 
     public UserSaveCommand() {}
 
+    public UserSaveCommand(UserSaveCommand cmd) {
+        super((Command) cmd);
+        this.username=cmd.getUsername();
+        this.password=cmd.getPassword();
+        this.firstname=cmd.getFirstname();
+        this.surname=cmd.getSurname();
+        this.lastUpdated=cmd.getLastUpdated();
+    }
+
     public UserSaveCommand(@NotBlank String username, @NotBlank String password, @NotBlank String firstname, @NotBlank String surname) {
 
         this.username = username;

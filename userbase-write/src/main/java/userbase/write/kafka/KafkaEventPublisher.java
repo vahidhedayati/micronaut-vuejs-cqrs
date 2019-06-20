@@ -23,14 +23,14 @@ public class KafkaEventPublisher implements EventPublisher {
     public <T extends Command> void publish(EmbeddedServer embeddedServer, String topic, T command) {
         System.out.println(" About to send to kafka"+topic);
         //String eventType = command.getClass().getSimpleName();
-
-        String value = serializeCommand(command);
-
-        System.out.println(" About to send to kafka"+topic+" ------------"+value);
-        System.out.println(" Transaction ID  ---------------------------------------------- "+command.getTransactionId());
-
-        //kafkaSender.send(topic, command.getEventType()+"_"+command.getTransactionId().toString(), value);
-        kafkaSender.send(topic, command.getEventType()+"_"+ command.getTransactionId().toString(), value);
+        if (command.getTransactionId() !=null) {
+            String value = serializeCommand(command);
+            System.out.println(" About to send to kafka"+topic+" ------------"+value);
+            System.out.println(" Transaction ID  ---------------------------------------------- "+command.getTransactionId());
+            kafkaSender.send(topic,command.getEventType()+"_"+ command.getTransactionId().toString(), value);
+        } else {
+            System.out.println(" No Transaction ID  found error with ---------------------------------------------- "+command.getClass()+" ---> "+command);
+        }
     }
 
 

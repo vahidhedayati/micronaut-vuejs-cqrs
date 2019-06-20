@@ -25,6 +25,16 @@ public class UserUpdateCommand extends Command {
 
     public UserUpdateCommand() {}
 
+    public UserUpdateCommand(UserUpdateCommand cmd) {
+        super((Command) cmd);
+        this.username=cmd.getUsername();
+        this.password=cmd.getPassword();
+        this.firstname=cmd.getFirstname();
+        this.surname=cmd.getSurname();
+        this.id=cmd.getId();
+    }
+
+
     public UserUpdateCommand(@NotNull Long id, @NotBlank String username, @NotBlank String password, @NotBlank String firstname, @NotBlank String surname) {
         this.id = id;
         this.username = username;

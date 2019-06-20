@@ -38,7 +38,14 @@ public class HotelSaveCommand extends Command {
         this.name = name;
         this.code=code;
     }
-
+    public HotelSaveCommand(HotelSaveCommand cmd) {
+        super((Command) cmd);
+        this.name=cmd.getName();
+        this.code=cmd.getCode();
+        this.email=cmd.getEmail();
+        this.phone=cmd.getPhone();
+        this.updateUserId=cmd.getUpdateUserId();
+    }
     public String getName() {
         return name;
     }

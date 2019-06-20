@@ -29,8 +29,17 @@ public abstract class Command implements Action {
         this.port = embeddedServer.getPort();
     }
 
+
     protected Command() {
 
+    }
+
+    public Command(Command cmd) {
+        this.eventType=cmd.getEventType();
+        this.instant=cmd.getInstant();
+        this.transactionId=cmd.getTransactionId();
+        this.host=cmd.getHost();
+        this.port=cmd.getPort();
     }
 
     public String getEventType() {

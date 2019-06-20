@@ -3,10 +3,7 @@ package userbase.write.service;
 import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.spring.tx.annotation.Transactional;
-import userbase.write.commands.Command;
-import userbase.write.commands.UserDeleteCommand;
-import userbase.write.commands.UserSaveCommand;
-import userbase.write.commands.UserUpdateCommand;
+import userbase.write.commands.*;
 import userbase.write.domain.User;
 import userbase.write.implementations.MyApplicationConfiguration;
 import userbase.write.implementations.Users;
@@ -90,8 +87,9 @@ public class UserService implements Users {
     @Override
     public void save(UserSaveCommand cmd) {
 
-        cmd.setEventType("UserSavedCommand");
-        publishEvent(cmd);
+        UserSavedCommand cmd1 = new UserSavedCommand(cmd);
+        cmd1.setEventType("UserSavedCommand");
+        publishEvent(cmd1);
 
         System.out.println("Doing user save "+cmd.getUsername());
         User user = new User(cmd.getUsername(),cmd.getPassword(),cmd.getFirstname(),cmd.getSurname(),cmd.getLastUpdated());
@@ -101,8 +99,10 @@ public class UserService implements Users {
     @Transactional
     @Override
     public void delete(UserDeleteCommand cmd) {
-        cmd.setEventType("UserDeletedCommand");
-        publishEvent(cmd);
+
+        UserDeletedCommand cmd1 = new UserDeletedCommand(cmd);
+        cmd1.setEventType("UserDeletedCommand");
+        publishEvent(cmd1);
 
         System.out.println("Doing User delete "+cmd.getId());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
@@ -111,8 +111,10 @@ public class UserService implements Users {
     @Transactional
     @Override
     public void update(UserUpdateCommand cmd) {
-        cmd.setEventType("UserUpdatedCommand");
-        publishEvent(cmd);
+
+        UserUpdatedCommand cmd1 = new UserUpdatedCommand(cmd);
+        cmd1.setEventType("UserUpdatedCommand");
+        publishEvent(cmd1);
 
         System.out.println("Doing user update "+cmd.getUsername());
         findById(cmd.getId()).ifPresent(user -> entityManager.createQuery("UPDATE User h  SET username = :username, password = :password, firstname=:firstname, surname=:surname where id = :id")

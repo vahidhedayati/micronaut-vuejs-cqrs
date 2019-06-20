@@ -1,5 +1,8 @@
 package hotel.read.commands;
 
+
+import hotel.read.domain.Hotel;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -23,7 +26,14 @@ public class HotelUpdateCommand  extends Command  {
 
 
     public HotelUpdateCommand() {}
-
+    public HotelUpdateCommand(HotelUpdateCommand cmd) {
+        super((Command) cmd);
+        this.name=cmd.getName();
+        this.code=cmd.getCode();
+        this.email=cmd.getEmail();
+        this.phone=cmd.getPhone();
+        this.id=cmd.getId();
+    }
     public HotelUpdateCommand(Long id, String name, String code) {
         this.id = id;
         this.name = name;
@@ -36,6 +46,15 @@ public class HotelUpdateCommand  extends Command  {
         this.code = code;
         this.phone = phone;
         this.email = email;
+    }
+
+    public HotelUpdateCommand(Hotel h) {
+        this.id = h.getId();
+        this.name = h.getName();
+        this.code = h.getCode();
+        this.name = h.getName();
+        this.phone = h.getPhone();
+        this.email = h.getEmail();
     }
 
     public Long getId() {

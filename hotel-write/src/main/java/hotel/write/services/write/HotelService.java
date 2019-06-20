@@ -55,8 +55,10 @@ public class HotelService implements HotelsInterface {
     @Override
     @Transactional
     public void delete(HotelDeleteCommand cmd) {
-        cmd.setEventType("HotelDeletedCommand");
-        publishEvent(cmd);
+
+        HotelDeletedCommand cmd1 = new HotelDeletedCommand(cmd);
+        cmd1.setEventType("HotelDeletedCommand");
+        publishEvent(cmd1);
         System.out.println("Doing hotel delete "+cmd.getId());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
     }
@@ -64,17 +66,9 @@ public class HotelService implements HotelsInterface {
     @Override
     @Transactional
     public void update(HotelUpdateCommand cmd) {
-
-        cmd.setEventType("HotelUpdatedCommand");
-
-
-        //HotelUpdatedCommand cmd1 = (HotelUpdatedCommand)cmd;
-        //cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).get().getUsername());
-
-        publishEvent(cmd);
-
-
-
+        HotelUpdatedCommand cmd1 = new HotelUpdatedCommand(cmd);
+        cmd1.setEventType("HotelUpdatedCommand");
+        publishEvent(cmd1);
 
         System.out.println("Doing hotel update "+cmd.getName());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
@@ -106,10 +100,10 @@ public class HotelService implements HotelsInterface {
     @Transactional
     public void save(HotelCreateCommand cmd) {
 
-        cmd.setEventType("HotelCreatedCommand");
-        HotelCreatedCommand cmd1 = (HotelCreatedCommand)cmd;
-        cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).get().getUsername());
 
+        HotelCreatedCommand cmd1 = new HotelCreatedCommand(cmd);
+        cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).get().getUsername());
+        cmd1.setEventType("HotelCreatedCommand");
         publishEvent(cmd1);
 
         System.out.println("Doing hotel HotelCreatedCommand save  "+cmd.getName());
@@ -130,11 +124,11 @@ public class HotelService implements HotelsInterface {
     @Transactional
     public void save(HotelSaveCommand cmd) {
         System.out.println("Doing hotel save "+cmd.getName());
-        cmd.setEventType("HotelSavedCommand");
 
-        HotelSavedCommand cmd1 = (HotelSavedCommand)cmd;
+        HotelSavedCommand cmd1 = new HotelSavedCommand(cmd);
+        //HotelSavedCommand cmd1 = (HotelSavedCommand)cmd;
         cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).get().getUsername());
-
+        cmd1.setEventType("HotelSavedCommand");
         publishEvent(cmd1);
 
         save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail()));

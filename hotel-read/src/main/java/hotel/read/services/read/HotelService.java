@@ -122,11 +122,13 @@ public class HotelService implements HotelsInterface {
         List<HotelRooms> hotelRooms = new ArrayList<>();
         if (!findByCode(hotel.getCode()).isPresent()) {
             entityManager.persist(hotel);
-            for (HotelRoomsCreateCommand rmc  : cmd.getHotelRooms() ) {
-                HotelRooms hotelRooms1 = new HotelRooms(hotel,rmc.getRoomType(),rmc.getPrice(), rmc.getStockTotal());
-                hotelRooms.add(hotelRooms1);
+            if (cmd.getHotelRooms()!=null) {
+                for (HotelRoomsCreateCommand rmc  : cmd.getHotelRooms() ) {
+                    HotelRooms hotelRooms1 = new HotelRooms(hotel,rmc.getRoomType(),rmc.getPrice(), rmc.getStockTotal());
+                    hotelRooms.add(hotelRooms1);
+                }
+                hotel.setHotelRooms(hotelRooms);
             }
-            hotel.setHotelRooms(hotelRooms);
             entityManager.persist(hotel);
         }
 

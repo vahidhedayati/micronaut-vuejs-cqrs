@@ -1,24 +1,30 @@
 package gateway.command.event.commands;
 
 import com.sun.istack.Nullable;
+import io.micronaut.validation.Validated;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
+@Validated
 public class HotelSaveCommand extends Command {
 
 
-    @Nullable
-    private Long id;
-
-    @Nullable
+    @NotBlank
+    @Pattern(regexp = "(?=.*[A-Z]).{2,3}", message = "field_three_char")
     private String code;
 
-    @Nullable
+    @NotNull
+    @NotBlank
+    @Size(max = 10, min=3)
     private String name;
 
-    @Nullable
+    @NotBlank
     private String phone;
 
-    @Nullable
+    @NotBlank
     private String email;
 
     @Nullable
@@ -32,7 +38,14 @@ public class HotelSaveCommand extends Command {
         this.name = name;
         this.code=code;
     }
-
+    public HotelSaveCommand(HotelSaveCommand cmd) {
+        super((Command) cmd);
+        this.name=cmd.getName();
+        this.code=cmd.getCode();
+        this.email=cmd.getEmail();
+        this.phone=cmd.getPhone();
+        this.updateUserId=cmd.getUpdateUserId();
+    }
     public String getName() {
         return name;
     }
@@ -64,14 +77,6 @@ public class HotelSaveCommand extends Command {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
 

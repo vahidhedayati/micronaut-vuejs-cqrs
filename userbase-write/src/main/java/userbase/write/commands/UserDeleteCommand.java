@@ -10,6 +10,11 @@ public class UserDeleteCommand extends Command {
 
     public UserDeleteCommand() {}
 
+    public UserDeleteCommand(UserDeleteCommand cmd) {
+        super((Command) cmd);
+        this.id = cmd.getId();
+    }
+
     public UserDeleteCommand(Long id) {
         this.id = id;
 

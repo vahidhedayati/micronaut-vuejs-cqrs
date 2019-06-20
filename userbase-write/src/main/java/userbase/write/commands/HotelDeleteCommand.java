@@ -14,6 +14,10 @@ public class HotelDeleteCommand  extends Command  {
         this.id = id;
 
     }
+    public HotelDeleteCommand(HotelDeleteCommand cmd) {
+        super((Command) cmd);
+        this.id = cmd.getId();
+    }
 
     public Long getId() {
         return id;
