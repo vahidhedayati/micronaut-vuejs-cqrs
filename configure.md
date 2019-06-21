@@ -14,7 +14,10 @@ consul agent -dev -node  machine
 or if you have installed docker simply run `sudo docker run -p 8500:8500 consul`
 
  ##### Run Kafka
- 
+ -- Please note  you need to probably clear out kafka - each restart builds same events from gateway-command
+
+ `sudo rm -rf  /tmp/kafka-logs/*`
+
  Please ensure you are also running kafka
  -> sudo /opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properties
  
