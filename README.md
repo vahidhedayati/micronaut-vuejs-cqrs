@@ -7,9 +7,6 @@ Micronaut backend vuejs frontend application - CQRS
 
 
 
-This project is incomplete will be marked as working - when this message is removed - and instructions are updated properly
-
-
 Running app
 ----
 ##### Please refer to [pre-requirements](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/master/configure.md).
