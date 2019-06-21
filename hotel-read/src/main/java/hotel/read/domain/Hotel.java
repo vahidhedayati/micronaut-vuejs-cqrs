@@ -51,7 +51,6 @@ public class Hotel {
     private String updateUserName;
 
 
-
     public Hotel() {
 
     }
@@ -216,6 +215,31 @@ public class Hotel {
     public void setHotelRooms(List<HotelRooms> hotelRooms) {
         this.hotelRooms = hotelRooms;
     }
+
+    public String getUpdateUserName() {
+        return updateUserName;
+    }
+
+    public void setUpdateUserName(String updateUserName) {
+        this.updateUserName = updateUserName;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
     @Override
     public String toString() {
         return "hotel{" +

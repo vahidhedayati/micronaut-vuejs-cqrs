@@ -36,8 +36,10 @@ import java.util.*;
 public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAware {
 
     private final ObjectMapper objectMapper;
-    final EmbeddedServer embeddedServer;
 
+    /**
+     * TODO this is currently hard wired to something that is dynamic in command object host/port
+     */
     @Inject
     @Client("http://localhost:8082")
     RxWebSocketClient webSocketClient;
@@ -51,9 +53,8 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
         }
     };
 
-    public KafkaEventListener(ObjectMapper objectMapper,EmbeddedServer embeddedServer) {
+    public KafkaEventListener(ObjectMapper objectMapper) {
         this.objectMapper=objectMapper;
-        this.embeddedServer=embeddedServer;
     }
     @Inject
     protected MediaTypeCodecRegistry mediaTypeCodecRegistry;
@@ -90,6 +91,8 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
                 if (hotelCreatedEvent !=null ) {
                     final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
+                    WebsocketMessage msg  =new WebsocketMessage();
+                    msg.setCurrentUser(cmd.getCurrentUser());
 
                     final Set<ConstraintViolation<Command>> constraintViolations = validator.validate(cmd);
                     if (constraintViolations.size() > 0) {
@@ -101,55 +104,37 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
                         }
                         System.out.println(" HOTEL-WRITE VALIDATION ERROR - COMMAND BUS FAILED VALIDATION::: 01 ---->"+violationMessages);
                         // throw new ValidationException("Hotel is not valid:\n" + violationMessages);
-                        //TODO - We need to websocket back and pickup
                         /// return HttpResponse.badRequest(violationMessages);
-                        WebsocketMessage msg  =new WebsocketMessage();
-                        msg.setCurrentUser(cmd.getCurrentUser());
+
+                        //sending back erros via websocket as json well converted to json in Gateway controller on gateway-command
                         msg.setErrors(violationMessages);
                         msg.setEventType("errorForm");
-                        if (cmd.getSession()!=null ) {
-
-
-                            System.out.println("Websocket Session found hooray - sending "+serializeMessage(msg));
-                            cmd.getSession().send(serializeMessage(msg));
-                        } else {
-                           // WebSocketClient wsClient = embeddedServer.getApplicationContext().createBean(WebSocketClient, "https://ws-api.upstox.com")
-                            /*
-                            WebSocketClient client;
-                            final String url = "ws://"+cmd.getHost()+":"+cmd.getPort()+"/ws/process";
-
-                                client = new WebSocketClient();
-                            }
-                            System.out.print("Socket connection from: "+hostName+"\n");
-                            //final String url = "ws://localhost:9000";
-                            try {
-                                client.open();
-                                //Keep connection open and add it to the existing connCurrent Maps
-                                BootService.addSocket(hostName,client);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            return session.send("{ hostName:"+hostName+"}", MediaType.APPLICATION_JSON_TYPE);
-                            */
-                            //GatewayClient client = webSocketClient.connect(GatewayClient.class, "/ws/process".toString()).blockingFirst();
-                            ChatClientWebSocket chatClient = webSocketClient.connect(ChatClientWebSocket.class, "/ws/process").blockingFirst();
-                            chatClient.send(serializeMessage(msg));
-
-                            System.out.println("Websocket Session found oh dear - this is an issue "+cmd.getCurrentUser());
-                        }
-
                     } else {
+                        /**
+                         * a note of warning about this id based on creation this is currently returning ID of record on
+                         * hotel-write which is the write side or should I say wrong :) side of the equation
+                         * it should be looking for an id on hotel-read so write is wrong read is right hehehehehe
+                         * anyhow it is conceptual so perhaps the validation should really be happening on read
+                         * or or or maybe the front end when it has a save goes off and gets id for it rather than this way
+                         */
+                        msg.setEventType("successForm");
                         if (cmd instanceof HotelSaveCommand) {
                             dao.save((HotelSaveCommand) cmd);
+                            msg.setId(dao.findByCode(((HotelSaveCommand) cmd).getCode()).map(h->h.getId()));
                         } else if (cmd instanceof HotelCreateCommand) {
                             dao.save((HotelCreateCommand) cmd);
+                            msg.setId(dao.findByCode(((HotelCreateCommand) cmd).getCode()).map(h->h.getId()));
                         } else if (cmd instanceof HotelUpdateCommand) {
                             dao.update((HotelUpdateCommand) cmd);
+                            msg.setId(Optional.of(((HotelUpdateCommand) cmd).getId()));
                         } else if (cmd instanceof HotelDeleteCommand) {
                             dao.delete((HotelDeleteCommand) cmd);
+                            msg.setId(Optional.of(((HotelUpdateCommand) cmd).getId()));
                         }
                     }
+
+                    ChatClientWebSocket chatClient = webSocketClient.connect(ChatClientWebSocket.class, "/ws/process").blockingFirst();
+                    chatClient.send(serializeMessage(msg));
                 }
             }
         }

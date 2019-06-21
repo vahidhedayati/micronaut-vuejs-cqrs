@@ -70,27 +70,22 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
 
     @Override
     public void onApplicationEvent(ProcessEvent event) {
-        LOG.info("User Registered");
-
         LOG.info("brodcasting message to {}", sessions.size());
-
-
        // String message = String.valueOf(userRepository.count());
-        String message="Hello";
-        for ( String webSocketSessionId : sessions.keySet()) {
-            publishMessage(message, sessions.get(webSocketSessionId));
-        }
+       // String message="Hello";
+       // for ( String webSocketSessionId : sessions.keySet()) {
+        //    publishMessage(message, sessions.get(webSocketSessionId));
+        //}
     }
 
     @OnOpen
     public void onOpen(WebSocketSession session) {
-
         LOG.info("on Open");
-        System.out.println("SOCKET OPENED "+session);
+       // System.out.println("SOCKET OPENED "+session);
         sessions.put(session.getId(), session);
         //String message = String.valueOf(userRepository.count());
-        String message="Hello";
-        publishMessage(message, session);
+        //String message="Hello";
+        //publishMessage(message, session);
     }
 
     /**
@@ -110,65 +105,68 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
         JsonMediaTypeCodec mediaTypeCodec = (JsonMediaTypeCodec) mediaTypeCodecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
                 .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
         WebsocketMessage msg  = mediaTypeCodec.decode(WebsocketMessage.class, message);
-
+        WebSocketSession userSession;
         if (msg!=null) {
             //System.out.println("Found  >"+msg.getEventType()+"< EVENT -------------------------------------------------------");
-            switch(msg.getEventType()) {
-                case "userForm":
-                    if (!currentSubmissions.contains(msg.getCurrentUser())) {
-                        System.out.println("Adding user "+message+" to concurrent hashmap currentSubmissions");
-                        currentSubmissions.put(msg.getCurrentUser(),session);
-                    }
-                    break;
-                case "errorForm":
-                    System.out.println("Error has happened relaying back to user "+msg.getCurrentUser()+" were errors being relayed ");
-                    WebSocketSession userSession = currentSubmissions.get(msg.getCurrentUser());
-                    if (userSession!=null) {
-                        System.out.println("Found  "+userSession+" going to send error");
-                        Iterator hmIterator = msg.getErrors().entrySet().iterator();
-                        List<String> errors =new ArrayList<>();
-                        while (hmIterator.hasNext()) {
-                            Map.Entry mapElement = (Map.Entry)hmIterator.next();
-
-                            System.out.println("Error being sent"+mapElement.getValue());
-                            //userSession.sendAsync("{\"currentUser\":\""+msg.getCurrentUser()+"\", \"errorMessage\":\""+mapElement.getValue()+"\"}");
-                            //errors.add("\"errorMessage\":\""+mapElement.getValue()+"\"");
-                            errors.add("\""+mapElement.getValue()+"\"");
-
+            try {
+                switch(msg.getEventType()) {
+                    case "userForm":
+                        if (!currentSubmissions.contains(msg.getCurrentUser())) {
+                            System.out.println("Adding user "+message+" to concurrent hashmap currentSubmissions");
+                            currentSubmissions.put(msg.getCurrentUser(),session);
                         }
-                        userSession.sendAsync("{\"currentUser\":\""+msg.getCurrentUser()+"\", \"errors\":["+ String.join(", ", errors)+"] }");
-                    } else {
-                        System.out.println("Could not find user !!");
-                    }
-                    break;
+                        break;
+                    case "errorForm":
+                        System.out.println("Error has happened relaying back to user "+msg.getCurrentUser()+" were errors being relayed ");
+                        userSession = currentSubmissions.get(msg.getCurrentUser());
+                        if (userSession!=null) {
+                            System.out.println("Found  "+userSession+" going to send error");
+                            Iterator hmIterator = msg.getErrors().entrySet().iterator();
+                            List<String> errors =new ArrayList<>();
+                            while (hmIterator.hasNext()) {
+                                Map.Entry mapElement = (Map.Entry)hmIterator.next();
+                                errors.add("\""+mapElement.getValue()+"\"");
+                            }
+                            //userSession.sendAsync("{\"currentUser\":\""+msg.getCurrentUser()+"\", , \"status\":\"error\" \"errors\":["+ String.join(", ", errors)+"] }");
+                            userSession.sendAsync("{ \"currentUser\" : \""+msg.getCurrentUser()+"\",  \"status\" : \"error\" ,\"errors\" : ["+ String.join(", ", errors)+"] }");
+                        } else {
+                            System.out.println("Could not find user !!");
+                        }
+                        break;
+                    case "successForm":
+                        userSession = currentSubmissions.get(msg.getCurrentUser());
+                        if (userSession!=null) {
+                            System.out.println("Found  "+userSession+" going to send success");
+                            userSession.sendAsync("{ \"currentUser\" : \""+msg.getCurrentUser()+"\", \"id\" : \""+msg.getId()+"\", \"status\": \"success\"}");
+                        } else {
+                            System.out.println("Could not find user !!");
+                        }
+                        break;
+                }
+            } catch (ConcurrentModificationException e) {
+
             }
-
         }
-
     }
 
 
 
     public void publishMessage(String message, WebSocketSession session) {
-        //session.broadcastSync(message);
         broadcaster.broadcast(message);
     }
 
     @OnError
     public void onError(Throwable error) {
-        System.out.println("SOCKET error "+error);
-
+       // System.out.println("SOCKET error "+error);
         LOG.info("on Error");
     }
 
     @OnClose
     public void onClose(CloseReason closeReason, WebSocketSession session) {
-        LOG.info("on Close");
-        System.out.println("SOCKET close ");
+        //LOG.info("on Close");
+       // System.out.println("SOCKET close ");
         session.remove(session.getId());
     }
-
-
 
     /**
      *
@@ -181,59 +179,11 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
      */
     @Post(uri = "/{topic}", consumes = MediaType.APPLICATION_JSON)
     public HttpResponse process(String topic, @JsonProperty("eventType") String eventType, @Body String formInput)  {
-
         JsonMediaTypeCodec mediaTypeCodec = (JsonMediaTypeCodec) mediaTypeCodecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
                 .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
-
-        System.out.println(" command to be rn "+eventType);
         Command cmd = (Command) mediaTypeCodec.decode(commandClasses.get(eventType),formInput);
-        /**
-         * We attempt to send current websocket session with command to which ever command handler
-         */
-
-        if (cmd.getCurrentUser()!=null) {
-            //System.out.println(" Websocket test for  "+cmd.getCurrentUser());
-            WebSocketSession session = currentSubmissions.get(cmd.getCurrentUser());
-            if (session!=null) {
-                //System.out.println(" Websocket session =   "+session);
-                cmd.setSession(session);
-                //System.out.println(" removing  session =   ");//+session);
-                //currentSubmissions.remove(cmd.getCurrentUser());
-            }
-
-        } else {
-            System.out.println(" No current user found  "+cmd.getCurrentUser());
-        }
-
-        System.out.println("Publishing--------- command "+cmd+ " Current user "+cmd.getCurrentUser());
+        System.out.println(" command to be run "+eventType+" Publishing--------- command "+cmd+ " Current user "+cmd.getCurrentUser());
         eventPublisher.publish(embeddedServer,topic,cmd);
-
-        /**
-         * We attempt to send current websocket session with command to which ever command handler
-         */
-/*
-        if (cmd.getCurrentUser()!=null) {
-            System.out.println(" Websocket test for  "+cmd.getCurrentUser());
-            WebSocketSession session = currentSubmissions.get(cmd.getCurrentUser());
-            if (session!=null) {
-                eventPublisher.publish(session, embeddedServer,topic,cmd);
-                System.out.println(" Websocket session =   "+session);
-                System.out.println(" removing  session =   ");//+session);
-                currentSubmissions.remove(cmd.getCurrentUser());
-                System.out.println("Publishing--------- command "+cmd+ " Current user "+cmd.getCurrentUser()+"  has session"+session);
-
-            } else {
-                System.out.println("Publishing--------- command "+cmd+ " Current user "+cmd.getCurrentUser());
-                eventPublisher.publish(embeddedServer,topic,cmd);
-            }
-
-        } else {
-            System.out.println("Publishing--------- command "+cmd+ " Current user "+cmd.getCurrentUser());
-            eventPublisher.publish(embeddedServer,topic,cmd);
-        }
-*/
-
-
         return HttpResponse.accepted();
     }
 

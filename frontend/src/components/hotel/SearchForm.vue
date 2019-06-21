@@ -19,6 +19,10 @@
         <hotel-form
           @refresh-list="refreshHotels"
           @hotel-errors="errorHotels"
+          :submittedForm="submittedForm"
+          :masterUser="masterUser"
+          @current-hotel="currentHotel"
+          @hotel-update="updateHotels"
         >
 
         </hotel-form>
@@ -39,7 +43,7 @@
       AppHeader,
       HotelForm,
     },
-    props: ['search'],
+    props: ['search','masterUser','submittedForm'],
     model: {
       prop: 'search',
       event: 'change',
@@ -56,6 +60,17 @@
        console.log('hotelTable.vue updating hotel list')
           this.$emit('hotel-errors',errors);
       },
+      currentHotel: function(ho) {
+        this.$emit('current-hotel',  ho);
+      },
+
+      updateAddForm: function(ho) {
+        this.submittedForm=ho;
+      },
+      updateHotels: function(cv) {
+        this.$emit('hotel-update',  cv);
+      },
+
     }
   }
 </script>

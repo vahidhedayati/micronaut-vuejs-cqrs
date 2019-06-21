@@ -1,9 +1,9 @@
 import axios from 'axios'
 const instance = axios.create({
-  baseURL: `http://localhost:8080/`
+  baseURL: `http://localhost:8081/`
 })
 const state = {
-    loadVehicles: {},
+    loadHotels: {},
     params:{},
     total: 0,
     numberOfPages: 0
@@ -31,61 +31,52 @@ const updateObjectsInArr = function(initialArr, newArr) {
   return finalUpdatedArr
 }
 const getters = {
-    loadVehicles() {
-      console.log('ahhh '+state.loadVehicles)
-      return state.loadVehicles;
+    loadHotels() {
+     // console.log('ahhh '+state.loadHotels)
+      return state.loadHotels;
     },
     total: state => state.total,
     numberOfPages: state => state.numberOfPages
 };
+
 /**
- * This is called through Rental.vue - when initialiseVehicle is called
+ * This is called through Hotel.vue - when initialiseHotels is called
  * it passes the params over to this action - also appended or defined in mutation below...
- * The output is then stored in this vuex object - called vehicles -
- * vehicles its total and number of pages become a vuex session contained list
+ * The output is then stored in this vuex object - called hotels -
+ * hotels its total and number of pages become a vuex session contained list
  * each page change will update all these cache values
  * @type {boolean}
  */
 const actions = {
-    initVehicles: ({commit}, params) => {
+    initHotels: ({commit}, params) => {
       console.log("params = "+params.params)
-    instance.get('/guest/rental?'+params.params)
+    instance.get('/list?'+params.params)
       .then((response) =>{
         console.log('DATA '+JSON.stringify(response.data.instanceList));
         //commit('SET_STORE', response.data.instanceList,response.data.instanceTotal,response.data.numberOfPages);
         //commit('SET_TOTAL', response.data.instanceTotal);
         //commit('SET_PAGES', response.data.numberOfPages);
-        state.loadVehicles = response.data.instanceList;
+
+        state.loadHotels = response.data.instanceList;
         state.total = response.data.instanceTotal;
         state.numberOfPages = response.data.numberOfPages;
 
-        console.log(' -STATE 00>> '+JSON.stringify(state.vehicles))
+        //console.log(' -STATE 00>> '+JSON.stringify(state.loadHotels))
       });
     },
-  updateVehicles:  ({commit}, vehicleObject) => {
-  console.log('updatting '+vehicleObject.vehicle.id)
-  state.loadVehicles=updateObjectsInArr(state.loadVehicles, [vehicleObject.vehicle])
-
-
+  updateHotels:  ({commit}, hotelObject) => {
+      console.log('updatting '+JSON.stringify(hotelObject.hotel)+" with ID: "+hotelObject.hotel.id)
+      state.loadHotels=updateObjectsInArr(state.loadHotels, [hotelObject.hotel])
   }
-
-
 };
 
 const mutations = {
-    'SET_STORE' (state,vehicles,total,numberOfPages) {
-      console.log('sseting up vehicles as '+JSON.stringify(vehicles))
-      state.loadVehicles = vehicles;
+    'SET_STORE' (state,hotels,total,numberOfPages) {
+      console.log('sseting up hotels as '+JSON.stringify(hotels))
+      state.loadHotels = hotels;
       state.total = total;
       state.numberOfPages = numberOfPages;
-    },
- // 'SET_TOTAL' (state, total) {
-  //  state.total = total;
-  //},
- // 'SET_PAGES' (state, numberOfPages) {
-  //  state.numberOfPages = numberOfPages;
-  //},
-
+    }
 };
 
 export default {
@@ -93,7 +84,7 @@ export default {
     getters,
     actions,
   mutations: {
-    initVehicles(state, { params }) {
+    initHotels(state, { params }) {
       localStorage.setItem('params', params)
 
     }

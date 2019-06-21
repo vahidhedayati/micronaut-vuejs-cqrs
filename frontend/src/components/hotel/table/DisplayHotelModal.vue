@@ -30,7 +30,7 @@
 
         <div class="form-label col-sm-12">
         username
-        hotel.updateUser.username
+        hotel.updateUserName
       </div>
 
 

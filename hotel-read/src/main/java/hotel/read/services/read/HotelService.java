@@ -118,7 +118,10 @@ public class HotelService implements HotelsInterface {
     @Transactional
     public void save(HotelCreatedCommand cmd) {
         System.out.println("Doing READ  HotelCreatedCommand save "+cmd.getName());
-        Hotel hotel = new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(),cmd.getUpdateUserId(),cmd.getLastUpdated(),cmd.getUpdateUserName());
+        /**
+         * We are doing a getUpdateUsername.get() which at this point becomes a blocking call
+         */
+        Hotel hotel = new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(),cmd.getUpdateUserId(),cmd.getLastUpdated(),cmd.getUpdateUserName().get());
         List<HotelRooms> hotelRooms = new ArrayList<>();
         if (!findByCode(hotel.getCode()).isPresent()) {
             entityManager.persist(hotel);
@@ -138,7 +141,12 @@ public class HotelService implements HotelsInterface {
     @Transactional
     public void save(HotelSavedCommand cmd) {
         System.out.println("Doing hotel save "+cmd.getName());
-        save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(), cmd.getUpdateUserId(), cmd.getUpdateUserName()));
+        /**
+         * We are doing a getUpdateUsername.get() which at this point becomes a blocking call
+         */
+        System.out.println(cmd.getUpdateUserName()+" optional username: ------------ ");
+        System.out.println(cmd.getUpdateUserName().get()+" blocking get username:");
+        save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(), cmd.getUpdateUserId(), cmd.getUpdateUserName().get()));
     }
 
     @Override

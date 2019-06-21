@@ -2,7 +2,6 @@ package userbase.write.commands;
 
 
 import io.micronaut.runtime.server.EmbeddedServer;
-import io.micronaut.websocket.WebSocketSession;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -26,20 +25,7 @@ public abstract class Command implements Action {
     //follow hotelForm.vue which binds currentUser to hotelSaveCommand which extends this and sets this value when
     //created
     private String currentUser;
-
-    /**
-     * This is appended by gateway-command controller upon submission of a form if the form had currentUser defined
-     */
-    private WebSocketSession session;
-
-    public void initiate( WebSocketSession session, EmbeddedServer embeddedServer, String eventType) {
-        this.session=session;
-        this.eventType=eventType;
-        this.instant = Instant.now();
-        this.transactionId=UUID.randomUUID();
-        this.host = embeddedServer.getHost();
-        this.port = embeddedServer.getPort();
-    }
+    
     public void initiate(EmbeddedServer embeddedServer, String eventType) {
         this.eventType=eventType;
         this.instant = Instant.now();
@@ -48,13 +34,9 @@ public abstract class Command implements Action {
         this.port = embeddedServer.getPort();
     }
 
-
-    protected Command() {
-
-    }
+    protected Command() {}
 
     public Command(Command cmd) {
-        this.session=cmd.getSession();
         this.currentUser=cmd.getCurrentUser();
         this.eventType=cmd.getEventType();
         this.instant=cmd.getInstant();
@@ -111,11 +93,4 @@ public abstract class Command implements Action {
         this.port = port;
     }
 
-    public WebSocketSession getSession() {
-        return session;
-    }
-
-    public void setSession(WebSocketSession session) {
-        this.session = session;
-    }
 }

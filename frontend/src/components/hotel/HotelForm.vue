@@ -1,10 +1,6 @@
 <template id="add-hotel-template" xmlns="http://www.w3.org/1999/xhtml">
   <div id="validated-form">
-    <ul id="logs">
-      <li v-for="log in logs" class="log">
-        {{ log.event }}: {{ log.data }}
-      </li>
-    </ul>
+
      <div id="inputRow" class="row">
           <div class="col-sm-3">
             <div class="input-group">
@@ -45,7 +41,7 @@
       &nbsp
       </div>
         <div class="btn-group" role="group" aria-label="Add new vehicle">
-          <button type="button" :disabled="submitted==true" class="btn btn-success" @click.prevent="submitForm()">Add hotel</button>
+          <button type="button" :disabled="submittedForm==true" class="btn btn-success" @click.prevent="submitForm()">Add hotel</button>
         </div>
       </div>
   </div>
@@ -92,20 +88,12 @@ socket.onerror = function(err){
 }
 */
 export default {
- //  props: ['countries', 'reload','fetchCountries','sortSearch'],
+   props: ['masterUser','submittedForm'],
   data: function () {
     return {
-      message: "",
-      currentUser:"",
-      logs: [],
-
-      socket: null,
-      //socketIo:{currentUser:'', errors:{}, success:false, },
-      submitted:false,
-      status: "disconnected",
       valid: true,
       errors: [],
-      hotel:{currentUser:'', name:'AAAAAAAAAAAAA',code:'AAAA',phone:'+44-123456789', email:'aa@aa.com', updateUserName:'Admin' , updateUserId:'1',eventType:'HotelSaveCommand'}
+      hotel:{currentUser:this.masterUser,  name:'AAAAAAAAAAAAA',code:'AAAA',phone:'+44-123456789', email:'aa@aa.com', updateUserName:'Admin' , updateUserId:'1',eventType:'HotelSaveCommand'}
 
     }
   },
@@ -125,92 +113,31 @@ export default {
      * via events to an undefined command handler - the currentUser is stored in physical Command.java object that exists on
      * all microservices
      */
-    this.hotel.currentUser=Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
-
-    this.connect();
-
+    //this.hotel.currentUser=Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
   },
   mounted() {
 
   },
    methods: {
-     connect() {
-       console.log("About to connect to websocket")
-       this.socket = new WebSocket("ws://localhost:8082/ws/process");
-       this.socket.onopen = () => {
-         this.status = "connected";
-         this.logs.push({ event: "Connected to", data: 'ws://localhost:8082'})
-         console.log("Connected ")
-        // this.socket.send(this.hotel.currentUser)
-         this.socket.send(JSON.stringify({currentUser:this.hotel.currentUser,eventType:'userForm'}));
-         /**
-          * we only get a message back when something has gone wrong in gateway-command process action
-          */
-         this.socket.onmessage = ({data}) => {
-           this.submitted=false;
-           if (JSON.parse(data).currentUser=this.hotel.currentUser ) {
-             if (JSON.parse(data).errors.length>0) {
-               console.log("Yes adding"+JSON.parse(data).errors.errorMessage+" has errors "+JSON.parse(data).errors)
-               JSON.parse(data).errors.forEach((item) => {
-                 //console.log(item ) // key - value
-                this.errors.push(item)
-              });
-               this.$emit('hotel-errors',this.errors);
-             }
-           }
-           this.logs.push({ event: "Recieved message", data });
-         };
-         //console.log("received  ddd "+JSON.parse(data).errorMessage)
 
-
-
-       };
-
-     },
-     disconnect() {
-       this.socket.close();
-       this.status = "disconnected";
-       this.logs = [];
-     },
-     sendMessage() {
-       console.log("Sending message "+this.hotel.currentUser)
-       this.socket.send(JSON.stringify({currentUser:this.hotel.currentUser,eventType:'userForm'}));
-       //this.logs.push({ event: "Sent message", data: this.message });
-       this.message = "";
-     },
      submitForm (e) {
-      // if (this.postSuccess==false) {
-         //  e.preventDefault();
-       this.submitted=true;
-      // }
-       //this.message="current user "+this.currentUser;
-
-
+       this.$emit(' form-status',true);
        this.errors=[];
        const validName = validateName(this.hotel.name);
        this.errors.push(validName.error);
        this.valid = validName.valid
-
-
        const validPhone = validatePhone(this.hotel.phone);
        this.errors.push(validPhone.error);
        this.valid = validPhone.valid
-
        const validEmail = validateEmail(this.hotel.email);
        this.errors.push(validEmail.error);
        this.valid = validEmail.valid
-
-
-
        /**
         * IF form is valid for submission submit it - otherwise fail front end validation:
         */
        if (this.valid) {
          console.log('submitting valid form'+this.hotel.currentUser)
-
         this.submit();
-
-
        } else if (this.errors.length>0) {
          console.log('ERRors on page" '+this.errors)
          this.$emit('hotel-errors',this.errors);
@@ -221,21 +148,21 @@ export default {
       //This will call parent page with this action and pass this newly created object to it
       //this.$emit('add-hotel',hotel)
 
+      this.$emit('current-hotel',  this.hotel);
        return HotelService.postCall('/hotel',this.hotel)
               .then((res) => {
               if (res) {
                 if (res.data) {
-                    console.log('refresh entire list from hotelForm')
-                     this.$emit('refresh-list')
+                    //console.log('refresh entire list from hotelForm')
+                    // this.$emit('refresh-list')
+                  this.$emit('hotel-update', this.hotel);
                 }
               }
             }).catch((error) => {
 
            this.$emit('hotel-errors',   error.response.data);
-
            if (error.response) {
               //this.$emit('hotel-errors', err.code);
-
             } else if ( error.request) {
               console.log("dddd"+error.request);
             } else {

@@ -40,18 +40,11 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
     @Inject
     protected MediaTypeCodecRegistry mediaTypeCodecRegistry;
 
-
-   // @GuardedBy("kafkaConsumers")
-  //  private final Set<Consumer> kafkaConsumers = new HashSet<>();
-
     private Consumer consumer;
 
     @Override
     public void setKafkaConsumer(@Nonnull final Consumer consumer) {
         this.consumer=consumer;
-       // synchronized (kafkaConsumers) {
-       //     this.kafkaConsumers.add(consumer);
-        //}
     }
 
     //protected static final Logger LOG = LoggerFactory.getLogger(KafkaEventListener.class);
@@ -80,12 +73,9 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
                 } else if (cmd instanceof HotelDeletedCommand) {
                     dao.delete((HotelDeletedCommand) cmd);
                 }
-
             }
-
         }
     }
-
 
     @Override
     public void onPartitionsRevoked(Collection<TopicPartition> partitions) {

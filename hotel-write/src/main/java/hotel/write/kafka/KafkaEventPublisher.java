@@ -6,8 +6,6 @@ import hotel.write.commands.Command;
 import io.micronaut.context.annotation.Primary;
 import io.micronaut.runtime.server.EmbeddedServer;
 
-import java.util.UUID;
-
 @Primary
 public class KafkaEventPublisher implements EventPublisher {
 
@@ -23,16 +21,18 @@ public class KafkaEventPublisher implements EventPublisher {
 
     @Override
     public <T extends Command> void publish(EmbeddedServer embeddedServer, String topic, T command) {
-        System.out.println(" About to send to kafka"+topic);
+        //System.out.println(" About to send to kafka"+topic);
         //String eventType = command.getClass().getSimpleName();
         if (command.getTransactionId() !=null) {
             String value = serializeCommand(command);
-            System.out.println(" About to send to kafka"+topic+" ------------"+value);
-            System.out.println(" Transaction ID  ---------------------------------------------- "+command.getTransactionId());
+            System.out.println(" About to send to kafka"+topic+" ------------"+value+" Transaction ID  ---------------------------------------------- "+command.getTransactionId());
+            //System.out.println(" Transaction ID  ---------------------------------------------- "+command.getTransactionId());
             kafkaSender.send(topic,command.getEventType()+"_"+ command.getTransactionId().toString(), value);
-        } else {
+        }
+        /*else {
             System.out.println(" No Transaction ID  found error with ---------------------------------------------- "+command.getClass()+" ---> "+command);
         }
+        */
     }
 
 

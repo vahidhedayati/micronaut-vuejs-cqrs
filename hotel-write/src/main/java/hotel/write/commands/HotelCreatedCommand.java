@@ -1,6 +1,8 @@
 package hotel.write.commands;
 
 
+import java.util.Optional;
+
 public class HotelCreatedCommand extends HotelCreateCommand  {
 
     public HotelCreatedCommand() {
@@ -11,13 +13,13 @@ public class HotelCreatedCommand extends HotelCreateCommand  {
        super(cmd);
     }
 
-    private String updateUserName;
+    private Optional<String> updateUserName;
 
-    public String getUpdateUserName() {
+    public Optional<String> getUpdateUserName() {
         return updateUserName;
     }
 
-    public void setUpdateUserName(String updateUserName) {
+    public void setUpdateUserName(Optional<String> updateUserName) {
         this.updateUserName = updateUserName;
     }
 

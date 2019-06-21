@@ -22,7 +22,12 @@ public class Hotel {
 
 
     private Long updateUserId;
-    private User updateUser;
+
+    //Ouch username was not appearing this came to was reason still mapping to what had been set before..
+    //private User updateUser;
+
+
+    private String updateUserName;
 
 
     private Date lastUpdated;
@@ -98,12 +103,12 @@ public class Hotel {
         this.updateUserId = updateUserId;
     }
 
-    public User getUpdateUser() {
-        return updateUser;
+    public String getUpdateUserName() {
+        return updateUserName;
     }
 
-    public void setUpdateUser(User updateUser) {
-        this.updateUser = updateUser;
+    public void setUpdateUserName(String updateUserName) {
+        this.updateUserName = updateUserName;
     }
 
     public HotelRoomList rooms() {

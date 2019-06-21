@@ -58,47 +58,18 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
                 JsonMediaTypeCodec mediaTypeCodec = (JsonMediaTypeCodec) mediaTypeCodecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
                         .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
 
-
                 Command cmd = (Command) mediaTypeCodec.decode(commandClasses.get(eventType),hotelCreatedEvent);
-               // System.out.println(" command "+cmd);
-
-                //System.out.println("Default save of hotel in hotel-read ---------------- command "+cmd);
                 if (hotelCreatedEvent !=null ) {
-                    /*final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-
-
-                    final Set<ConstraintViolation<Command>> constraintViolations = validator.validate(cmd);
-                    if (constraintViolations.size() > 0) {
-                        Set<String> violationMessages = new HashSet<String>();
-
-                        for (ConstraintViolation<?> constraintViolation : constraintViolations) {
-                            violationMessages.add(constraintViolation.getMessage());
-                                //violationMessages.add(constraintViolation.getPropertyPath() + ": " + constraintViolation.getMessage());
-                        }
-                        System.out.println(" USER-WRITE VALIDATION ERROR - COMMAND BUS FAILED VALIDATION::: 01 ---->"+violationMessages);
-                        // throw new ValidationException("Hotel is not valid:\n" + violationMessages);
-                        //TODO - We need to websocket back and pickup
-                        /// return HttpResponse.badRequest(violationMessages);
-
-                    } else {
-
-                    */
-
-                        if (cmd instanceof UserSavedCommand) {
-                            dao.save((UserSavedCommand) cmd);
-                        } else if (cmd instanceof UserUpdatedCommand) {
-                            dao.update((UserUpdatedCommand) cmd);
-                        } else if (cmd instanceof UserDeletedCommand) {
-                            dao.delete((UserDeletedCommand) cmd);
-                        }
+                    if (cmd instanceof UserSavedCommand) {
+                        dao.save((UserSavedCommand) cmd);
+                    } else if (cmd instanceof UserUpdatedCommand) {
+                        dao.update((UserUpdatedCommand) cmd);
+                    } else if (cmd instanceof UserDeletedCommand) {
+                        dao.delete((UserDeletedCommand) cmd);
                     }
-
-                //}
-
+                }
             }
-
         }
-
     }
 
 

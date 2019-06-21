@@ -9,11 +9,9 @@ import hotel.write.domain.interfaces.HotelsInterface;
 import hotel.write.implementations.ApplicationConfiguration;
 import hotel.write.kafka.EventPublisher;
 import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
-import io.micronaut.http.codec.MediaTypeCodecRegistry;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.spring.tx.annotation.Transactional;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -102,7 +100,7 @@ public class HotelService implements HotelsInterface {
 
 
         HotelCreatedCommand cmd1 = new HotelCreatedCommand(cmd);
-        cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).get().getUsername());
+        cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).map(u->u.getUsername()));
         cmd1.setEventType("HotelCreatedCommand");
         publishEvent(cmd1);
 
@@ -127,7 +125,7 @@ public class HotelService implements HotelsInterface {
 
         HotelSavedCommand cmd1 = new HotelSavedCommand(cmd);
         //HotelSavedCommand cmd1 = (HotelSavedCommand)cmd;
-        cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).get().getUsername());
+        cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).map(u->u.getUsername()));
         cmd1.setEventType("HotelSavedCommand");
         publishEvent(cmd1);
 

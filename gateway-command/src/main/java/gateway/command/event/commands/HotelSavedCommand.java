@@ -1,5 +1,7 @@
 package gateway.command.event.commands;
 
+import java.util.Optional;
+
 public class HotelSavedCommand extends  HotelSaveCommand {
 
 
@@ -10,14 +12,13 @@ public class HotelSavedCommand extends  HotelSaveCommand {
     }
 
 
-    private String updateUserName;
+    private Optional<String> updateUserName;
 
-    public String getUpdateUserName() {
+    public Optional<String> getUpdateUserName() {
         return updateUserName;
     }
 
-    public void setUpdateUserName(String updateUserName) {
+    public void setUpdateUserName(Optional<String> updateUserName) {
         this.updateUserName = updateUserName;
     }
-
 }

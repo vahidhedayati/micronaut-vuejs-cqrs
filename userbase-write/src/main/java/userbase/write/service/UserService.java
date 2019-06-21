@@ -47,7 +47,16 @@ public class UserService implements Users {
         return Optional.ofNullable(entityManager.find(User.class, id));
     }
 
-
+    @Transactional
+    @Override
+    public Optional<User> findByUsername(String username) {
+        System.out.print("looking for "+username);
+        return entityManager
+                .createQuery("from User h where h.username = :username", User.class)
+                .setParameter("username", username)
+                .getResultStream()
+                .findFirst();
+    }
 
     @Override
     @Transactional
