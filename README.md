@@ -11,8 +11,6 @@ Running app
 ----
 ##### Please refer to [pre-requirements](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/master/configure.md).
 
-##### To start all applications in 2 sessions run:
-Session  1
 ```
 ./gradlew hotel-read:run  userbase-read:run frontend:start gateway-command:run gateway-query:run hotel-write:run  userbase-write:run  --parallel
 ```
@@ -21,7 +19,6 @@ Session  1
 ##### When running on linux a process for node hangs on which also keeps jvms active - killing node kills all other jvms hanging off
 ##### this is all in 1 line to kill if found and start apps
 
-Session  1
 ```
 kill -9 $(netstat -pln 2>/dev/null |grep LISTEN|grep node|awk '{print $7}'|awk -F"/" '{print $1}');
 ./gradlew hotel-read:run  userbase-read:run frontend:start gateway-command:run gateway-query:run hotel-write:run  userbase-write:run   --parallel
