@@ -1,6 +1,7 @@
 
 
 ##### CQRS Command and Query Responsibility Segregation ([CQRS](http://codebetter.com/gregyoung/2010/02/16/cqrs-task-based-uis-event-sourcing-agh/) as described here)
+
 > Starting with CQRS, CQRS is simply the creation of two objects where there was previously only one. 
 The separation occurs based upon whether the methods are a command or a query (the same definition that 
 is used by Meyer in Command and Query Separation, a command is any method that mutates state and a query 
@@ -53,7 +54,9 @@ we can host the read service on 25 servers and the write service on two. The pro
 
 
 
+[Below image from 1 year of event sourcing](https://hackernoon.com/1-year-of-event-sourcing-and-cqrs-fb9033ccd1c6)
 
+![Application design](https://cdn-images-1.medium.com/max/800/0*8oBk88QHJc00FHbL.)
 
 
 

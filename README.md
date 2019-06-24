@@ -5,6 +5,7 @@ Micronaut backend vuejs frontend application - CQRS
 
 ###### Youtube [Video demonstrating product](https://www.youtube.com/watch?v=-pKr6Zg-MtA). Written [description available here](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/master/detailedDescription.md).
 
+![how this app works](https://raw.githubusercontent.com/vahidhedayati/micronaut-vuejs-cqrs/master/docs/eventstoreCQRS.svg)
 
 
 Running app
@@ -71,3 +72,4 @@ Save is currently working - update to be done - etc
 
 
 ##### Please refer to [what CQRS is here](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/master/cqrs-explained.md).
+
