@@ -5,8 +5,8 @@ Micronaut backend vuejs frontend application - CQRS
 
 ###### Youtube [Video demonstrating product](https://www.youtube.com/watch?v=-pKr6Zg-MtA). Written [description available here](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/master/detailedDescription.md).
 
+![how this app works](https://raw.githubusercontent.com/vahidhedayati/micronaut-vuejs-cqrs/master/docs/eventstoreCQRS.png)
 
-<img src="https://raw.githubusercontent.com/vahidhedayati/micronaut-vuejs-cqrs/master/docs/eventstoreCQRS.svg">
 
 
 Running app
