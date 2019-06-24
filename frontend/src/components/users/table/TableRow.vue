@@ -151,7 +151,7 @@ export default {
                //return HotelService.deleteNoCatch('/user/', id)
                this.deleteUser.id=id;
 
-               return HotelService.postCall('/user',JSON.stringify(this.deleteUser))
+               return HotelService.postCall('/user',this.deleteUser)
                  .then((res) => {
                  if (res) {
                    console.log('RES: '+JSON.stringify(res));
@@ -192,8 +192,10 @@ export default {
            this.newUser.id=newName.id
            this.newUser.code=newName.code
            this.newUser.name=newName.name
+           //this.newUser.eventType='UserUpdateCommand'
+
            console.log('new newUser =  '+JSON.stringify( this.newUser))
-           return HotelService.postCall('/user',JSON.stringify(this.newUser))
+           return HotelService.postCall('/user',this.newUser)
           // return HotelService.putRootNoCatch('/user/update/'+newName.id, this.newUser)
              .then((res) => {
              if (res) {
@@ -206,7 +208,7 @@ export default {
              }
            }).catch((error) => {
               if (error.response) {
-                   this.$emit('user-errors', error.response.data.error);
+                   this.$emit('user-errors', error.response);
 
             } else if ( error.request) {
               console.log("dddd"+error.request);

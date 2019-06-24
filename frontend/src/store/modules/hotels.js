@@ -21,6 +21,16 @@ const newObjInInitialArr = function(initialArr, newObject) {
   }
   return newArr;
 };
+const removeObjInInitialArr = function(initialArr, newObject) {
+  let id = newObject.id;
+  let newArr = [];
+  for (let i = 0; i < initialArr.length; i++) {
+    if (id!= initialArr[i].id) {
+      newArr.push(initialArr[i]);
+    }
+  }
+  return newArr;
+};
 
 const updateObjectsInArr = function(initialArr, newArr) {
   let finalUpdatedArr = initialArr;
@@ -28,6 +38,13 @@ const updateObjectsInArr = function(initialArr, newArr) {
     finalUpdatedArr = newObjInInitialArr(finalUpdatedArr, newArr[i]);
   }
 
+  return finalUpdatedArr
+}
+const removeObjectsInArr = function(initialArr, newArr) {
+  let finalUpdatedArr = initialArr;
+  for (let i = 0; i < newArr.length; i++) {
+    finalUpdatedArr = removeObjInInitialArr(finalUpdatedArr, newArr[i]);
+  }
   return finalUpdatedArr
 }
 const getters = {
@@ -67,6 +84,10 @@ const actions = {
   updateHotels:  ({commit}, hotelObject) => {
       console.log('updatting '+JSON.stringify(hotelObject.hotel)+" with ID: "+hotelObject.hotel.id)
       state.loadHotels=updateObjectsInArr(state.loadHotels, [hotelObject.hotel])
+  },
+  removeHotel:  ({commit}, hotelObject) => {
+    console.log('updatting '+JSON.stringify(hotelObject.hotel)+" with ID: "+hotelObject.hotel)
+    state.loadHotels=removeObjectsInArr(state.loadHotels, [hotelObject.hotel])
   }
 };
 

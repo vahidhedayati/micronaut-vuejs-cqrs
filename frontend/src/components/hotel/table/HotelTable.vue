@@ -72,6 +72,7 @@
                   @hotel-update="updateHotels"
                  @refresh-list="refreshHotels"
                  @hotel-show="showHotel"
+                 @remove-hotel="removeHotel"
                   @hotel-errors="errorHotels"
                  v-bind="{fetchHotels}"
                 ></table-row> <!--2-->
@@ -126,6 +127,10 @@ export default {
      console.log('hotelTable.vue updating hotel list')
         this.$emit('hotel-update',hotel);
       },
+    removeHotel: function (hotel) {
+      console.log('hotelTable.vue removing hotel from list')
+      this.$emit('remove-hotel',hotel);
+    },
     showHotel: function (hotel) {
       //This is when the tableRow returned current current to be displayed - this updates the internal hotel
       //of this page to be that.
@@ -142,7 +147,7 @@ export default {
       this.$emit('refresh-list');
     },
    errorHotels: function (errors) {
-      console.log('hotelTable.vue updating hotel list')
+      console.log('hotelTable.vue updating hotel errors'+errors)
       this.$emit('hotel-errors',errors);
     },
   },

@@ -34,7 +34,7 @@
                    @hotel-update="updateHotels"
                     @current-hotel="currentHotel"
                  @form-status="updateAddForm"
-
+                 @remove-hotel="removeHotel"
                    @refresh-list="refreshHotels"
                    @hotel-errors="errorHotels"
     >
@@ -298,6 +298,11 @@
         this.hotels=updateObjectsInArr(this.hotels, [hotel])
       },
       */
+      removeHotel: function (hotel) {
+        console.log('hotel.vue removing hotel from list')
+        //this.$emit('remove-hotel',hotelId);
+        this.$store.dispatch( {type:'removeHotel',hotel:hotel});
+      },
       currentHotel: function(ho) {
         this.errors=[];
         this.successAdded=null;

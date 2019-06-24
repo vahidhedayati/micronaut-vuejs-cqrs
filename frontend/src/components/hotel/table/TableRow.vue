@@ -162,15 +162,16 @@ export default {
 
                this.deleteHotel.id=id;
                //return HotelService.deleteAlt('/delete/'+id, this.deleteHotel)
-               return HotelService.postCall('/hotel',JSON.stringify(this.deleteHotel))
+               return HotelService.postCall('/hotel',this.deleteHotel)
                  .then((res) => {
                  if (res) {
                    console.log('RES: '+JSON.stringify(res));
                  }
 
-                 if (res.data||res.status===200) {
+                 if (res.data||res.status===200||res.status===202) {
                   // we need to reload page
-                  this.$emit('refresh-list');
+                  //this.$emit('refresh-list');
+                 this.$emit('remove-hotel', this.deleteHotel);
                  }
              }).catch((error) => {
                  if (error.response) {
@@ -209,19 +210,19 @@ export default {
 
            console.log('new newHotel =  '+JSON.stringify( newName))
            //return HotelService.putRootNoCatch('/update/'+newName.id, JSON.stringify(newName))
-           return HotelService.postCall('/hotel',JSON.stringify(newName))
+           return HotelService.postCall('/hotel',newName)
              .then((res) => {
              if (res) {
                 console.log('RES: '+JSON.stringify(res));
              }
-             if (res.data||res.status===204) {
+             if (res.data||res.status===204||res.status===202) {
                this.showForm=false;
                console.log('resData '+JSON.stringify(res.data))
                this.$emit('hotel-update', res.data);
              }
            }).catch((error) => {
               if (error.response) {
-                   this.$emit('hotel-errors', error.response.data.error);
+                   this.$emit('hotel-errors', error.response);
 
             } else if ( error.request) {
               console.log("dddd"+error.request);
