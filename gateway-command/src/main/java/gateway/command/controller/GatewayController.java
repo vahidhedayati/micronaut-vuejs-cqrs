@@ -33,20 +33,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GatewayController implements ApplicationEventListener<ProcessEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(GatewayController.class);
-
     private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
     private WebSocketBroadcaster broadcaster;
-
+    private final EventPublisher eventPublisher;
     final EmbeddedServer embeddedServer;
     private ConcurrentHashMap<String, WebSocketSession> currentSubmissions = new ConcurrentHashMap<>();
-
     @Inject
     protected MediaTypeCodecRegistry mediaTypeCodecRegistry;
-
-
-    private final EventPublisher eventPublisher;
-
 
 
     @Inject
@@ -71,21 +65,12 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
     @Override
     public void onApplicationEvent(ProcessEvent event) {
         LOG.info("brodcasting message to {}", sessions.size());
-       // String message = String.valueOf(userRepository.count());
-       // String message="Hello";
-       // for ( String webSocketSessionId : sessions.keySet()) {
-        //    publishMessage(message, sessions.get(webSocketSessionId));
-        //}
     }
 
     @OnOpen
     public void onOpen(WebSocketSession session) {
         LOG.info("on Open");
-       // System.out.println("SOCKET OPENED "+session);
         sessions.put(session.getId(), session);
-        //String message = String.valueOf(userRepository.count());
-        //String message="Hello";
-        //publishMessage(message, session);
     }
 
     /**
@@ -101,45 +86,34 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
      */
     @OnMessage
     public void onMessage(String message, WebSocketSession session) {
-        System.out.println("SOCKET MESSage "+message);
         JsonMediaTypeCodec mediaTypeCodec = (JsonMediaTypeCodec) mediaTypeCodecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
                 .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
         WebsocketMessage msg  = mediaTypeCodec.decode(WebsocketMessage.class, message);
         WebSocketSession userSession;
         if (msg!=null) {
-            //System.out.println("Found  >"+msg.getEventType()+"< EVENT -------------------------------------------------------");
             try {
                 switch(msg.getEventType()) {
                     case "userForm":
                         if (!currentSubmissions.contains(msg.getCurrentUser())) {
-                            System.out.println("Adding user "+message+" to concurrent hashmap currentSubmissions");
                             currentSubmissions.put(msg.getCurrentUser(),session);
                         }
                         break;
                     case "errorForm":
-                        System.out.println("Error has happened relaying back to user "+msg.getCurrentUser()+" were errors being relayed ");
                         userSession = currentSubmissions.get(msg.getCurrentUser());
                         if (userSession!=null) {
-                            System.out.println("Found  "+userSession+" going to send error");
                             Iterator hmIterator = msg.getErrors().entrySet().iterator();
                             List<String> errors =new ArrayList<>();
                             while (hmIterator.hasNext()) {
                                 Map.Entry mapElement = (Map.Entry)hmIterator.next();
                                 errors.add("\""+mapElement.getValue()+"\"");
                             }
-                            //userSession.sendAsync("{\"currentUser\":\""+msg.getCurrentUser()+"\", , \"status\":\"error\" \"errors\":["+ String.join(", ", errors)+"] }");
                             userSession.sendAsync("{ \"currentUser\" : \""+msg.getCurrentUser()+"\",  \"status\" : \"error\" ,\"errors\" : ["+ String.join(", ", errors)+"] }");
-                        } else {
-                            System.out.println("Could not find user !!");
                         }
                         break;
                     case "successForm":
                         userSession = currentSubmissions.get(msg.getCurrentUser());
                         if (userSession!=null) {
-                            System.out.println("Found  "+userSession+" going to send success");
                             userSession.sendAsync("{ \"currentUser\" : \""+msg.getCurrentUser()+"\", \"id\" : \""+msg.getId()+"\", \"status\": \"success\"}");
-                        } else {
-                            System.out.println("Could not find user !!");
                         }
                         break;
                 }
@@ -157,14 +131,11 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
 
     @OnError
     public void onError(Throwable error) {
-       // System.out.println("SOCKET error "+error);
         LOG.info("on Error");
     }
 
     @OnClose
     public void onClose(CloseReason closeReason, WebSocketSession session) {
-        //LOG.info("on Close");
-       // System.out.println("SOCKET close ");
         session.remove(session.getId());
     }
 
@@ -182,7 +153,6 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
         JsonMediaTypeCodec mediaTypeCodec = (JsonMediaTypeCodec) mediaTypeCodecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
                 .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
         Command cmd = (Command) mediaTypeCodec.decode(commandClasses.get(eventType),formInput);
-        System.out.println(" command to be run "+eventType+" Publishing--------- command "+cmd+ " Current user "+cmd.getCurrentUser());
         eventPublisher.publish(embeddedServer,topic,cmd);
         return HttpResponse.accepted();
     }

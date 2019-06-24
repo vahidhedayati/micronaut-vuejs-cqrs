@@ -83,7 +83,6 @@
         for (let i = this.startPage;
              i <= Math.min(this.startPage + this.maxVisibleButtons - 1, this.totalPages);
              i+= 1 ) {
-          console.log(' name '+i)
           if (i>0) {
             range.push({
               name: i,
@@ -99,7 +98,6 @@
         return this.currentPage == 1;
       },
       isInLastPage() {
-        console.log(' thi'+this.currentPage+" "+this.totalPages)
         return this.currentPage == this.totalPages;
       },
     },

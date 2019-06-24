@@ -78,10 +78,8 @@ public class UserService implements Users {
         if (args.getOrder().isPresent() && args.getSort().isPresent() && VALID_PROPERTY_NAMES.contains(args.getSort().get())) {
             qlString += " ORDER BY h." + args.getSort().get() + " " + args.getOrder().get().toLowerCase();
         }
-        //System.out.println("Query "+qlString);
         TypedQuery<User> query;
         TypedQuery<Long> countQuery;
-        //Long countQuery=0L;
         if (args.getName().isPresent()) {
             query=entityManager.createQuery(qlString, User.class).setParameter("name",'%'+args.getName().get().toLowerCase()+'%');
             countQuery=entityManager.createQuery(countQueryString, Long.class).setParameter("name",'%'+args.getName().get().toLowerCase()+'%');
@@ -97,14 +95,12 @@ public class UserService implements Users {
         model.setInstanceTotal(countQuery.getSingleResult());
 
         model.setNumberOfPages(model.getInstanceTotal()/args.getMax().get());
-        System.out.println(" "+model.getInstanceTotal()+" "+model.getNumberOfPages()+" "+model.getInstanceList());
-        return Optional.of(model); //Single.just(model);
+        return Optional.of(model);
     }
 
     @Transactional
     @Override
     public Optional<User> findByUsername(String username) {
-        System.out.print("looking for "+username);
         return entityManager
                 .createQuery("from User h where h.username = :username", User.class)
                 .setParameter("username", username)
@@ -135,7 +131,6 @@ public class UserService implements Users {
     @Transactional
     @Override
     public void save(UserSaveCommand cmd) {
-        System.out.println("Doing user save "+cmd.getUsername());
         User user = new User(cmd.getUsername(),cmd.getPassword(),cmd.getFirstname(),cmd.getSurname(),cmd.getLastUpdated());
         entityManager.persist(user);
     }
@@ -143,14 +138,12 @@ public class UserService implements Users {
     @Transactional
     @Override
     public void delete(UserDeleteCommand cmd) {
-        System.out.println("Doing user delete "+cmd.getId());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
     }
 
     @Transactional
     @Override
     public void update(UserUpdateCommand cmd) {
-        System.out.println("Doing user update "+cmd.getUsername());
         findById(cmd.getId()).ifPresent(user -> entityManager.createQuery("UPDATE User h  SET username = :username, password = :password, firstname=:firstname, surname=:surname where id = :id")
                 .setParameter("username", cmd.getUsername())
                 .setParameter("id", cmd.getId())
@@ -164,9 +157,7 @@ public class UserService implements Users {
     @Transactional
     @Override
     public void add(List<User> users) {
-
         for ( final User user : users ) {
-            System.out.println(" Adding user: "+user.getFirstname());
             entityManager.persist(user);
         }
     }

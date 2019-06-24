@@ -1,4 +1,3 @@
-
 <template id="tablerow-template" xmlns="http://www.w3.org/1999/xhtml">
     <tr>
       <td>{{ hotel.id }}</td>
@@ -36,8 +35,6 @@
       </td>
       <td> username {{hotel.updateUserName}}
         ID: {{hotel.updateUserId}}
-
-
       </td>
       <td>  {{ hotel.lastUpdated | shortMoment() }}
       </td>
@@ -58,20 +55,17 @@
 </template>
 
 <script>
-//This is needed for the select component to work
 import FieldSelect from '../../form/FieldSelect'
 import HotelService from '@/services/HotelService'
 import moment from 'moment';
 import VueMoment from 'vue-moment'
 import VueDropdown from 'vue-dynamic-dropdown'
 export default {
-    //You must declare what is being passed in otherwise they wont work..
    props: ['hotel', 'makes', 'models', 'drivers','reload','updatedResults'],
    data () {
         return {
           response: [],
           errors: [],
-          //newHotel:{name:'',code:'',updateUser:{id:''}, phone:'',email:''},
           showHotel:null,
           updatedHotel:{},
           deleteHotel:{id:'',eventType:'HotelDeleteCommand'},
@@ -89,13 +83,8 @@ export default {
             prefix: "",
             backgroundColor: "transparent"
           }
-
         }
       },
-  computed: {
-    
-  },
-      //This is needed for the select component to work
       components: {
           FieldSelect,
         VueMoment,
@@ -119,80 +108,34 @@ export default {
           this.showForm=true;
           this.updatedHotel=this.hotel;
          },
-         /**
-          * This controls the drop down functionality
-          * @param event
-          * @param id
-          * @returns {boolean}
-          */
          actionDropDown(event,id) {
-           console.log(' jj '+JSON.stringify(event)+' --- '+id)
-
            if (event.value==='display') {
-                console.log('display '+id)
              return HotelService.fetchRoot(''+id)
                .then((res) => {
-               if (res) {
-                 console.log('RES: '+JSON.stringify(res));
-               }
                if (res.data) {
-               //this.showForm=false;
-               console.log('show resData '+JSON.stringify(res.data))
-               this.$emit('hotel-show', res.data);
-               //showHotel=res.data;
-               //showDialog=true
-             }
-           }).catch((error) => {
-               if (error.response) {
-               this.$emit('hotel-errors', error.response.data.error);
-
-             } else if ( error.request) {
-               console.log("dddd"+error.request);
-             } else {
-               console.log('Error', error.message);
-             }
-           });
-
+                   this.$emit('hotel-show', res.data);
+                 }
+               }).catch((error) => {
+                   if (error.response) {
+                    this.$emit('hotel-errors', error.response.data.error);
+                   }
+               });
            }
-
-
            if (event.value==='delete') {
              if (confirm('Delete record?')) {
-               console.log('delete '+id)
-
                this.deleteHotel.id=id;
-               //return HotelService.deleteAlt('/delete/'+id, this.deleteHotel)
                return HotelService.postCall('/hotel',this.deleteHotel)
                  .then((res) => {
-                 if (res) {
-                   console.log('RES: '+JSON.stringify(res));
-                 }
-
                  if (res.data||res.status===200||res.status===202) {
-                  // we need to reload page
-                  //this.$emit('refresh-list');
-                 this.$emit('remove-hotel', this.deleteHotel);
+                   this.$emit('remove-hotel', this.deleteHotel);
                  }
-             }).catch((error) => {
-                 if (error.response) {
-                   console.log('errors '+ JSON.stringify(error.response))
-                 //this.$emit('hotel-errors', error.response.data.error);
-
-               } else if ( error.request) {
-                 console.log("dddd"+error.request);
-               } else {
-                 console.log('Error', error.message);
-               }
-             });
-
-
-             } else {
-               console.log('denied')
+                 }).catch((error) => {
+                     if (error.response) {
+                     //this.$emit('hotel-errors', error.response.data.error);
+                      }
+                 });
              }
-
            }
-
-
          },
          updateValue: function (value) {
            this.$emit('input', value);
@@ -200,43 +143,22 @@ export default {
          save() {
            const newName = this.updatedHotel;
            newName.eventType='HotelUpdateCommand'
-           console.log('new Name =  '+JSON.stringify(newName))
-           //+newName.id
-           //this.newHotel.id=newName.id
-           //this.newHotel.code=newName.code
-           //this.newHotel.name=newName.name
-           //this.newHotel.phone=newName.phone
-           //this.newHotel.email=newName.email
-
-           console.log('new newHotel =  '+JSON.stringify( newName))
-           //return HotelService.putRootNoCatch('/update/'+newName.id, JSON.stringify(newName))
            return HotelService.postCall('/hotel',newName)
              .then((res) => {
-             if (res) {
-                console.log('RES: '+JSON.stringify(res));
-             }
-             if (res.data||res.status===204||res.status===202) {
-               this.showForm=false;
-               console.log('resData '+JSON.stringify(res.data))
-               this.$emit('hotel-update', res.data);
-             }
-           }).catch((error) => {
-              if (error.response) {
-                   this.$emit('hotel-errors', error.response);
-
-            } else if ( error.request) {
-              console.log("dddd"+error.request);
-            } else {
-              console.log('Error', error.message);
-            }
+              if (res.data||res.status===204||res.status===202) {
+                  this.showForm=false;
+                  this.$emit('hotel-update', res.data);
+              }
+              }).catch((error) => {
+                if (error.response) {
+                     this.$emit('hotel-errors', error.response);
+                }
           });
          }
      }
 }
 
 </script>
-
-<!-- Per Component Custom CSS Rules -->
 <style>
 .dropdown-label.text {
     font-size:0.8em;
@@ -261,5 +183,4 @@ export default {
     font-size:0.8em;
     background: red;
   }
-  /* Add custom rules here */
 </style>

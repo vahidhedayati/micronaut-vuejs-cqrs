@@ -21,19 +21,9 @@ public class KafkaEventPublisher implements EventPublisher {
 
     @Override
     public <T extends Command> void publish(EmbeddedServer embeddedServer, String topic, T command) {
-        /**
-         * This sets up some default context of command bean including timestap - uuid -
-         * current host / port creating command object
-         */
         command.initiate(embeddedServer,command.getClass().getSimpleName());
-        /**
-         * This is using the default extended command object generating json string and passing to who ever listens in to the
-         * dynamic topic being listened to
-         */
         String value =serializeCommand(command);
-        System.out.println("  kafka topic: "+topic+" ------------ Serialized values: "+value);
         Future<RecordMetadata> recordMetadataFuture = kafkaSender.send(topic,  command.getEventType()+"_"+ command.getTransactionId().toString(), value);
-      //  System.out.println(" "+recordMetadataFuture.toString());
     }
 
     @Override

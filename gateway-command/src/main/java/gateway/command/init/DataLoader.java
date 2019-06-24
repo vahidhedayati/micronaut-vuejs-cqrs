@@ -26,7 +26,6 @@ public class DataLoader  implements ApplicationEventListener<ServerStartupEvent>
 
 	@Override
 	public void onApplicationEvent(ServerStartupEvent event) {
-		System.out.println("Starting COMMAND GATEWAY ------------------------------------------------------------ ");
 		List<HotelCreateCommand> hotels = DemoHotelsFactory.defaultHotels();
 		for (HotelCreateCommand cmd : hotels ) {
 			eventPublisher.publish(embeddedServer,"hotel",cmd);

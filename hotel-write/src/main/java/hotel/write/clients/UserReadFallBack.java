@@ -16,7 +16,6 @@ public class UserReadFallBack implements UserReadClient {
 
     @Get("/{id}")
     public Optional<User> findById(@NotNull Long id) {
-        System.out.println("Backend app is down using fallback findById");
         return Optional.ofNullable(new User());
     }
 

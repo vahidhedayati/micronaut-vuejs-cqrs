@@ -1,7 +1,7 @@
 <template>
   <div>
-  <table class="table">
-    <thead class="thead-inverse">
+    <table class="table">
+      <thead class="thead-inverse">
       <tr>
         <th @click="sort('id')" :class="{active: this.column === 'id'}">
           ID
@@ -62,26 +62,24 @@
           </span>
         </th>
         <th>Action</th>
-
       </tr>
-    </thead> <!--1-->
-      <!-- sortedCats replaces vehicles and is only sorting by current paginated dataset -->
+      </thead>
       <table-row v-for="hotel in hotels"
-                  :key="hotel.id"
-                  :hotel="hotel"
-                  @hotel-update="updateHotels"
+                 :key="hotel.id"
+                 :hotel="hotel"
+                 @hotel-update="updateHotels"
                  @refresh-list="refreshHotels"
                  @hotel-show="showHotel"
                  @remove-hotel="removeHotel"
-                  @hotel-errors="errorHotels"
+                 @hotel-errors="errorHotels"
                  v-bind="{fetchHotels}"
-                ></table-row> <!--2-->
-  </table>
+      ></table-row> <!--2-->
+    </table>
 
     <display-hotel-modal
-                 :show="showModal"
-                 :hotel="currentShowHotel"
-                 @close="closeModalPopup"></display-hotel-modal>
+      :show="showModal"
+      :hotel="currentShowHotel"
+      @close="closeModalPopup"></display-hotel-modal>
 
   </div>
 </template>
@@ -112,28 +110,21 @@ export default {
     sort: function (s) {
       this.column=s;
       this.activeColumn=s;
-      //if s == current sort, reverse
       if (s === this.currentSort) {
         this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc';
 
       }
       this.currentSort = s;
-
-      //This is full on search and sortedSearch sits in the parent page Custom.vue
       this.sortSearch(s,this.currentSortDir)
 
     },
      updateHotels: function (hotel) {
-     console.log('hotelTable.vue updating hotel list')
         this.$emit('hotel-update',hotel);
       },
     removeHotel: function (hotel) {
-      console.log('hotelTable.vue removing hotel from list')
       this.$emit('remove-hotel',hotel);
     },
     showHotel: function (hotel) {
-      //This is when the tableRow returned current current to be displayed - this updates the internal hotel
-      //of this page to be that.
       this.currentShowHotel=hotel;
       this.showModal=true;
       //
@@ -143,19 +134,13 @@ export default {
       this.currentShowHotel = null;
     },
     refreshHotels: function () {
-      console.log('hotelTable.vue refresh hotel list')
       this.$emit('refresh-list');
     },
    errorHotels: function (errors) {
-      console.log('hotelTable.vue updating hotel errors'+errors)
       this.$emit('hotel-errors',errors);
     },
-  },
-  computed:{
-
   }
 }
-
 </script>
 
 <style>

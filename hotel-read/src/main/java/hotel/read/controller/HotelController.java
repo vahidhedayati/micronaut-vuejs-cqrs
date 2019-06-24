@@ -23,7 +23,6 @@ public class HotelController {
         this.hotels = hotels;
     }
 
-
     @Get("/status")
     public HttpResponse status() {
         return HttpResponse.ok();
@@ -37,15 +36,11 @@ public class HotelController {
                 .orElse(null);
     }
 
-
-
-    @Get("/list{?args*}") //, consumes = MediaType.APPLICATION_JSON
+    @Get("/list{?args*}")
     public Optional<HotelModel> findAll(@Nullable SortingAndOrderArguments args) {
-       // System.out.println(" In findAll hotels");
         return hotels.findAll(args);
 
     }
-
 
     protected URI location(Long id) {
         return URI.create("/" + id);

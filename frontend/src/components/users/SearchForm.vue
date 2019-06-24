@@ -49,11 +49,9 @@
         this.$emit('submit')
       },
       refreshUsers: function () {
-          console.log('refresh entire list from searchForm')
           this.$emit('refresh-list');
       },
       errorUsers: function (errors) {
-       console.log('userTable.vue updating user list')
           this.$emit('user-errors',errors);
       },
     }

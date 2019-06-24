@@ -24,12 +24,9 @@
           @current-hotel="currentHotel"
           @hotel-update="updateHotels"
         >
-
         </hotel-form>
       </tab>
-
       <app-header headerText="Hotel listing" headerImage="hotel"></app-header>
-
     </tabs>
   </div>
 </template>
@@ -53,11 +50,9 @@
         this.$emit('submit')
       },
       refreshHotels: function () {
-          console.log('refresh entire list from searchForm')
           this.$emit('refresh-list');
       },
       errorHotels: function (errors) {
-       console.log('hotelTable.vue updating hotel list')
           this.$emit('hotel-errors',errors);
       },
       currentHotel: function(ho) {
@@ -70,7 +65,6 @@
       updateHotels: function(cv) {
         this.$emit('hotel-update',  cv);
       },
-
     }
   }
 </script>

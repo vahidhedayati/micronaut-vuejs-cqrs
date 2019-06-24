@@ -27,35 +27,6 @@ public class GatewayController {
 
     @Get(uri="/list{?args*}" , consumes = MediaType.APPLICATION_JSON)
     public Optional<HotelModel> findAll(SortingAndOrderArguments args) {
-        //System.out.println("Trying to find"+args.getValues());
-        /**
-         * We bind in userClient and have a slightly different modelled hotel on gateway application which has a User updateUser
-         * defined - this binds in via flatMap to bind in actual user for given user -
-         *
-         *
-         * None of this happens any morel hotel read models bits it needs as it receives from hotel-write
-         */
-        /*
-        Optional<HotelModel> hotelModel =  hotelReadClient.findAll(args);
-        if (hotelModel.isPresent() ) {
-            hotelModel.flatMap(hotelModel1 -> {
-                Optional<List<Hotel>> instanceList = hotelModel1.getInstanceList();
-                if (instanceList.isPresent()) {
-                    instanceList.flatMap(hotel-> {
-                        hotel.forEach(hotel1 -> {
-                            hotel1.setUpdateUser(userReadClient.findById(hotel1.getUpdateUserId()).get());
-                            //hotel1.setUpdateUser(userClient.findByUsername("admin").get());
-                        });
-
-                        return Optional.of(hotel);
-                    });
-                }
-                return Optional.of(hotelModel1);
-            });
-        }
-        return hotelModel;
-        */
-
         return hotelReadClient.findAll(args);
     }
 

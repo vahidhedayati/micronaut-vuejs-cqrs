@@ -37,9 +37,6 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
 
     private final ObjectMapper objectMapper;
 
-    /**
-     * TODO this is currently hard wired to something that is dynamic in command object host/port
-     */
     @Inject
     @Client("http://localhost:8082")
     RxWebSocketClient webSocketClient;
@@ -59,21 +56,12 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
     @Inject
     protected MediaTypeCodecRegistry mediaTypeCodecRegistry;
 
-
-   // @GuardedBy("kafkaConsumers")
-  //  private final Set<Consumer> kafkaConsumers = new HashSet<>();
-
     private Consumer consumer;
 
     @Override
     public void setKafkaConsumer(@Nonnull final Consumer consumer) {
         this.consumer=consumer;
-       // synchronized (kafkaConsumers) {
-       //     this.kafkaConsumers.add(consumer);
-        //}
     }
-
-    //protected static final Logger LOG = LoggerFactory.getLogger(KafkaEventListener.class);
 
     @Inject
     private HotelService dao;
@@ -83,8 +71,6 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
         if (hotelCode!=null &&  hotelCode.contains("_")) {
             String eventType = hotelCode.split("_")[0];
             if (eventType!=null) {
-                // LOG.debug("KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER hotelCreated "+hotelCode);
-                System.out.println("_____> HOTELWRITE  EVENT: "+eventType+"--------------- KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER  --- "+hotelCode+ " -- event "+hotelCreatedEvent);
                 JsonMediaTypeCodec mediaTypeCodec = (JsonMediaTypeCodec) mediaTypeCodecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
                         .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
                 Command cmd = (Command) mediaTypeCodec.decode(commandClasses.get(eventType),hotelCreatedEvent);
@@ -102,20 +88,14 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
                             violationMessages.put(constraintViolation.getPropertyPath().toString(),constraintViolation.getMessage());
                             //violationMessages.add(constraintViolation.getPropertyPath() + ": " + constraintViolation.getMessage());
                         }
-                        System.out.println(" HOTEL-WRITE VALIDATION ERROR - COMMAND BUS FAILED VALIDATION::: 01 ---->"+violationMessages);
-                        // throw new ValidationException("Hotel is not valid:\n" + violationMessages);
-                        /// return HttpResponse.badRequest(violationMessages);
 
-                        //sending back erros via websocket as json well converted to json in Gateway controller on gateway-command
                         msg.setErrors(violationMessages);
                         msg.setEventType("errorForm");
                     } else {
                         /**
                          * a note of warning about this id based on creation this is currently returning ID of record on
                          * hotel-write which is the write side or should I say wrong :) side of the equation
-                         * it should be looking for an id on hotel-read so write is wrong read is right hehehehehe
-                         * anyhow it is conceptual so perhaps the validation should really be happening on read
-                         * or or or maybe the front end when it has a save goes off and gets id for it rather than this way
+                         * it should be looking for an id on hotel-read for the id
                          */
                         msg.setEventType("successForm");
                         if (cmd instanceof HotelSaveCommand) {
@@ -153,43 +133,25 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
 
     @Override
     public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
-        System.out.println("onPartitionsRevoked------------------------------------------------------------------------------------------------");
-        // partitions.iterator().forEachRemaining();
-        // save offsets here
-        for(TopicPartition partition: partitions) {
-            synchronized (partition) {
-                System.out.println("  onPartitionsRevoked parition : " + partition + ' ');
-                // + consumer.position(partition));
-                //consumer.seek(partition,1);
-            }
-        }
+        //for(TopicPartition partition: partitions) {
+        //}
     }
 
 
-    /**
-     * This triggers a new node to build h2 db up based on existing received kafka events
-     * @param partitions
-     */
     @Override
     public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
         for (TopicPartition partition : partitions) {
-            System.out.println("onPartitionsAssigned  Topic " + partition.topic() + " polling");
             synchronized (consumer) {
-                //this.consumer.
                 this.consumer.subscribe(Arrays.asList(partition.topic()));
             }
             ConsumerRecords<String, String> records = this.consumer.poll(100);
             try {
-                System.out.println(" Topic " + partition.topic() + " seekBegin");
                 this.consumer.seek(partition,1);
             } catch (Exception e) {
                 rewind(records);
-                //Thread.sleep(100);
             }
             for (ConsumerRecord<String, String> record : records)
                 System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
-
-            System.out.println("Topics done - subscribing: ");
         }
     }
     private void rewind(ConsumerRecords<String, String> records) {

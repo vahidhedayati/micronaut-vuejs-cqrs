@@ -48,9 +48,6 @@ public class HotelService implements HotelsInterface {
 
     @Transactional(readOnly = true)
     public Optional<HotelModel> findAll(@NotNull SortingAndOrderArguments args) {
-
-        //SELECT new map (h.code as code, h.name as name, h.id as id, h.hotelRooms as hotelRooms)
-        System.out.println("Doing search 123 ");
         String countQueryString= "select count(h) FROM Hotel as  h ";
         String qlString = "FROM Hotel as  h ";
         if (args.getName().isPresent()) {
@@ -60,10 +57,8 @@ public class HotelService implements HotelsInterface {
         if (args.getOrder().isPresent() && args.getSort().isPresent() && VALID_PROPERTY_NAMES.contains(args.getSort().get())) {
             qlString += " ORDER BY h." + args.getSort().get() + " " + args.getOrder().get().toLowerCase();
         }
-        // System.out.println("Query "+qlString);
         TypedQuery<Hotel> query;
         TypedQuery<Long> countQuery;
-        //Long countQuery=0L;
         if (args.getName().isPresent()) {
             query=entityManager.createQuery(qlString, Hotel.class).setParameter("name",'%'+args.getName().get().toLowerCase()+'%');
             countQuery=entityManager.createQuery(countQueryString, Long.class).setParameter("name",'%'+args.getName().get().toLowerCase()+'%');
@@ -74,29 +69,22 @@ public class HotelService implements HotelsInterface {
 
         query.setMaxResults(args.getMax().orElseGet(applicationConfiguration::getMax));
         args.getOffset().ifPresent(query::setFirstResult);
-        //countQuery.setMaxResults(1);
         HotelModel model = new HotelModel();
-        //System.out.println(" "+(countQuery.getFirstResult())+"1 sss ssss");
-        model.setInstanceList(Optional.of(query.getResultList()));//.flatMap(hotel -> {}));
-        //System.out.println(" "+(countQuery.getSingleResult())+"0 sss ssss");
+        model.setInstanceList(Optional.of(query.getResultList()));
         model.setInstanceTotal(countQuery.getSingleResult());
-
         model.setNumberOfPages(model.getInstanceTotal()/args.getMax().get());
-      //  System.out.println(" SEARCH ::: "+model.getInstanceTotal()+" "+model.getNumberOfPages()+" "+model.getInstanceList());
-        return Optional.of(model); //Single.just(model);
+        return Optional.of(model);
     }
 
     @Override
     @Transactional
     public void delete(HotelDeletedCommand cmd) {
-        System.out.println("Doing hotel delete "+cmd.getId());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
     }
 
     @Override
     @Transactional
     public void update(HotelUpdatedCommand cmd) {
-        System.out.println("Doing hotel update "+cmd.getName());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
                 .setParameter("name", cmd.getName())
                 .setParameter("id", cmd.getId())
@@ -117,10 +105,6 @@ public class HotelService implements HotelsInterface {
     @Override
     @Transactional
     public void save(HotelCreatedCommand cmd) {
-        System.out.println("Doing READ  HotelCreatedCommand save "+cmd.getName());
-        /**
-         * We are doing a getUpdateUsername.get() which at this point becomes a blocking call
-         */
         Hotel hotel = new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(),cmd.getUpdateUserId(),cmd.getLastUpdated(),cmd.getUpdateUserName().get());
         List<HotelRooms> hotelRooms = new ArrayList<>();
         if (!findByCode(hotel.getCode()).isPresent()) {
@@ -140,12 +124,6 @@ public class HotelService implements HotelsInterface {
     @Override
     @Transactional
     public void save(HotelSavedCommand cmd) {
-        System.out.println("Doing hotel save "+cmd.getName());
-        /**
-         * We are doing a getUpdateUsername.get() which at this point becomes a blocking call
-         */
-        System.out.println(cmd.getUpdateUserName()+" optional username: ------------ ");
-        System.out.println(cmd.getUpdateUserName().get()+" blocking get username:");
         save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(), cmd.getUpdateUserId(), cmd.getUpdateUserName().get()));
     }
 
@@ -153,15 +131,10 @@ public class HotelService implements HotelsInterface {
     @Transactional
     public void save(Hotel hotel) {
         if (hotel!=null) {
-           // System.out.println("Hotel is not null - Doing hotel Add "+hotel.getCode());
             if (!findByCode(hotel.getCode()).isPresent()) {
-                System.out.println("Doing hotel Add "+hotel.getCode());
                 entityManager.persist(hotel);
             }
         }
-        //else {
-        //   System.out.println("Hotel not being added - HOTEL is null --- ERROR ----- ");
-        //}
     }
 
 
@@ -179,6 +152,4 @@ public class HotelService implements HotelsInterface {
     public Hotel getByCode(String code) {
         return findByCode(code).orElseThrow(() -> new RuntimeException("Hotel not found"));
     }
-
-
 }

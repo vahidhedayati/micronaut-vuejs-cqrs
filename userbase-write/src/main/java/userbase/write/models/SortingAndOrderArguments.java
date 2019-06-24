@@ -28,25 +28,16 @@ public class SortingAndOrderArguments {
 
     }
 
-
     public Optional<Integer> getOffset() {
         if(offset == null) {
-           // return Optional.empty();
             return Optional.of(0);
         }
         return Optional.of(offset);
     }
 
-
     public void setOffset(@Nullable Optional<Integer>  offset) {
-        //if (offset.get() ==null) {
-         //   this.offset=0;
-        //} else {
-            this.offset = Integer.valueOf(offset.get());
-        //}
+        this.offset = Integer.valueOf(offset.get());
     }
-
-
 
     public Optional<Integer> getMax() {
         if(max == null) {
@@ -55,39 +46,9 @@ public class SortingAndOrderArguments {
         return Optional.of(max);
     }
 
-
-    /*
-
-       public void setOffset(Integer offset) {
-        this.offset = offset;
-    }
-    public void setOffset(String offset) {
-
-        this.offset = Integer.valueOf(offset);
-
-    }
-    public void setMax(String max) {
-
-            this.max = Integer.valueOf(max);
-
-    }
-    public void setMax(@Nullable  Optional<Integer> max) {
-        System.out.println("Setting max");
-        if (max.get() ==null) {
-            this.max=0;
-        } else {
-            this.max = max.get();
-        }
-    }
-
-    */
     public void setMax(@Nullable Integer max) {
         this.max = max;
     }
-
-
-
-
 
     public Optional<String> getName() {
         if(name == null) {
@@ -97,7 +58,6 @@ public class SortingAndOrderArguments {
     }
 
     public void setName(@Nullable String name) {
-        System.out.println("Setting name"+name);
         if (name==null||name=="") {
             this.name = null;
         } else {
@@ -105,7 +65,6 @@ public class SortingAndOrderArguments {
         }
 
     }
-
 
     public Optional<String> getSort() {
         if(sort == null) {

@@ -10,7 +10,6 @@ const auth = {
   },
   actions: {
     login ({commit}, payload) {
-      console.log("auth action"+ payload);
       commit('isAuthenticated', payload)
     },
     logout ({commit}) {
@@ -19,7 +18,6 @@ const auth = {
   },
   getters: {
     isAuthenticated (state) {
-      console.log("authenticated ???? "+state.isAuthenticated)
       return  state.isAuthenticated
     }
   }

@@ -27,7 +27,6 @@
          </div>
        </div>
 
-        <!-- if the user is logged in this is value is preset by their ID after the page has been loaded -->
         <input type="hidden"  v-model="user.updateUser.id">
 
    <div class="col-sm-2">
@@ -45,38 +44,23 @@
 <script>
 import HotelService from '@/services/HotelService'
 export default {
- //  props: ['countries', 'reload','fetchCountries','sortSearch'],
   data: function () {
     return {
       user:{username:'',password:'', firstname:'', surname:'', updateUser:{id:''},eventType:'UserSaveCommand'},
     }
   },
-  created: function () {
-    //this.authRecord=JSON.parse(localStorage.getItem('vuex')).auth.isAuthenticated;
-    //this.user.updateUser.id=this.authRecord.id;
-  },
    methods: {
     submit () {
-      //This will call parent page with this action and pass this newly created object to it
-      //this.$emit('add-user',user)
-
-//       return HotelService.post('/user/',this.user)
       return HotelService.postCall('/user',JSON.stringify(this.user))
               .then((res) => {
               if (res) {
                 if (res.data) {
-                    console.log('refresh entire list from userForm')
                      this.$emit('refresh-list')
                 }
               }
             }).catch((error) => {
               if (error.response) {
                      this.$emit('user-errors', error.response.data.error);
-
-              } else if ( error.request) {
-                console.log("dddd"+error.request);
-              } else {
-                console.log('Error', error.message);
               }
             });
     }

@@ -50,7 +50,6 @@ public class UserService implements Users {
     @Transactional
     @Override
     public Optional<User> findByUsername(String username) {
-        System.out.print("looking for "+username);
         return entityManager
                 .createQuery("from User h where h.username = :username", User.class)
                 .setParameter("username", username)
@@ -97,10 +96,9 @@ public class UserService implements Users {
     public void save(UserSaveCommand cmd) {
 
         UserSavedCommand cmd1 = new UserSavedCommand(cmd);
-        cmd1.setEventType("UserSavedCommand");
+        cmd1.setEventType(cmd1.getClass().getSimpleName());
         publishEvent(cmd1);
 
-        System.out.println("Doing user save "+cmd.getUsername());
         User user = new User(cmd.getUsername(),cmd.getPassword(),cmd.getFirstname(),cmd.getSurname(),cmd.getLastUpdated());
         entityManager.persist(user);
     }
@@ -110,10 +108,9 @@ public class UserService implements Users {
     public void delete(UserDeleteCommand cmd) {
 
         UserDeletedCommand cmd1 = new UserDeletedCommand(cmd);
-        cmd1.setEventType("UserDeletedCommand");
+        cmd1.setEventType(cmd1.getClass().getSimpleName());
         publishEvent(cmd1);
 
-        System.out.println("Doing User delete "+cmd.getId());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
     }
 
@@ -122,10 +119,9 @@ public class UserService implements Users {
     public void update(UserUpdateCommand cmd) {
 
         UserUpdatedCommand cmd1 = new UserUpdatedCommand(cmd);
-        cmd1.setEventType("UserUpdatedCommand");
+        cmd1.setEventType(cmd1.getClass().getSimpleName());
         publishEvent(cmd1);
 
-        System.out.println("Doing user update "+cmd.getUsername());
         findById(cmd.getId()).ifPresent(user -> entityManager.createQuery("UPDATE User h  SET username = :username, password = :password, firstname=:firstname, surname=:surname where id = :id")
                 .setParameter("username", cmd.getUsername())
                 .setParameter("id", cmd.getId())
@@ -148,7 +144,6 @@ public class UserService implements Users {
     @Override
     public void add(List<User> users) {
         for ( final User user : users ) {
-            System.out.println(" Adding user: "+user.getFirstname());
             entityManager.persist(user);
         }
     }

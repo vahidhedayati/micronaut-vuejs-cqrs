@@ -39,9 +39,6 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
 
     private final ObjectMapper objectMapper;
 
-    /**
-     * TODO this is currently hard wired to something that is dynamic in command object host/port
-     */
     @Inject
     @Client("http://localhost:8082")
     RxWebSocketClient webSocketClient;
@@ -76,32 +73,20 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
         if (hotelCode!=null &&  hotelCode.contains("_")) {
             String eventType = hotelCode.split("_")[0];
             if (eventType!=null) {
-                // LOG.debug("KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER hotelCreated "+hotelCode);
-                System.out.println("_____> USERWRITE  EVENT: "+eventType+"--------------- KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER  --- "+hotelCode+ " -- event "+hotelCreatedEvent);
                 JsonMediaTypeCodec mediaTypeCodec = (JsonMediaTypeCodec) mediaTypeCodecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
                         .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
 
                 Command cmd = (Command) mediaTypeCodec.decode(commandClasses.get(eventType),hotelCreatedEvent);
-                //System.out.println("Default save of hotel in hotel-write ---------------- command "+cmd);
-
                 if (hotelCreatedEvent !=null ) {
                     final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-
                     WebsocketMessage msg  =new WebsocketMessage();
                     msg.setCurrentUser(cmd.getCurrentUser());
-
                     final Set<ConstraintViolation<Command>> constraintViolations = validator.validate(cmd);
                     if (constraintViolations.size() > 0) {
-                       // Set<String> violationMessages = new HashSet<String>();
                         HashMap<String,String> violationMessages = new HashMap<>();
-
                         for (ConstraintViolation<?> constraintViolation : constraintViolations) {
                             violationMessages.put(constraintViolation.getPropertyPath().toString(),constraintViolation.getMessage());
-                           // violationMessages.add(constraintViolation.getMessage());
-                            //violationMessages.add(constraintViolation.getPropertyPath() + ": " + constraintViolation.getMessage());
                         }
-                        System.out.println(" USER-WRITE VALIDATION ERROR - COMMAND BUS FAILED VALIDATION::: 01 ---->"+violationMessages);
-
                         msg.setErrors(violationMessages);
                         msg.setEventType("errorForm");
                     } else {
@@ -123,7 +108,6 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
             }
 
         }
-
     }
 
     public String serializeMessage(WebsocketMessage command) {
@@ -138,16 +122,8 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
 
     @Override
     public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
-        System.out.println("onPartitionsRevoked------------------------------------------------------------------------------------------------");
-        // partitions.iterator().forEachRemaining();
-        // save offsets here
-        for(TopicPartition partition: partitions) {
-            synchronized (partition) {
-                System.out.println("  onPartitionsRevoked parition : " + partition + ' ');
-                // + consumer.position(partition));
-                //consumer.seek(partition,1);
-            }
-        }
+        //for(TopicPartition partition: partitions) {
+        //}
     }
 
 
@@ -158,30 +134,24 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
     @Override
     public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
         for (TopicPartition partition : partitions) {
-            System.out.println("onPartitionsAssigned  Topic " + partition.topic() + " polling");
             synchronized (consumer) {
-                //this.consumer.
                 this.consumer.subscribe(Arrays.asList(partition.topic()));
             }
             ConsumerRecords<String, String> records = this.consumer.poll(100);
             try {
-                System.out.println(" Topic " + partition.topic() + " seekBegin");
                 this.consumer.seek(partition,1);
             } catch (Exception e) {
                 rewind(records);
-                //Thread.sleep(100);
             }
             for (ConsumerRecord<String, String> record : records)
                 System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
-
-            System.out.println("Topics done - subscribing: ");
         }
     }
+
     private void rewind(ConsumerRecords<String, String> records) {
         records.partitions().forEach(partition -> {
             long offset = records.records(partition).get(0).offset();
             consumer.seek(partition, offset);
         });
     }
-
 }

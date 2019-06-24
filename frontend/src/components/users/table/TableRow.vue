@@ -46,14 +46,12 @@
 </template>
 
 <script>
-//This is needed for the select component to work
 import FieldSelect from '../../form/FieldSelect'
 import HotelService from '@/services/HotelService'
 import moment from 'moment';
 import VueMoment from 'vue-moment'
 import VueDropdown from 'vue-dynamic-dropdown'
 export default {
-    //You must declare what is being passed in otherwise they wont work..
    props: ['user', 'makes', 'models', 'drivers','reload','updatedResults'],
    data () {
         return {
@@ -80,10 +78,6 @@ export default {
 
         }
       },
-  computed: {
-    
-  },
-      //This is needed for the select component to work
       components: {
           FieldSelect,
         VueMoment,
@@ -107,122 +101,59 @@ export default {
           this.showForm=true;
           this.updatedUser=this.user;
          },
-         /**
-          * This controls the drop down functionality
-          * @param event
-          * @param id
-          * @returns {boolean}
-          */
          actionDropDown(event,id) {
-           console.log(' jj '+JSON.stringify(event)+' --- '+id)
-
            if (event.value==='display') {
-                console.log('display '+id)
              return HotelService.fetchRoot('/user/'+id)
                .then((res) => {
-               if (res) {
-                 console.log('RES: '+JSON.stringify(res));
-               }
                if (res.data) {
-               //this.showForm=false;
-               console.log('show resData '+JSON.stringify(res.data))
-               this.$emit('user-show', res.data);
-               //showUser=res.data;
-               //showDialog=true
-             }
-           }).catch((error) => {
-               if (error.response) {
-               this.$emit('user-errors', error.response.data.error);
-
-             } else if ( error.request) {
-               console.log("dddd"+error.request);
-             } else {
-               console.log('Error', error.message);
-             }
-           });
-
-           }
-
-
-           if (event.value==='delete') {
-             if (confirm('Delete record?')) {
-               console.log('delete '+id)
-
-               //return HotelService.deleteNoCatch('/user/', id)
-               this.deleteUser.id=id;
-
-               return HotelService.postCall('/user',this.deleteUser)
-                 .then((res) => {
-                 if (res) {
-                   console.log('RES: '+JSON.stringify(res));
-                 }
-
-                 if (res.data||res.status===200) {
-                  // we need to reload page
-                  this.$emit('refresh-list');
-                 }
+                  this.$emit('user-show', res.data);
+               }
              }).catch((error) => {
                  if (error.response) {
-                   console.log('errors '+ JSON.stringify(error.response))
-                 //this.$emit('user-errors', error.response.data.error);
-
-               } else if ( error.request) {
-                 console.log("dddd"+error.request);
-               } else {
-                 console.log('Error', error.message);
+                 this.$emit('user-errors', error.response.data.error);
                }
              });
-
-
-             } else {
-               console.log('denied')
-             }
-
            }
-
-
+           if (event.value==='delete') {
+             if (confirm('Delete record?')) {
+               this.deleteUser.id=id;
+               return HotelService.postCall('/user',this.deleteUser)
+                 .then((res) => {
+                   if (res.data||res.status===200) {
+                    this.$emit('refresh-list');
+                   }
+               }).catch((error) => {
+                   if (error.response) {
+                   //this.$emit('user-errors', error.response.data.error);
+                 }
+               });
+             }
+           }
          },
          updateValue: function (value) {
            this.$emit('input', value);
          },
          save() {
            const newName = this.updatedUser;
-           console.log('new Name =  '+JSON.stringify(newName))
-           //+newName.id
            this.newUser.id=newName.id
            this.newUser.code=newName.code
            this.newUser.name=newName.name
-           //this.newUser.eventType='UserUpdateCommand'
-
-           console.log('new newUser =  '+JSON.stringify( this.newUser))
            return HotelService.postCall('/user',this.newUser)
-          // return HotelService.putRootNoCatch('/user/update/'+newName.id, this.newUser)
              .then((res) => {
-             if (res) {
-                console.log('RES: '+JSON.stringify(res));
-             }
-             if (res.data||res.status===204) {
-               this.showForm=false;
-               console.log('resData '+JSON.stringify(res.data))
-               this.$emit('user-update', res.data);
-             }
-           }).catch((error) => {
-              if (error.response) {
-                   this.$emit('user-errors', error.response);
-
-            } else if ( error.request) {
-              console.log("dddd"+error.request);
-            } else {
-              console.log('Error', error.message);
-            }
-          });
+               if (res.data||res.status===204) {
+                 this.showForm=false;
+                 this.$emit('user-update', res.data);
+               }
+             }).catch((error) => {
+                if (error.response) {
+                     this.$emit('user-errors', error.response);
+                }
+            });
          }
      }
 }
 
 </script>
-
-<!-- Per Component Custom CSS Rules -->
 <style>
 .dropdown-label.text {
     font-size:0.8em;
@@ -247,5 +178,4 @@ export default {
     font-size:0.8em;
     background: red;
   }
-  /* Add custom rules here */
 </style>

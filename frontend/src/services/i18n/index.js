@@ -9,7 +9,6 @@ export const setUiLocale = (locale) => {
     if (!_.find(locales, supported => supported.code === locale)) {
         return Promise.reject(new Error(`Locale ${locale} is not supported.`))
     }
-    console.log('doing locle '+locale)
     return fetch(`/static/translations/${locale}.json`)
         .then(response => response.json())
         .then(loadedResources => (

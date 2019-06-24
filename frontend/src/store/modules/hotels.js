@@ -49,7 +49,6 @@ const removeObjectsInArr = function(initialArr, newArr) {
 }
 const getters = {
     loadHotels() {
-     // console.log('ahhh '+state.loadHotels)
       return state.loadHotels;
     },
     total: state => state.total,
@@ -66,34 +65,23 @@ const getters = {
  */
 const actions = {
     initHotels: ({commit}, params) => {
-      console.log("params = "+params.params)
     instance.get('/list?'+params.params)
       .then((response) =>{
-        console.log('DATA '+JSON.stringify(response.data.instanceList));
-        //commit('SET_STORE', response.data.instanceList,response.data.instanceTotal,response.data.numberOfPages);
-        //commit('SET_TOTAL', response.data.instanceTotal);
-        //commit('SET_PAGES', response.data.numberOfPages);
-
         state.loadHotels = response.data.instanceList;
         state.total = response.data.instanceTotal;
         state.numberOfPages = response.data.numberOfPages;
-
-        //console.log(' -STATE 00>> '+JSON.stringify(state.loadHotels))
       });
     },
   updateHotels:  ({commit}, hotelObject) => {
-      console.log('updatting '+JSON.stringify(hotelObject.hotel)+" with ID: "+hotelObject.hotel.id)
-      state.loadHotels=updateObjectsInArr(state.loadHotels, [hotelObject.hotel])
+    state.loadHotels=updateObjectsInArr(state.loadHotels, [hotelObject.hotel])
   },
   removeHotel:  ({commit}, hotelObject) => {
-    console.log('updatting '+JSON.stringify(hotelObject.hotel)+" with ID: "+hotelObject.hotel)
     state.loadHotels=removeObjectsInArr(state.loadHotels, [hotelObject.hotel])
   }
 };
 
 const mutations = {
     'SET_STORE' (state,hotels,total,numberOfPages) {
-      console.log('sseting up hotels as '+JSON.stringify(hotels))
       state.loadHotels = hotels;
       state.total = total;
       state.numberOfPages = numberOfPages;

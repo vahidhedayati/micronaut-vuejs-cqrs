@@ -47,7 +47,6 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
         this.consumer=consumer;
     }
 
-    //protected static final Logger LOG = LoggerFactory.getLogger(KafkaEventListener.class);
 
     @Inject
     private HotelService dao;
@@ -59,12 +58,10 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
             String eventType = hotelCode.split("_")[0];
             if (eventType!=null) {
                 // LOG.debug("KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER hotelCreated "+hotelCode);
-                System.out.println("_____> HOTELREAD  EVENT: "+eventType+"--------------- KAKFA EVENT RECEIVED AT CUSTOM APPLICATION LISTENER  --- "+hotelCode+ " -- event "+hotelCreatedEvent);
                 JsonMediaTypeCodec mediaTypeCodec = (JsonMediaTypeCodec) mediaTypeCodecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
                         .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
                 Command cmd = (Command) mediaTypeCodec.decode(commandClasses.get(eventType),hotelCreatedEvent);
                 if (cmd instanceof HotelSavedCommand) {
-                    System.out.println("Saving read hote");
                     dao.save((HotelSavedCommand) cmd);
                 } else if (cmd instanceof HotelCreatedCommand) {
                     dao.save((HotelCreatedCommand) cmd);
@@ -79,15 +76,7 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
 
     @Override
     public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
-        System.out.println("onPartitionsRevoked------------------------------------------------------------------------------------------------");
-        // partitions.iterator().forEachRemaining();
-        // save offsets here
         for(TopicPartition partition: partitions) {
-            synchronized (partition) {
-                System.out.println("  onPartitionsRevoked parition : " + partition + ' ');
-                // + consumer.position(partition));
-                //consumer.seek(partition,1);
-            }
         }
     }
 
@@ -99,23 +88,17 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
     @Override
     public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
         for (TopicPartition partition : partitions) {
-            System.out.println("onPartitionsAssigned  Topic " + partition.topic() + " polling");
             synchronized (consumer) {
-                //this.consumer.
                 this.consumer.subscribe(Arrays.asList(partition.topic()));
             }
             ConsumerRecords<String, String> records = this.consumer.poll(100);
             try {
-                System.out.println(" Topic " + partition.topic() + " seekBegin");
                 this.consumer.seek(partition,1);
             } catch (Exception e) {
                 rewind(records);
-                //Thread.sleep(100);
             }
             for (ConsumerRecord<String, String> record : records)
                 System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
-
-            System.out.println("Topics done - subscribing: ");
         }
     }
     private void rewind(ConsumerRecords<String, String> records) {

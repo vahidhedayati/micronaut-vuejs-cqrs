@@ -17,8 +17,7 @@ public class DemoUsersFactory {
 		users.add(addUser("susan","password", "Susan", "Jones"));
 		users.add(addUser("bill","password", "Billy", "Smith"));
 		users.add(addUser("ben","password", "Benjamin", "Thomas"));
-        System.out.println(" users to be added "+users.size());
-		return users;
+        return users;
     }
 	
 	

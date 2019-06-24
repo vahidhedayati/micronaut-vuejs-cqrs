@@ -65,7 +65,6 @@
         return moment();
       },
       close: function () {
-        console.log('running close')
         this.$emit('close');
       }
     }

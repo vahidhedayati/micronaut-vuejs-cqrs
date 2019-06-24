@@ -102,19 +102,15 @@
         }
       },
       initialiseUsers(params){
-        console.log(' getting user /user/list'+params)
         return HotelService.fetchRoot('/user/list?'+params)
           .then((res) => {
           if (res) {
-            console.log('full results '+JSON.stringify(res));
             if (res.data.instanceList) {
-              console.log("rr "+res.data.instanceList)
               this.users = res.data.instanceList;
               this.total=res.data.instanceTotal;
               this.numberOfPages=res.data.numberOfPages;
             } else {
               if (res.data) {
-                //console.log("rr "+res.data.objects)
                 this.users = res.data;
               }
             }
@@ -122,7 +118,6 @@
         });
       },
       pagechanged: function(page) {
-        console.log("Page = "+page)
         this.currentPage = page;
         this.offset=(page*this.max)-this.max
         this.fetchUsers(this.offset)
@@ -135,16 +130,13 @@
         this.initialiseUsers(variables);
       },
       refreshUsers: function () {
-        console.log('refreshing entire list after a new entry was added')
         this.fetchUsers(0)
       },
       updateUsers: function (user) {
         this.errors=[];
-        console.log('user.vue updating user list')
         this.users=updateObjectsInArr(this.users, [user])
       },
       errorUsers: function (errors) {
-        console.log('userTable.vue updating error list')
         this.errors=errors;
       },
       fetchUsers: function (pageNumber) {
@@ -160,12 +152,10 @@
         } else {
           variables='?offset='+pageNumber
         }
-        console.log("Fetching users "+pageNumber)
         this.initialiseUsers(variables);
       },
       searchUsers: function () {
         var variables = $.param(this.search);
-        console.log('variables: '+variables)
         this.initialiseUsers(variables);
       }
     }

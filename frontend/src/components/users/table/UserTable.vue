@@ -47,8 +47,7 @@
         <th>Action</th>
 
       </tr>
-    </thead> <!--1-->
-      <!-- sortedCats replaces vehicles and is only sorting by current paginated dataset -->
+    </thead>
       <table-row v-for="user in users"
                   :key="user.id"
                   :user="user"
@@ -57,7 +56,7 @@
                  @user-show="showUser"
                   @user-errors="errorUsers"
                  v-bind="{fetchUsers}"
-                ></table-row> <!--2-->
+                ></table-row>
   </table>
 
     <display-user-modal
@@ -73,7 +72,7 @@ import TableRow from './TableRow.vue';
 import DisplayUserModal from './DisplayUserModal.vue';
 export default {
    props: ['users', 'reload','fetchUsers','sortSearch'],
-  components: { // <3>
+  components: {
     TableRow,
     DisplayUserModal
   },
@@ -89,51 +88,37 @@ export default {
     showModal:false
   }
 },
-
   methods: {
     sort: function (s) {
       this.column=s;
       this.activeColumn=s;
-      //if s == current sort, reverse
       if (s === this.currentSort) {
         this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc';
 
       }
       this.currentSort = s;
-
-      //This is full on search and sortedSearch sits in the parent page Custom.vue
       this.sortSearch(s,this.currentSortDir)
 
     },
-     updateUsers: function (user) {
-     console.log('userTable.vue updating user list')
-        this.$emit('user-update',user);
-      },
+    updateUsers: function (user) {
+      this.$emit('user-update',user);
+    },
     showUser: function (user) {
-      //This is when the tableRow returned current current to be displayed - this updates the internal user
-      //of this page to be that.
       this.currentShowUser=user;
       this.showModal=true;
-      //
     },
     closeModalPopup: function () {
       this.showModal = false;
       this.currentShowUser = null;
     },
     refreshUsers: function () {
-      console.log('userTable.vue refresh user list')
       this.$emit('refresh-list');
     },
    errorUsers: function (errors) {
-      console.log('userTable.vue updating user list')
       this.$emit('user-errors',errors);
     },
-  },
-  computed:{
-
   }
 }
-
 </script>
 
 <style>
@@ -163,10 +148,5 @@ export default {
   }
   th.active {
     color:orange !important;
-  }
-
-
-  blank {
-
   }
 </style>

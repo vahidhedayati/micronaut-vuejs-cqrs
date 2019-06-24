@@ -55,9 +55,8 @@ public class HotelService implements HotelsInterface {
     public void delete(HotelDeleteCommand cmd) {
 
         HotelDeletedCommand cmd1 = new HotelDeletedCommand(cmd);
-        cmd1.setEventType("HotelDeletedCommand");
+        cmd1.setEventType(cmd1.getClass().getSimpleName());
         publishEvent(cmd1);
-        System.out.println("Doing hotel delete "+cmd.getId());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
     }
 
@@ -65,10 +64,9 @@ public class HotelService implements HotelsInterface {
     @Transactional
     public void update(HotelUpdateCommand cmd) {
         HotelUpdatedCommand cmd1 = new HotelUpdatedCommand(cmd);
-        cmd1.setEventType("HotelUpdatedCommand");
+        cmd1.setEventType(cmd1.getClass().getSimpleName());
         publishEvent(cmd1);
 
-        System.out.println("Doing hotel update "+cmd.getName());
         findById(cmd.getId()).ifPresent(hotel -> entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
                 .setParameter("name", cmd.getName())
                 .setParameter("id", cmd.getId())
@@ -101,10 +99,9 @@ public class HotelService implements HotelsInterface {
 
         HotelCreatedCommand cmd1 = new HotelCreatedCommand(cmd);
         cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).map(u->u.getUsername()));
-        cmd1.setEventType("HotelCreatedCommand");
+        cmd1.setEventType(cmd1.getClass().getSimpleName());
         publishEvent(cmd1);
 
-        System.out.println("Doing hotel HotelCreatedCommand save  "+cmd.getName());
         Hotel hotel = new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(),cmd.getUpdateUserId(),cmd.getLastUpdated());
         List<HotelRooms> hotelRooms = new ArrayList<>();
         if (!findByCode(hotel.getCode()).isPresent()) {
@@ -121,12 +118,10 @@ public class HotelService implements HotelsInterface {
     @Override
     @Transactional
     public void save(HotelSaveCommand cmd) {
-        System.out.println("Doing hotel save "+cmd.getName());
 
         HotelSavedCommand cmd1 = new HotelSavedCommand(cmd);
-        //HotelSavedCommand cmd1 = (HotelSavedCommand)cmd;
         cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).map(u->u.getUsername()));
-        cmd1.setEventType("HotelSavedCommand");
+        cmd1.setEventType(cmd1.getClass().getSimpleName());
         publishEvent(cmd1);
 
         save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail()));
@@ -136,27 +131,11 @@ public class HotelService implements HotelsInterface {
     @Transactional
     public void save(Hotel hotel) {
         if (hotel!=null) {
-           // System.out.println("Hotel is not null - Doing hotel Add "+hotel.getCode());
             if (!findByCode(hotel.getCode()).isPresent()) {
-                System.out.println("Doing hotel Add "+hotel.getCode());
                 entityManager.persist(hotel);
             }
         }
-        //else {
-        //   System.out.println("Hotel not being added - HOTEL is null --- ERROR ----- ");
-        //}
     }
-
-
-    private final static List<String> VALID_PROPERTY_NAMES = Arrays.asList("id", "name", "code", "lastUpdated", "phone","email");
-
-
-
-
-    // public Single<List<Hotel>> listAll(Map input) {
-
-    // }
-
 
     @Transactional
     @Override
@@ -172,6 +151,5 @@ public class HotelService implements HotelsInterface {
     public Hotel getByCode(String code) {
         return findByCode(code).orElseThrow(() -> new RuntimeException("Hotel not found"));
     }
-
 
 }

@@ -11,27 +11,27 @@ export default {
   fetchParams (component,params) {
     return readInstance.get(component, {params:params })
       .catch((error) => {
-      if (error.response) {
-      console.log(error.response);
-    } else if (error.request) {
-      console.log(error.request);
-    } else {
-      console.log('Error', error.message);
-    }
-  });
+        if (error.response) {
+          console.log(error.response);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log('Error', error.message);
+        }
+      });
   },
 
   fetchBlob (component) {
     return readInstance.get(component,{responseType: 'blob', headers: { 'Accept': 'application/vnd.ms-excel' }})
       .catch((error) => {
-      if (error.response) {
-      console.log(error.response);
-    } else if (error.request) {
-      console.log(error.request);
-    } else {
-      console.log('Error', error.message);
-    }
-  });
+        if (error.response) {
+          console.log(error.response);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log('Error', error.message);
+        }
+      });
   },
   fetchName (component) {
     return readInstance.get(component)
@@ -49,13 +49,13 @@ export default {
     return readInstance.get(component)
       .catch((error) => {
       if (error.response) {
-      console.log(error.response);
-    } else if (error.request) {
-      console.log(error.request);
-    } else {
-      console.log('Error', error.message);
-    }
-  });
+        console.log(error.response);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log('Error', error.message);
+      }
+    });
   },
   createName (component, params) {
     return writeInstance.post(component, params)
