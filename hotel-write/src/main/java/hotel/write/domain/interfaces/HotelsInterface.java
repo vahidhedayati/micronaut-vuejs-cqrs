@@ -11,22 +11,11 @@ import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 public interface HotelsInterface {
-
 	Optional<Hotel> findById(@NotNull Long id);
-
-
-
 	Optional<Hotel> findByCode(String code);
 	void save(Hotel hotel);
 	void save(HotelSaveCommand hotelSaveCommand);
 	void save(HotelCreateCommand hotelCreatedCommand);
 	void delete(HotelDeleteCommand hotel);
 	void update(HotelUpdateCommand hotel);
-	//Single<List<Hotel>> listAll(Map input);
-
-	//Maybe<Hotel> reolveCode(String code);
-
-	Hotel getByCode(String code);
-	
-
 }

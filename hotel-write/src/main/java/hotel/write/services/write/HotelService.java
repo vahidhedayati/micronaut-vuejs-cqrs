@@ -17,7 +17,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +52,6 @@ public class HotelService implements HotelsInterface {
     @Override
     @Transactional
     public void delete(HotelDeleteCommand cmd) {
-
         HotelDeletedCommand cmd1 = new HotelDeletedCommand(cmd);
         cmd1.setEventType(cmd1.getClass().getSimpleName());
         publishEvent(cmd1);
@@ -95,8 +93,6 @@ public class HotelService implements HotelsInterface {
     @Override
     @Transactional
     public void save(HotelCreateCommand cmd) {
-
-
         HotelCreatedCommand cmd1 = new HotelCreatedCommand(cmd);
         cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).map(u->u.getUsername()));
         cmd1.setEventType(cmd1.getClass().getSimpleName());
@@ -118,7 +114,6 @@ public class HotelService implements HotelsInterface {
     @Override
     @Transactional
     public void save(HotelSaveCommand cmd) {
-
         HotelSavedCommand cmd1 = new HotelSavedCommand(cmd);
         cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).map(u->u.getUsername()));
         cmd1.setEventType(cmd1.getClass().getSimpleName());
@@ -146,10 +141,4 @@ public class HotelService implements HotelsInterface {
                 .getResultStream()
                 .findFirst();
     }
-
-    @Override
-    public Hotel getByCode(String code) {
-        return findByCode(code).orElseThrow(() -> new RuntimeException("Hotel not found"));
-    }
-
 }

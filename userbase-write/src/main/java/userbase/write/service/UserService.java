@@ -8,17 +8,11 @@ import userbase.write.domain.User;
 import userbase.write.implementations.MyApplicationConfiguration;
 import userbase.write.implementations.Users;
 import userbase.write.kafka.EventPublisher;
-import userbase.write.models.SortingAndOrderArguments;
-import userbase.write.models.UserModel;
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 @Singleton
@@ -55,40 +49,6 @@ public class UserService implements Users {
                 .setParameter("username", username)
                 .getResultStream()
                 .findFirst();
-    }
-
-    @Override
-    @Transactional
-    public void deleteById(@NotNull Long id) {
-        findById(id).ifPresent(user -> entityManager.remove(user));
-    }
-
-    @Transactional
-    @Override
-    public int update(@NotNull Long id, @NotBlank String username, @NotBlank String password, @NotBlank String firstname, @NotBlank String surname) {
-        return entityManager.createQuery("UPDATE User h  SET username = :username, password = :password, firstname=:firstname, surname=:surname where id = :id")
-                .setParameter("username", username)
-                .setParameter("id", id)
-                .setParameter("password", password)
-                .setParameter("firstname", firstname)
-                .setParameter("surname", surname)
-                .executeUpdate();
-    }
-
-
-
-    @Transactional
-    @Override
-    public void add(User user) {
-        entityManager.persist(user);
-    }
-
-    @Transactional
-    @Override
-    public User save(@NotBlank String username, @NotBlank String password, @NotBlank String firstname, @NotBlank String surname) {
-        User user = new User(username,password,firstname,surname);
-        entityManager.persist(user);
-        return user;
     }
 
     @Transactional
@@ -140,11 +100,4 @@ public class UserService implements Users {
         eventPublisher.publish(embeddedServer,topic,cmd);
     }
 
-    @Transactional
-    @Override
-    public void add(List<User> users) {
-        for ( final User user : users ) {
-            entityManager.persist(user);
-        }
-    }
 }

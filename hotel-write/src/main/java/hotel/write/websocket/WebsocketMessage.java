@@ -7,6 +7,7 @@ public class WebsocketMessage {
 
     //This is current user from vuejs - generated as part of initial socket connection
     private String currentUser;
+
     //This relates to what the socket is dealing with i.e. userForm  i.e. user input  ( errorForm / successForm : this is its own responses)
     //find this in gateway-command/GatewayController
     private String eventType;

@@ -95,12 +95,6 @@ public class HotelService implements HotelsInterface {
         );
     }
 
-    @Transactional
-    public void add(List<Hotel> hotels) {
-        for ( final Hotel hotel : hotels ) {
-            entityManager.persist(hotel);
-        }
-    }
 
     @Override
     @Transactional
@@ -148,8 +142,4 @@ public class HotelService implements HotelsInterface {
                 .findFirst();
     }
 
-    @Override
-    public Hotel getByCode(String code) {
-        return findByCode(code).orElseThrow(() -> new RuntimeException("Hotel not found"));
-    }
 }

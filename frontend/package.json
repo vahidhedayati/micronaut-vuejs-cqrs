@@ -89,13 +89,6 @@
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^0.5.8",
     "vue-jest": "^1.0.2",
-    "//": [
-      "https://stackoverflow.com/questions/54306758/parser-babylon-deprecated-error-webpack-build",
-      "https://stackoverflow.com/questions/51300578/how-to-add-vue-style-loader-dependency-in-vue-js/51301217",
-      "https://github.com/surmon-china/vue-awesome-swiper/issues/104",
-      "https://github.com/srs/gradle-node-plugin/issues/190",
-      "https://stackoverflow.com/questions/46013544/yarn-install-command-error-no-such-file-or-directory-install"
-    ],
     "vue-loader": "https://github.com/graux/vue-loader#a0d6b77",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.2",

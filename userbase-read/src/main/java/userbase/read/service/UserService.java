@@ -39,37 +39,16 @@ public class UserService implements Users {
 
     private final static List<String> VALID_PROPERTY_NAMES = Arrays.asList("id", "username", "firstname", "surname");
 
-
     @Override
     @Transactional(readOnly = true)
     public Optional<User> findById(@NotNull Long id) {
         return Optional.ofNullable(entityManager.find(User.class, id));
     }
 
-
-
-    @Override
-    @Transactional
-    public void deleteById(@NotNull Long id) {
-        findById(id).ifPresent(user -> entityManager.remove(user));
-    }
-
-    @Transactional
-    @Override
-    public int update(@NotNull Long id, @NotBlank String username, @NotBlank String password, @NotBlank String firstname, @NotBlank String surname) {
-        return entityManager.createQuery("UPDATE User h  SET username = :username, password = :password, firstname=:firstname, surname=:surname where id = :id")
-                .setParameter("username", username)
-                .setParameter("id", id)
-                .setParameter("password", password)
-                .setParameter("firstname", firstname)
-                .setParameter("surname", surname)
-                .executeUpdate();
-    }
-
     @Transactional(readOnly = true)
     public Optional<UserModel> findAll(@NotNull SortingAndOrderArguments args) {
 
-        String countQueryString= "select count(h) FROM User as  h ";
+        String countQueryString = "select count(h) FROM User as  h ";
         String qlString = "FROM User as  h ";
         if (args.getName().isPresent()) {
             qlString += " where  ( lower(h.username) like (:name)  or  lower(h.firstname) like (:name)   lower(h.surname) like (:name) )  ";
@@ -81,11 +60,11 @@ public class UserService implements Users {
         TypedQuery<User> query;
         TypedQuery<Long> countQuery;
         if (args.getName().isPresent()) {
-            query=entityManager.createQuery(qlString, User.class).setParameter("name",'%'+args.getName().get().toLowerCase()+'%');
-            countQuery=entityManager.createQuery(countQueryString, Long.class).setParameter("name",'%'+args.getName().get().toLowerCase()+'%');
+            query = entityManager.createQuery(qlString, User.class).setParameter("name", '%' + args.getName().get().toLowerCase() + '%');
+            countQuery = entityManager.createQuery(countQueryString, Long.class).setParameter("name", '%' + args.getName().get().toLowerCase() + '%');
         } else {
-            query=entityManager.createQuery(qlString, User.class);
-            countQuery=entityManager.createQuery(countQueryString, Long.class);
+            query = entityManager.createQuery(qlString, User.class);
+            countQuery = entityManager.createQuery(countQueryString, Long.class);
         }
 
         query.setMaxResults(args.getMax().orElseGet(myApplicationConfiguration::getMax));
@@ -94,7 +73,7 @@ public class UserService implements Users {
         model.setInstanceList(query.getResultList());
         model.setInstanceTotal(countQuery.getSingleResult());
 
-        model.setNumberOfPages(model.getInstanceTotal()/args.getMax().get());
+        model.setNumberOfPages(model.getInstanceTotal() / args.getMax().get());
         return Optional.of(model);
     }
 
@@ -108,30 +87,10 @@ public class UserService implements Users {
                 .findFirst();
     }
 
-    @Override
-    public User getByUsername(String username) {
-        return findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
-    }
-
-    @Transactional
-    @Override
-    public void add(User user) {
-        entityManager.persist(user);
-    }
-
-    @Transactional
-    @Override
-    public User save(@NotBlank String username, @NotBlank String password, @NotBlank String firstname, @NotBlank String surname) {
-        User user = new User(username,password,firstname,surname);
-        entityManager.persist(user);
-        return user;
-    }
-
-
     @Transactional
     @Override
     public void save(UserSaveCommand cmd) {
-        User user = new User(cmd.getUsername(),cmd.getPassword(),cmd.getFirstname(),cmd.getSurname(),cmd.getLastUpdated());
+        User user = new User(cmd.getUsername(), cmd.getPassword(), cmd.getFirstname(), cmd.getSurname(), cmd.getLastUpdated());
         entityManager.persist(user);
     }
 
@@ -153,12 +112,5 @@ public class UserService implements Users {
                 .executeUpdate()
         );
     }
-
-    @Transactional
-    @Override
-    public void add(List<User> users) {
-        for ( final User user : users ) {
-            entityManager.persist(user);
-        }
-    }
 }
+
