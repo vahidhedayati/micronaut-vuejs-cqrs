@@ -30,6 +30,8 @@
        <div>
          <label>Update UserId:</label>
          <input type="text" v-model="hotel.updateUserId" />
+         <autocomplete :items="[ 'Apple', 'Banana', 'Orange', 'Mango', 'Pear', 'Peach', 'Grape', 'Tangerine', 'Pineapple']" />
+
        </div>
 
    <div class="col-sm-2">
@@ -47,6 +49,7 @@
 
 <script>
 import HotelService from '@/services/HotelService'
+import Autocomplete from '../Autocomplete'
 const validateEmail= email => {
   if (!email.length) {
     return { valid: false, error: "email_needed"};
@@ -87,7 +90,8 @@ export default {
   components: {
     'validateEmail': validateEmail,
     'validatePhone': validatePhone,
-    'validateName' : validateName
+    'validateName' : validateName,
+    'autocomplete' : Autocomplete
 
   },
    methods: {

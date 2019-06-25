@@ -34,11 +34,12 @@
   import {Tabs, Tab} from 'vue-tabs-component';
   import HotelForm from './HotelForm'
   import AppHeader from '../AppHeader'
+
   export default {
     components: {
       Tabs,
       AppHeader,
-      HotelForm,
+      HotelForm
     },
     props: ['search','masterUser','submittedForm'],
     model: {
