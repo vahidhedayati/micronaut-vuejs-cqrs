@@ -103,7 +103,6 @@ export default {
   },
    methods: {
      updateAutoCompleteItems: function (searchValue) {
-
        if (searchValue.length>2) {
          this.users=[];
          var variables = $.param(searchValue);
@@ -125,7 +124,6 @@ export default {
          }
        });
      },
-
      submitForm (e) {
        this.$emit(' form-status',true);
        this.errors=[];
@@ -148,7 +146,6 @@ export default {
        }
      },
      updateSearchValue: function (value) {
-       console.log("Got value")
        this.hotel.updateUserName=value
      },
      updateSearchKey: function (key) {
