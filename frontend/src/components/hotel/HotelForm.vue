@@ -30,7 +30,12 @@
        <div>
          <label>Update UserId:</label>
          <input type="text" v-model="hotel.updateUserId" />
-         <autocomplete :items="[ 'Apple', 'Banana', 'Orange', 'Mango', 'Pear', 'Peach', 'Grape', 'Tangerine', 'Pineapple']" />
+
+         <autocomplete form-field="search"
+                       @search-value="updateSearchValue"
+                       @search-key="updateSearchKey"
+                       key-field="customId" value-field="customName"
+                       :items="[ {customName : 'Apple', customId:'1'} , {customName:'Banana', customId:'2'} ]" />
 
        </div>
 
@@ -83,7 +88,7 @@ export default {
     return {
       valid: true,
       errors: [],
-      hotel:{currentUser:this.masterUser,  name:'AAAAAAAAAAAAA',code:'AAAA',phone:'+44-123456789', email:'aa@aa.com', updateUserName:'Admin' , updateUserId:'1',eventType:'HotelSaveCommand'}
+      hotel:{currentUser:this.masterUser,  name:'AAAAAAAAAAAAA',code:'AAAA',phone:'+44-123456789', email:'aa@aa.com', updateUserName:'admin' , updateUserId:'1',eventType:'HotelSaveCommand'}
 
     }
   },
@@ -115,6 +120,13 @@ export default {
        } else if (this.errors.length>0) {
          this.$emit('hotel-errors',this.errors);
        }
+     },
+     updateSearchValue: function (value) {
+       console.log("Got value")
+       this.hotel.updateUserName=value
+     },
+     updateSearchKey: function (key) {
+       this.hotel.updateUserId=key
      },
     submit () {
       this.$emit('current-hotel',  this.hotel);

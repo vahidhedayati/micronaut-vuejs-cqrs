@@ -3,6 +3,12 @@
     name: 'autocomplete',
 
     props: {
+      keyField: {
+        default: 'id'
+      },
+      valueField: {
+        default: 'name'
+      },
       items: {
         type: Array,
         required: false,
@@ -20,6 +26,7 @@
       isOpen: false,
       results: [],
       search: '',
+      hiddenId:'',
       isLoading: false,
       arrowCounter: 0,
     };
@@ -28,7 +35,7 @@
   methods: {
     onChange() {
       // Let's warn the parent that a change was made
-      this.$emit('input', this.);
+      //this.$emit('input', this.search);
 
       // Is the data given by an outside ajax request?
       if (this.isAsync) {
@@ -43,11 +50,14 @@
     filterResults() {
       // first uncapitalize all the things
       this.results = this.items.filter((item) => {
-        return item.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
+        return item[this.valueField].toLowerCase().indexOf(this.search.toLowerCase()) > -1;
     });
     },
     setResult(result) {
-      this.search = result;
+      this.search = result[this.valueField];
+      this.hiddenId=result[this.keyField];
+      this.$emit('search-value', this.search);
+      this.$emit('search-key',this.hiddenId);
       this.isOpen = false;
     },
     onArrowDown(evt) {
@@ -119,9 +129,12 @@
         class="autocomplete-result"
         :class="{ 'is-active': i === arrowCounter }"
       >
-        {{ result }}
+        {{ result[valueField] }}
       </li>
     </ul>
+    <input
+      type="hidden"
+      v-model="hiddenId"/>
   </div>
 </template>
 
