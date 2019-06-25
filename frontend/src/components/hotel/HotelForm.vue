@@ -24,18 +24,18 @@
          <input type="text" v-model="hotel.email" />
        </div>
        <div>
-         <label>Update Username:</label>
-         <input type="text" v-model="hotel.updateUserName" />
-       </div>
-       <div>
-         <label>Update UserId:</label>
-         <input type="text" v-model="hotel.updateUserId" />
+         <label>Update User:</label>
+         <!-- please note hidden fields not needed but to represent what happens with autoComplete below -->
+         <input type="hidden" v-model="hotel.updateUserName" />
+         <input type="hidden" v-model="hotel.updateUserId" />
 
+         <!--  :items="[ {customName : 'Apple', customId:'1'} , {customName:'Banana', customId:'2'} ]"   :isAsync="true" -->
          <autocomplete form-field="search"
+                       @key-press="updateAutoCompleteItems"
                        @search-value="updateSearchValue"
                        @search-key="updateSearchKey"
-                       key-field="customId" value-field="customName"
-                       :items="[ {customName : 'Apple', customId:'1'} , {customName:'Banana', customId:'2'} ]" />
+                       key-field="id" value-field="username"
+                       :items="users" />
 
        </div>
 
@@ -53,6 +53,7 @@
 </template>
 
 <script>
+ import $ from 'jquery';
 import HotelService from '@/services/HotelService'
 import Autocomplete from '../Autocomplete'
 const validateEmail= email => {
@@ -87,6 +88,7 @@ export default {
   data: function () {
     return {
       valid: true,
+      users: [],
       errors: [],
       hotel:{currentUser:this.masterUser,  name:'AAAAAAAAAAAAA',code:'AAAA',phone:'+44-123456789', email:'aa@aa.com', updateUserName:'admin' , updateUserId:'1',eventType:'HotelSaveCommand'}
 
@@ -100,6 +102,30 @@ export default {
 
   },
    methods: {
+     updateAutoCompleteItems: function (searchValue) {
+
+       if (searchValue.length>2) {
+         this.users=[];
+         var variables = $.param(searchValue);
+         variables+="&max=10&offset=0";
+         this.initialiseUsers(variables);
+       }
+     },
+     initialiseUsers(params){
+       return HotelService.fetchRoot('/user/list?'+params)
+         .then((res) => {
+         if (res) {
+           if (res.data.instanceList) {
+            this.users = res.data.instanceList;
+           } else {
+             if (res.data) {
+               this.users = res.data;
+             }
+           }
+         }
+       });
+     },
+
      submitForm (e) {
        this.$emit(' form-status',true);
        this.errors=[];

@@ -35,7 +35,7 @@
   methods: {
     onChange() {
       // Let's warn the parent that a change was made
-      //this.$emit('input', this.search);
+      this.$emit('key-press', this.search);
 
       // Is the data given by an outside ajax request?
       if (this.isAsync) {
