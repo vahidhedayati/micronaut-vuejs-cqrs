@@ -7,6 +7,7 @@ import io.micronaut.configuration.kafka.ConsumerAware;
 import io.micronaut.configuration.kafka.annotation.KafkaKey;
 import io.micronaut.configuration.kafka.annotation.KafkaListener;
 import io.micronaut.configuration.kafka.annotation.Topic;
+import io.micronaut.context.event.ApplicationEventPublisher;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.websocket.RxWebSocketClient;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -52,8 +53,12 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
         this.consumer=consumer;
     }
 
+    /**
+     * This publishes kafka Generic Command as real command locally -
+     * local events in this folder extend ApplicationEventListener and pick relevant work
+     */
     @Inject
-    private UserService bus;
+    ApplicationEventPublisher publisher;
 
     @Topic("user")
     public <T extends CommandRoot> void consume(@KafkaKey String hotelCode,  T cmd) {
@@ -71,7 +76,7 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
                 msg.setEventType("errorForm");
             } else {
                 msg.setEventType("successForm");
-                bus.handleCommand(cmd);
+                publisher.publishEvent(cmd);
             }
             ChatClientWebSocket chatClient = webSocketClient.connect(ChatClientWebSocket.class, "/ws/process").blockingFirst();
             chatClient.send(serializeMessage(msg));

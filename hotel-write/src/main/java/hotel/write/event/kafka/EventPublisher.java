@@ -1,4 +1,4 @@
-package hotel.write.kafka;
+package hotel.write.event.kafka;
 
 
 import hotel.write.event.events.EventRoot;

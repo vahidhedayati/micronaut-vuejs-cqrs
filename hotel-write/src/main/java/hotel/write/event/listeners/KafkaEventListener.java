@@ -3,6 +3,7 @@ package hotel.write.event.listeners;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hotel.write.event.CommandBus;
 import hotel.write.event.commands.CommandRoot;
 import hotel.write.services.write.HotelService;
 import hotel.write.websocket.ChatClientWebSocket;
@@ -11,6 +12,7 @@ import io.micronaut.configuration.kafka.ConsumerAware;
 import io.micronaut.configuration.kafka.annotation.KafkaKey;
 import io.micronaut.configuration.kafka.annotation.KafkaListener;
 import io.micronaut.configuration.kafka.annotation.Topic;
+import io.micronaut.context.event.ApplicationEventPublisher;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.websocket.RxWebSocketClient;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -52,10 +54,13 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
         this.consumer=consumer;
     }
 
+
+    /**
+     * This publishes kafka Generic Command as real command locally -
+     * local events in this folder extend ApplicationEventListener and pick relevant work
+     */
     @Inject
-    private HotelService bus;
-
-
+    ApplicationEventPublisher publisher;
 
     @Topic("hotel")
     public  <T extends CommandRoot> void  consume(@KafkaKey String hotelCode,T cmd) {
@@ -76,7 +81,9 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
                 msg.setEventType("errorForm");
             } else {
                 msg.setEventType("successForm");
-                bus.handleCommand(cmd);
+                //bus.handleCommand(cmd);
+                //commandBus.handleCommand(cmd);
+                publisher.publishEvent(cmd);
             }
             ChatClientWebSocket chatClient = webSocketClient.connect(ChatClientWebSocket.class, "/ws/process").blockingFirst();
             chatClient.send(serializeMessage(msg));
@@ -123,5 +130,6 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
             consumer.seek(partition, offset);
         });
     }
+
 
 }

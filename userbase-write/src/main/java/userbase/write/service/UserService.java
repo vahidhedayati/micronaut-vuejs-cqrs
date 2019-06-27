@@ -58,58 +58,6 @@ public class UserService implements Users {
                 .findFirst();
     }
 
-    @Override
-    @Transactional
-    public <T extends CommandRoot> void  handleCommand(T  cmd) {
-        if (cmd instanceof UserSaveCommand) {
-            handleCommand((UserSaveCommand) cmd);
-        } else if (cmd instanceof UserDeleteCommand) {
-            handleCommand((UserDeleteCommand) cmd);
-        } else if (cmd instanceof UserUpdateCommand) {
-            handleCommand((UserUpdateCommand) cmd);
-        }
-    }
-
-    @Transactional
-    @Override
-    public void handleCommand(UserSaveCommand cmd) {
-
-        UserSaved cmd1 = new UserSaved(cmd);
-        cmd1.setEventType(cmd1.getClass().getSimpleName());
-        publishEvent(cmd1);
-
-        User user = new User(cmd.getUsername(),cmd.getPassword(),cmd.getFirstname(),cmd.getSurname(),cmd.getLastUpdated());
-        entityManager.persist(user);
-    }
-
-    @Transactional
-    @Override
-    public void handleCommand(UserDeleteCommand cmd) {
-
-        UserDeleted cmd1 = new UserDeleted(cmd);
-        cmd1.setEventType(cmd1.getClass().getSimpleName());
-        publishEvent(cmd1);
-
-        findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
-    }
-
-    @Transactional
-    @Override
-    public void handleCommand(UserUpdateCommand cmd) {
-
-        UserUpdated cmd1 = new UserUpdated(cmd);
-        cmd1.setEventType(cmd1.getClass().getSimpleName());
-        publishEvent(cmd1);
-
-        findById(cmd.getId()).ifPresent(user -> entityManager.createQuery("UPDATE User h  SET username = :username, password = :password, firstname=:firstname, surname=:surname where id = :id")
-                .setParameter("username", cmd.getUsername())
-                .setParameter("id", cmd.getId())
-                .setParameter("password", cmd.getPassword())
-                .setParameter("firstname", cmd.getFirstname())
-                .setParameter("surname", cmd.getSurname())
-                .executeUpdate()
-        );
-    }
 
     /**
      * This publishes to hotelRead Topic - picked up by hotelRead microservice

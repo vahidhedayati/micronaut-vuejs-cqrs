@@ -8,7 +8,7 @@ import hotel.write.domain.HotelRooms;
 import hotel.write.domain.interfaces.HotelsInterface;
 import hotel.write.event.events.*;
 import hotel.write.implementations.ApplicationConfiguration;
-import hotel.write.kafka.EventPublisher;
+import hotel.write.event.kafka.EventPublisher;
 import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.spring.tx.annotation.Transactional;
@@ -42,84 +42,6 @@ public class HotelService implements HotelsInterface {
         this.eventPublisher = eventPublisher;
         this.embeddedServer = embeddedServer;
         this.userReadClient=userReadClient;
-    }
-
-
-    @Override
-    @Transactional
-    public void handleCommand(HotelCreateCommand cmd) {
-        HotelCreated cmd1 = new HotelCreated(cmd);
-        cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).map(u->u.getUsername()));
-        cmd1.setEventType(cmd1.getClass().getSimpleName());
-        publishEvent(cmd1);
-
-        Hotel hotel = new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(),cmd.getUpdateUserId(),cmd.getLastUpdated());
-        List<HotelRooms> hotelRooms = new ArrayList<>();
-        if (!findByCode(hotel.getCode()).isPresent()) {
-            entityManager.persist(hotel);
-            for (HotelRoomsCreateCommand rmc  : cmd.getHotelRooms() ) {
-                HotelRooms hotelRooms1 = new HotelRooms(hotel,rmc.getRoomType(),rmc.getPrice(), rmc.getStockTotal());
-                hotelRooms.add(hotelRooms1);
-            }
-            hotel.setHotelRooms(hotelRooms);
-            entityManager.persist(hotel);
-        }
-    }
-
-    /**
-     * TOOD have no other way of dynamically adding command a its original way than this at moment
-     * @param cmd
-     * @param <T>
-     */
-    @Override
-    @Transactional
-    public <T extends CommandRoot> void  handleCommand(T  cmd) {
-        if (cmd instanceof HotelSaveCommand) {
-            handleCommand((HotelSaveCommand) cmd);
-            //msg.setId(dao.findByCode(((HotelSaveCommand) cmd).getCode()).map(h->h.getId()));
-        } else if (cmd instanceof HotelCreateCommand) {
-            handleCommand((HotelCreateCommand) cmd);
-        } else if (cmd instanceof HotelUpdateCommand) {
-            handleCommand((HotelUpdateCommand) cmd);
-        } else if (cmd instanceof HotelDeleteCommand) {
-            handleCommand((HotelDeleteCommand) cmd);
-        }
-    }
-    @Override
-    @Transactional
-    public void handleCommand(HotelSaveCommand cmd) {
-        HotelSaved cmd1 = new HotelSaved(cmd);
-        cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).map(u->u.getUsername()));
-        cmd1.setEventType(cmd1.getClass().getSimpleName());
-        publishEvent(cmd1);
-
-        save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail()));
-    }
-
-    @Override
-    @Transactional
-    public void handleCommand(HotelDeleteCommand cmd) {
-        HotelDeleted cmd1 = new HotelDeleted(cmd);
-        cmd1.setEventType(cmd1.getClass().getSimpleName());
-        publishEvent(cmd1);
-        findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
-    }
-
-    @Override
-    @Transactional
-    public void handleCommand(HotelUpdateCommand cmd) {
-        HotelUpdated cmd1 = new HotelUpdated(cmd);
-        cmd1.setEventType(cmd1.getClass().getSimpleName());
-        publishEvent(cmd1);
-
-        findById(cmd.getId()).ifPresent(hotel -> entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
-                .setParameter("name", cmd.getName())
-                .setParameter("id", cmd.getId())
-                .setParameter("code", cmd.getCode())
-                .setParameter("phone", cmd.getPhone())
-                .setParameter("email", cmd.getEmail())
-                .executeUpdate()
-        );
     }
 
 

@@ -1,6 +1,5 @@
-package hotel.write.kafka;
+package hotel.write.event.kafka;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hotel.write.event.events.EventRoot;
 import io.micronaut.context.annotation.Primary;
