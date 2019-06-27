@@ -4,7 +4,7 @@ package gateway.command.event.commands;
 import java.math.BigDecimal;
 
 
-public class HotelRoomsCreateCommand extends  Command {
+public class HotelRoomsCreateCommand {
 
     public HotelRoomsCreateCommand() { }
 

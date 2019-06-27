@@ -3,7 +3,7 @@ package gateway.command.event.commands;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
-public class UserSaveCommand extends Command {
+public class UserSaveCommand extends CommandRoot {
 
     private String username;
     private String password;
@@ -16,22 +16,6 @@ public class UserSaveCommand extends Command {
 
     public UserSaveCommand() {}
 
-    public UserSaveCommand(UserSaveCommand cmd) {
-        super((Command) cmd);
-        this.username=cmd.getUsername();
-        this.password=cmd.getPassword();
-        this.firstname=cmd.getFirstname();
-        this.surname=cmd.getSurname();
-        this.lastUpdated=cmd.getLastUpdated();
-    }
-
-    public UserSaveCommand(@NotBlank String username, @NotBlank String password, @NotBlank String firstname, @NotBlank String surname) {
-
-        this.username = username;
-        this.password = password;
-        this.firstname = firstname;
-        this.surname = surname;
-    }
 
     public UserSaveCommand(@NotBlank String username, @NotBlank String password, @NotBlank String firstname, @NotBlank String surname, @NotBlank Date lastUpdated) {
         this.username = username;

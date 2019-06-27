@@ -1,10 +1,10 @@
 package hotel.write.kafka;
 
 
-import hotel.write.commands.Command;
+import hotel.write.event.events.EventRoot;
 import io.micronaut.runtime.server.EmbeddedServer;
 
 public  interface EventPublisher {
-    <T extends Command> void publish(EmbeddedServer embeddedServer, String topic, T command);
-    <T extends Command> String serializeCommand(T command);
+
+    <T extends EventRoot> void publish(EmbeddedServer embeddedServer, String topic, T command);
 }

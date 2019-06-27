@@ -8,16 +8,16 @@ getCommandName: CreateHotelCommand
 handle command: CreateHotelCommand
 getCommandName: CreateHotelCommand
 hotel:null,AAAAAAAAAAAAA
-handleCommand AbstractCommandHandler - save is called hotel.write.commands.HotelSaveCommand@360d46bb 
+handleCommand AbstractCommandHandler - save is called hotel.write.event.commands.HotelSaveCommand@360d46bb 
 --- from abstract class save hotel:null,AAAAAAAAAAAAA
 ```
 
-[handleCommand AbstractCommandHandler - save is called hotel.write.commands.HotelSaveCommand@360d46bb --- from abstract class save hotel:null,AAAAAAAAAAAAA](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/master/commandservice/src/main/java/commandservice/commands/AbstractCommandHandler.java#L32-L40)
+[handleCommand AbstractCommandHandler - save is called hotel.write.event.commands.HotelSaveCommand@360d46bb --- from abstract class save hotel:null,AAAAAAAAAAAAA](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/master/commandservice/src/main/java/commandservice/commands/AbstractCommandHandler.java#L32-L40)
 
 
 ```
 Adding hotel to arrayList
-handleCommand AbstractCommandHandler - buildEvent hotel.write.commands.HotelSaveCommand@360d46bb
+handleCommand AbstractCommandHandler - buildEvent hotel.write.event.commands.HotelSaveCommand@360d46bb
 build event hotel:null,AAAAAAAAAAAAA
 publisher.publish(hotel.write.event.HotelCreatedEvent@236eeaae
  KafkaPublisher publishing: hotel.write.event.HotelCreatedEvent@236eeaae

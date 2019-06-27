@@ -2,10 +2,11 @@ package hotel.write.services.write;
 
 
 import hotel.write.clients.UserReadClient;
-import hotel.write.commands.*;
+import hotel.write.event.commands.*;
 import hotel.write.domain.Hotel;
 import hotel.write.domain.HotelRooms;
 import hotel.write.domain.interfaces.HotelsInterface;
+import hotel.write.event.events.*;
 import hotel.write.implementations.ApplicationConfiguration;
 import hotel.write.kafka.EventPublisher;
 import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
@@ -43,57 +44,11 @@ public class HotelService implements HotelsInterface {
         this.userReadClient=userReadClient;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<Hotel> findById(@NotNull Long id) {
-        return Optional.ofNullable(entityManager.find(Hotel.class, id));
-    }
 
     @Override
     @Transactional
-    public void delete(HotelDeleteCommand cmd) {
-        HotelDeletedCommand cmd1 = new HotelDeletedCommand(cmd);
-        cmd1.setEventType(cmd1.getClass().getSimpleName());
-        publishEvent(cmd1);
-        findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
-    }
-
-    @Override
-    @Transactional
-    public void update(HotelUpdateCommand cmd) {
-        HotelUpdatedCommand cmd1 = new HotelUpdatedCommand(cmd);
-        cmd1.setEventType(cmd1.getClass().getSimpleName());
-        publishEvent(cmd1);
-
-        findById(cmd.getId()).ifPresent(hotel -> entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
-                .setParameter("name", cmd.getName())
-                .setParameter("id", cmd.getId())
-                .setParameter("code", cmd.getCode())
-                .setParameter("phone", cmd.getPhone())
-                .setParameter("email", cmd.getEmail())
-                .executeUpdate()
-        );
-    }
-
-    /**
-     * This publishes to hotelRead Topic - picked up by hotelRead microservice
-     * @param cmd
-     */
-    public void publishEvent(Command cmd) {
-        eventPublisher.publish(embeddedServer,topic,cmd);
-    }
-
-    @Transactional
-    public void add(List<Hotel> hotels) {
-        for ( final Hotel hotel : hotels ) {
-            entityManager.persist(hotel);
-        }
-    }
-
-    @Override
-    @Transactional
-    public void save(HotelCreateCommand cmd) {
-        HotelCreatedCommand cmd1 = new HotelCreatedCommand(cmd);
+    public void handleCommand(HotelCreateCommand cmd) {
+        HotelCreated cmd1 = new HotelCreated(cmd);
         cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).map(u->u.getUsername()));
         cmd1.setEventType(cmd1.getClass().getSimpleName());
         publishEvent(cmd1);
@@ -111,15 +66,83 @@ public class HotelService implements HotelsInterface {
         }
     }
 
+    /**
+     * TOOD have no other way of dynamically adding command a its original way than this at moment
+     * @param cmd
+     * @param <T>
+     */
     @Override
     @Transactional
-    public void save(HotelSaveCommand cmd) {
-        HotelSavedCommand cmd1 = new HotelSavedCommand(cmd);
+    public <T extends CommandRoot> void  handleCommand(T  cmd) {
+        if (cmd instanceof HotelSaveCommand) {
+            handleCommand((HotelSaveCommand) cmd);
+            //msg.setId(dao.findByCode(((HotelSaveCommand) cmd).getCode()).map(h->h.getId()));
+        } else if (cmd instanceof HotelCreateCommand) {
+            handleCommand((HotelCreateCommand) cmd);
+        } else if (cmd instanceof HotelUpdateCommand) {
+            handleCommand((HotelUpdateCommand) cmd);
+        } else if (cmd instanceof HotelDeleteCommand) {
+            handleCommand((HotelDeleteCommand) cmd);
+        }
+    }
+    @Override
+    @Transactional
+    public void handleCommand(HotelSaveCommand cmd) {
+        HotelSaved cmd1 = new HotelSaved(cmd);
         cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).map(u->u.getUsername()));
         cmd1.setEventType(cmd1.getClass().getSimpleName());
         publishEvent(cmd1);
 
         save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail()));
+    }
+
+    @Override
+    @Transactional
+    public void handleCommand(HotelDeleteCommand cmd) {
+        HotelDeleted cmd1 = new HotelDeleted(cmd);
+        cmd1.setEventType(cmd1.getClass().getSimpleName());
+        publishEvent(cmd1);
+        findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
+    }
+
+    @Override
+    @Transactional
+    public void handleCommand(HotelUpdateCommand cmd) {
+        HotelUpdated cmd1 = new HotelUpdated(cmd);
+        cmd1.setEventType(cmd1.getClass().getSimpleName());
+        publishEvent(cmd1);
+
+        findById(cmd.getId()).ifPresent(hotel -> entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
+                .setParameter("name", cmd.getName())
+                .setParameter("id", cmd.getId())
+                .setParameter("code", cmd.getCode())
+                .setParameter("phone", cmd.getPhone())
+                .setParameter("email", cmd.getEmail())
+                .executeUpdate()
+        );
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Hotel> findById(@NotNull Long id) {
+        return Optional.ofNullable(entityManager.find(Hotel.class, id));
+    }
+
+
+    /**
+     * This publishes to hotelRead Topic - picked up by hotelRead microservice
+     * @param cmd
+     */
+    public void publishEvent(EventRoot cmd) {
+        eventPublisher.publish(embeddedServer,topic,cmd);
+    }
+
+    @Transactional
+    public void add(List<Hotel> hotels) {
+        for ( final Hotel hotel : hotels ) {
+            entityManager.persist(hotel);
+        }
     }
 
     @Override

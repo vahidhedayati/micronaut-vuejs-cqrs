@@ -76,7 +76,7 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
     /**
      * hotelForm.vue submits currentUser which is a randomly generated id on that page to this socket connector
      * when a user attempts to submit hotelForm
-     * this picks up and registers the currentUser which is also now in Command.java object and is passed from the actual
+     * this picks up and registers the currentUser which is also now in CommandRoot.java object and is passed from the actual
      * form to this page actioned by process(String topic, @JsonProperty("eventType") String eventType, @Body String formInput)
      * action below and upon form failues - it will get the websocket session to return response to ...
      *
@@ -152,7 +152,7 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
     public HttpResponse process(String topic, @JsonProperty("eventType") String eventType, @Body String formInput)  {
         JsonMediaTypeCodec mediaTypeCodec = (JsonMediaTypeCodec) mediaTypeCodecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
                 .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
-        Command cmd = (Command) mediaTypeCodec.decode(commandClasses.get(eventType),formInput);
+        CommandRoot cmd = (CommandRoot) mediaTypeCodec.decode(commandClasses.get(eventType),formInput);
         eventPublisher.publish(embeddedServer,topic,cmd);
         return HttpResponse.accepted();
     }

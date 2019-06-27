@@ -3,11 +3,18 @@ package userbase.write.service;
 import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.spring.tx.annotation.Transactional;
-import userbase.write.commands.*;
 import userbase.write.domain.User;
+import userbase.write.event.commands.CommandRoot;
+import userbase.write.event.commands.UserDeleteCommand;
+import userbase.write.event.commands.UserSaveCommand;
+import userbase.write.event.commands.UserUpdateCommand;
+import userbase.write.event.events.EventRoot;
+import userbase.write.event.events.UserDeleted;
+import userbase.write.event.events.UserSaved;
+import userbase.write.event.events.UserUpdated;
+import userbase.write.event.kafka.EventPublisher;
 import userbase.write.implementations.MyApplicationConfiguration;
 import userbase.write.implementations.Users;
-import userbase.write.kafka.EventPublisher;
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
@@ -51,11 +58,23 @@ public class UserService implements Users {
                 .findFirst();
     }
 
+    @Override
+    @Transactional
+    public <T extends CommandRoot> void  handleCommand(T  cmd) {
+        if (cmd instanceof UserSaveCommand) {
+            handleCommand((UserSaveCommand) cmd);
+        } else if (cmd instanceof UserDeleteCommand) {
+            handleCommand((UserDeleteCommand) cmd);
+        } else if (cmd instanceof UserUpdateCommand) {
+            handleCommand((UserUpdateCommand) cmd);
+        }
+    }
+
     @Transactional
     @Override
-    public void save(UserSaveCommand cmd) {
+    public void handleCommand(UserSaveCommand cmd) {
 
-        UserSavedCommand cmd1 = new UserSavedCommand(cmd);
+        UserSaved cmd1 = new UserSaved(cmd);
         cmd1.setEventType(cmd1.getClass().getSimpleName());
         publishEvent(cmd1);
 
@@ -65,9 +84,9 @@ public class UserService implements Users {
 
     @Transactional
     @Override
-    public void delete(UserDeleteCommand cmd) {
+    public void handleCommand(UserDeleteCommand cmd) {
 
-        UserDeletedCommand cmd1 = new UserDeletedCommand(cmd);
+        UserDeleted cmd1 = new UserDeleted(cmd);
         cmd1.setEventType(cmd1.getClass().getSimpleName());
         publishEvent(cmd1);
 
@@ -76,9 +95,9 @@ public class UserService implements Users {
 
     @Transactional
     @Override
-    public void update(UserUpdateCommand cmd) {
+    public void handleCommand(UserUpdateCommand cmd) {
 
-        UserUpdatedCommand cmd1 = new UserUpdatedCommand(cmd);
+        UserUpdated cmd1 = new UserUpdated(cmd);
         cmd1.setEventType(cmd1.getClass().getSimpleName());
         publishEvent(cmd1);
 
@@ -96,7 +115,7 @@ public class UserService implements Users {
      * This publishes to hotelRead Topic - picked up by hotelRead microservice
      * @param cmd
      */
-    public void publishEvent(Command cmd) {
+    public void publishEvent(EventRoot cmd) {
         eventPublisher.publish(embeddedServer,topic,cmd);
     }
 

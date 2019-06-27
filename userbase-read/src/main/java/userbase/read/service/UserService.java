@@ -2,22 +2,20 @@ package userbase.read.service;
 
 import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
 import io.micronaut.spring.tx.annotation.Transactional;
-import userbase.read.commands.UserDeleteCommand;
-import userbase.read.commands.UserSaveCommand;
-import userbase.read.commands.UserUpdateCommand;
 import userbase.read.domain.User;
+import userbase.read.event.events.EventRoot;
+import userbase.read.event.events.UserDeleted;
+import userbase.read.event.events.UserSaved;
+import userbase.read.event.events.UserUpdated;
 import userbase.read.implementations.MyApplicationConfiguration;
 import userbase.read.interfaces.Users;
 import userbase.read.models.SortingAndOrderArguments;
-
 import userbase.read.models.UserModel;
-
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
@@ -88,21 +86,32 @@ public class UserService implements Users {
     }
 
     @Transactional
+    public <T extends EventRoot> void  handleEvent(T  cmd) {
+        if (cmd instanceof UserSaved) {
+            handleEvent((UserSaved) cmd);
+        } else if (cmd instanceof UserUpdated) {
+            handleEvent((UserUpdated) cmd);
+        } else if (cmd instanceof UserDeleted) {
+            handleEvent((UserDeleted) cmd);
+        }
+    }
+
+    @Transactional
     @Override
-    public void save(UserSaveCommand cmd) {
+    public void handleEvent(UserSaved cmd) {
         User user = new User(cmd.getUsername(), cmd.getPassword(), cmd.getFirstname(), cmd.getSurname(), cmd.getLastUpdated());
         entityManager.persist(user);
     }
 
     @Transactional
     @Override
-    public void delete(UserDeleteCommand cmd) {
+    public void handleEvent(UserDeleted cmd) {
         findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
     }
 
     @Transactional
     @Override
-    public void update(UserUpdateCommand cmd) {
+    public void handleEvent(UserUpdated cmd) {
         findById(cmd.getId()).ifPresent(user -> entityManager.createQuery("UPDATE User h  SET username = :username, password = :password, firstname=:firstname, surname=:surname where id = :id")
                 .setParameter("username", cmd.getUsername())
                 .setParameter("id", cmd.getId())

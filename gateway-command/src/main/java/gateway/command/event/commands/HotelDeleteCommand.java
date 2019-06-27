@@ -2,7 +2,7 @@ package gateway.command.event.commands;
 
 import javax.validation.constraints.NotNull;
 
-public class HotelDeleteCommand  extends Command  {
+public class HotelDeleteCommand  extends CommandRoot {
 
     @NotNull
     private Long id;
@@ -15,7 +15,7 @@ public class HotelDeleteCommand  extends Command  {
 
     }
     public HotelDeleteCommand(HotelDeleteCommand cmd) {
-        super((Command) cmd);
+        super((CommandRoot) cmd);
         this.id = cmd.getId();
     }
 

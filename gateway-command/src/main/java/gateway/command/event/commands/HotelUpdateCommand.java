@@ -3,7 +3,7 @@ package gateway.command.event.commands;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class HotelUpdateCommand  extends Command  {
+public class HotelUpdateCommand  extends CommandRoot {
 
     @NotNull
     private Long id;
@@ -24,7 +24,7 @@ public class HotelUpdateCommand  extends Command  {
 
     public HotelUpdateCommand() {}
     public HotelUpdateCommand(HotelUpdateCommand cmd) {
-        super((Command) cmd);
+        super((CommandRoot) cmd);
         this.name=cmd.getName();
         this.code=cmd.getCode();
         this.email=cmd.getEmail();

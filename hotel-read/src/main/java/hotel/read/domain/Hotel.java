@@ -45,7 +45,7 @@ public class Hotel {
      * https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/working-basic/gateway/src/main/java/gateway/adaptors/web/GatewayController.java#L49-L61
      *
      *
-     * This is happening here as it stores HotelSavedCommand or HotelCreatedCommand
+     * This is happening here as it stores HotelSaved or HotelCreated
      */
     @Column(name = "update_user_name")
     private String updateUserName;

@@ -9,7 +9,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Validated
-public class HotelSaveCommand extends Command {
+public class HotelSaveCommand extends CommandRoot {
 
 
     @NotBlank
@@ -34,18 +34,7 @@ public class HotelSaveCommand extends Command {
         super();
     }
 
-    public HotelSaveCommand(String code, String name) {
-        this.name = name;
-        this.code=code;
-    }
-    public HotelSaveCommand(HotelSaveCommand cmd) {
-        super((Command) cmd);
-        this.name=cmd.getName();
-        this.code=cmd.getCode();
-        this.email=cmd.getEmail();
-        this.phone=cmd.getPhone();
-        this.updateUserId=cmd.getUpdateUserId();
-    }
+
     public String getName() {
         return name;
     }

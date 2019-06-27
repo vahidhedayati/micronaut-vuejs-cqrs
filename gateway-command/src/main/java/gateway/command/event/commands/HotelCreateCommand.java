@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class HotelCreateCommand extends Command  {
+public class HotelCreateCommand extends CommandRoot {
 
 
     @Nullable
@@ -33,41 +33,6 @@ public class HotelCreateCommand extends Command  {
     public HotelCreateCommand() {
 
     }
-    public HotelCreateCommand(HotelCreateCommand cmd) {
-        super((Command) cmd);
-        this.code=cmd.getCode();
-        this.name=cmd.getName();
-        this.phone=cmd.getPhone();
-        this.email=cmd.getEmail();
-        this.updateUserId=cmd.getUpdateUserId();
-        this.lastUpdated=cmd.getLastUpdated();
-        this.hotelRooms=cmd.getHotelRooms();
-    }
-
-    public HotelCreateCommand(String code, String name) {
-        this.code = code;
-        this.name=name;
-        this.hotelRooms = new ArrayList<>();
-    }
-
-    public HotelCreateCommand(String code, String name, String phone, String email) {
-        this.code = code;
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.updateUserId = 1L;
-        this.lastUpdated=new Date();
-        this.hotelRooms = new ArrayList<>();
-    }
-    public HotelCreateCommand(String code, String name, String phone, String email, Date lastUpdated) {
-        this.code = code;
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.updateUserId = 1L;
-        this.lastUpdated=lastUpdated;
-        this.hotelRooms = new ArrayList<>();
-    }
 
     public HotelCreateCommand(String code, String name, String phone, String email, Long updateUserId, Date lastUpdated, List<HotelRoomsCreateCommand> hotelRooms) {
         this.code = code;
@@ -79,38 +44,21 @@ public class HotelCreateCommand extends Command  {
         this.lastUpdated = lastUpdated;
         this.hotelRooms = hotelRooms;
     }
-    public HotelCreateCommand(String code, String name, String phone, String email, Long updateUserId, Date lastUpdated) {
-        this.code = code;
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.updateUserId = updateUserId;
-
-        this.lastUpdated = lastUpdated;
-
-    }
-
-
-    public Date getLastUpdated() {
-        return this.lastUpdated;
-    }
-
 
     public String getCode() {
-    	return this.code;
+        return code;
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
-    public void setName(String n) {
-        this.name = n;
-    }
-
-    public List<HotelRoomsCreateCommand> getHotelRooms() {
-        return hotelRooms;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPhone() {
@@ -137,4 +85,19 @@ public class HotelCreateCommand extends Command  {
         this.updateUserId = updateUserId;
     }
 
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public List<HotelRoomsCreateCommand> getHotelRooms() {
+        return hotelRooms;
+    }
+
+    public void setHotelRooms(List<HotelRoomsCreateCommand> hotelRooms) {
+        this.hotelRooms = hotelRooms;
+    }
 }

@@ -2,7 +2,7 @@ package gateway.command.event.commands;
 
 import javax.validation.constraints.NotNull;
 
-public class UserDeleteCommand extends Command {
+public class UserDeleteCommand extends CommandRoot {
 
     @NotNull
     private Long id;
@@ -10,10 +10,6 @@ public class UserDeleteCommand extends Command {
 
     public UserDeleteCommand() {}
 
-    public UserDeleteCommand(UserDeleteCommand cmd) {
-        super((Command) cmd);
-        this.id = cmd.getId();
-    }
 
     public UserDeleteCommand(Long id) {
         this.id = id;

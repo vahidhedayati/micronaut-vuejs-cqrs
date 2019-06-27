@@ -1,10 +1,7 @@
 package hotel.write.domain.interfaces;
 
 
-import hotel.write.commands.HotelCreateCommand;
-import hotel.write.commands.HotelDeleteCommand;
-import hotel.write.commands.HotelSaveCommand;
-import hotel.write.commands.HotelUpdateCommand;
+import hotel.write.event.commands.*;
 import hotel.write.domain.Hotel;
 
 import javax.validation.constraints.NotNull;
@@ -14,8 +11,10 @@ public interface HotelsInterface {
 	Optional<Hotel> findById(@NotNull Long id);
 	Optional<Hotel> findByCode(String code);
 	void save(Hotel hotel);
-	void save(HotelSaveCommand hotelSaveCommand);
-	void save(HotelCreateCommand hotelCreatedCommand);
-	void delete(HotelDeleteCommand hotel);
-	void update(HotelUpdateCommand hotel);
+	<T extends CommandRoot> void  handleCommand(T  cmd);
+	void handleCommand(HotelSaveCommand hotelSaveCommand);
+	void handleCommand(HotelCreateCommand hotelCreatedCommand);
+	void handleCommand(HotelDeleteCommand hotelDeleteCommand);
+	void handleCommand(HotelUpdateCommand hotelUpdateCommand);
+
 }

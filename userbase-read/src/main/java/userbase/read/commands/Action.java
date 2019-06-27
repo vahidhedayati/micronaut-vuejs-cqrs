@@ -1,8 +1,0 @@
-package userbase.read.commands;
-
-import java.io.Serializable;
-
-
-public interface Action extends Serializable {
-
-}

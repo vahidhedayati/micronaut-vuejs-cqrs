@@ -2,7 +2,7 @@ package gateway.command.event.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gateway.command.event.commands.Command;
+import gateway.command.event.commands.CommandRoot;
 import io.micronaut.context.annotation.Primary;
 import io.micronaut.runtime.server.EmbeddedServer;
 import org.apache.kafka.clients.producer.RecordMetadata;
@@ -20,21 +20,9 @@ public class KafkaEventPublisher implements EventPublisher {
     }
 
     @Override
-    public <T extends Command> void publish(EmbeddedServer embeddedServer, String topic, T command) {
+    public <T extends CommandRoot> void publish(EmbeddedServer embeddedServer, String topic, T command) {
         command.initiate(embeddedServer,command.getClass().getSimpleName());
-        String value =serializeCommand(command);
-        Future<RecordMetadata> recordMetadataFuture = kafkaSender.send(topic,  command.getEventType()+"_"+ command.getTransactionId().toString(), value);
-    }
-
-    @Override
-    public <T extends Command> String serializeCommand( T command) {
-        String json;
-        try {
-            json = objectMapper.writeValueAsString(command);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        return json;
+        Future<RecordMetadata> recordMetadataFuture = kafkaSender.send(topic,  command.getEventType()+"_"+ command.getTransactionId().toString(), command);
     }
 
 }

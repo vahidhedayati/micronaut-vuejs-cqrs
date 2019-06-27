@@ -1,5 +1,6 @@
 package gateway.command.event.kafka;
 
+import gateway.command.event.commands.CommandRoot;
 import io.micronaut.configuration.kafka.annotation.KafkaClient;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -9,16 +10,16 @@ import javax.inject.Singleton;
 import java.util.concurrent.Future;
 
 @Singleton
-public class KafkaSender {
+public class KafkaSender<T> {
 
-    private final Producer<String, String> kafkaProducer;
+    private final Producer<String, T> kafkaProducer;
 
-    public KafkaSender(
-            @KafkaClient Producer<String, String> kafkaProducer) {
+    public  KafkaSender(
+            @KafkaClient Producer<String, T > kafkaProducer) {
         this.kafkaProducer = kafkaProducer;
     }
 
-    public Future<RecordMetadata> send(String topic, String transactionId, String event) {
+    public Future<RecordMetadata> send(String topic, String transactionId, T event) {
         return kafkaProducer.send(new ProducerRecord<>(topic, transactionId, event));
     }
 }
