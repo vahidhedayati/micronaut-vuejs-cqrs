@@ -1,15 +1,14 @@
-package hotel.write.services.write;
+package hotel.write.event.commandHandlers;
 
 
 import hotel.write.clients.UserReadClient;
-import hotel.write.event.commands.*;
 import hotel.write.domain.Hotel;
-import hotel.write.domain.HotelRooms;
 import hotel.write.domain.interfaces.HotelsInterface;
-import hotel.write.event.events.*;
-import hotel.write.implementations.ApplicationConfiguration;
+import hotel.write.event.events.EventRoot;
 import hotel.write.event.kafka.EventPublisher;
+import hotel.write.implementations.ApplicationConfiguration;
 import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
+import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.spring.tx.annotation.Transactional;
 
@@ -17,26 +16,35 @@ import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * AbstractCommandHandler is an internal listener for internal application events
+ * It is triggered by KafkaListener which republishes dynamically received remote command object
+ * This is then extended by relevant application commandHanders all within this folder structure.
+ *
+ */
 
 @Singleton
-public class HotelService implements HotelsInterface {
+public abstract class AbstractCommandHandler<E> implements HotelsInterface, ApplicationEventListener<E> {
 
 
     @PersistenceContext
     private EntityManager entityManager;
     private final ApplicationConfiguration applicationConfiguration;
+
+
+
     private final UserReadClient userReadClient;
 
     private final EmbeddedServer embeddedServer;
     protected static final String topic = "hotelRead";
     private final EventPublisher eventPublisher;
 
-    public HotelService(@CurrentSession EntityManager entityManager, ApplicationConfiguration applicationConfiguration,
-                        EventPublisher eventPublisher, EmbeddedServer embeddedServer,UserReadClient userReadClient) {
+
+    public AbstractCommandHandler(@CurrentSession EntityManager entityManager, ApplicationConfiguration applicationConfiguration,
+                                  EventPublisher eventPublisher, EmbeddedServer embeddedServer, UserReadClient userReadClient) {
         this.entityManager = entityManager;
         this.applicationConfiguration = applicationConfiguration;
         this.eventPublisher = eventPublisher;
@@ -85,5 +93,16 @@ public class HotelService implements HotelsInterface {
                 .setParameter("code", code)
                 .getResultStream()
                 .findFirst();
+    }
+    public UserReadClient getUserReadClient() {
+        return userReadClient;
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    public EventPublisher getEventPublisher() {
+        return eventPublisher;
     }
 }

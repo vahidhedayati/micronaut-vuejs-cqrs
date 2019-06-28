@@ -16,7 +16,6 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.TopicPartition;
 import userbase.write.event.commands.CommandRoot;
-import userbase.write.service.UserService;
 import userbase.write.websocket.ChatClientWebSocket;
 import userbase.write.websocket.WebsocketMessage;
 

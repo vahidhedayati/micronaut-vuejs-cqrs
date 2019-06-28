@@ -105,7 +105,7 @@ io.micronaut.messaging.exceptions.MessagingClientException: Exception sending pr
         at hotel.write.commandHandlers.AbstractCommandHandler.publish(AbstractCommandHandler.java:51)
         at hotel.write.commandHandlers.AbstractCommandHandler.handleCommand(AbstractCommandHandler.java:38)
         at hotel.write.cqrs.bus.BusImpl.handleCommand(BusImpl.java:32)
-        at hotel.write.services.write.HotelService.addHotel(HotelService.java:17)
+        at hotel.write.event.commandHandlers.AbstractCommandHandler.addHotel(HotelService.java:17)
         at hotel.write.controller.HotelWriteEndpoint.save(HotelWriteEndpoint.java:25)
         at hotel.write.controller.$HotelWriteEndpointDefinition$$exec1.invokeInternal(Unknown Source)
         at io.micronaut.context.AbstractExecutableMethod.invoke(AbstractExecutableMethod.java:144)

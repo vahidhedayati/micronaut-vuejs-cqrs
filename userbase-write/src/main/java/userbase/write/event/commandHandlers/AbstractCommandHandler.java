@@ -1,6 +1,7 @@
-package userbase.write.service;
+package userbase.write.event.commandHandlers;
 
 import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
+import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.spring.tx.annotation.Transactional;
 import userbase.write.domain.User;
@@ -22,8 +23,15 @@ import javax.persistence.PersistenceContext;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
+/**
+ * AbstractCommandHandler is an internal listener for internal application events
+ * It is triggered by KafkaListener which republishes dynamically received remote command object
+ * This is then extended by relevant application commandHanders all within this folder structure.
+ *
+ */
+
 @Singleton
-public class UserService implements Users {
+public abstract class AbstractCommandHandler<E>  implements Users, ApplicationEventListener<E> {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -33,8 +41,8 @@ public class UserService implements Users {
     protected static final String topic = "userRead";
     private final EventPublisher eventPublisher;
 
-    public UserService(@CurrentSession EntityManager entityManager,EmbeddedServer embeddedServer,
-                       MyApplicationConfiguration myApplicationConfiguration,EventPublisher eventPublisher) {
+    public AbstractCommandHandler(@CurrentSession EntityManager entityManager, EmbeddedServer embeddedServer,
+                                  MyApplicationConfiguration myApplicationConfiguration, EventPublisher eventPublisher) {
         this.entityManager = entityManager;
         this.embeddedServer=embeddedServer;
         this.myApplicationConfiguration = myApplicationConfiguration;
@@ -67,4 +75,7 @@ public class UserService implements Users {
         eventPublisher.publish(embeddedServer,topic,cmd);
     }
 
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
 }

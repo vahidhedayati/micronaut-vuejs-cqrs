@@ -3,9 +3,7 @@ package hotel.write.event.listeners;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hotel.write.event.CommandBus;
 import hotel.write.event.commands.CommandRoot;
-import hotel.write.services.write.HotelService;
 import hotel.write.websocket.ChatClientWebSocket;
 import hotel.write.websocket.WebsocketMessage;
 import io.micronaut.configuration.kafka.ConsumerAware;
