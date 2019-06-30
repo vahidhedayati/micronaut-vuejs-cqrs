@@ -4,6 +4,7 @@ package hotel.write.event.commandHandlers;
 import hotel.write.clients.UserReadClient;
 import hotel.write.domain.Hotel;
 import hotel.write.domain.interfaces.HotelsInterface;
+import hotel.write.event.commands.HotelUpdateCommand;
 import hotel.write.event.events.EventRoot;
 import hotel.write.event.kafka.EventPublisher;
 import hotel.write.implementations.ApplicationConfiguration;
@@ -36,7 +37,7 @@ public abstract class AbstractCommandHandler<E> implements HotelsInterface, Appl
 
 
 
-    private final UserReadClient userReadClient;
+    public final UserReadClient userReadClient;
 
     private final EmbeddedServer embeddedServer;
     protected static final String topic = "hotelRead";
@@ -51,7 +52,30 @@ public abstract class AbstractCommandHandler<E> implements HotelsInterface, Appl
         this.embeddedServer = embeddedServer;
         this.userReadClient=userReadClient;
     }
+    @Transactional
+    public void persistToDb(Object object) {
+        entityManager.persist(object);
+    }
+    @Transactional
+    public void merge(Object object) {
+        entityManager.merge(object);
+    }
+    @Transactional
+    public void removeFromDb(Object object) {
+        entityManager.remove(object);
+    }
 
+    @Transactional
+    public void updateDb(HotelUpdateCommand cmd) {
+        findById(cmd.getId()).ifPresent(hotel -> entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
+                .setParameter("name", cmd.getName())
+                .setParameter("id", cmd.getId())
+                .setParameter("code", cmd.getCode())
+                .setParameter("phone", cmd.getPhone())
+                .setParameter("email", cmd.getEmail())
+                .executeUpdate()
+        );
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -94,15 +118,5 @@ public abstract class AbstractCommandHandler<E> implements HotelsInterface, Appl
                 .getResultStream()
                 .findFirst();
     }
-    public UserReadClient getUserReadClient() {
-        return userReadClient;
-    }
 
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
-
-    public EventPublisher getEventPublisher() {
-        return eventPublisher;
-    }
 }

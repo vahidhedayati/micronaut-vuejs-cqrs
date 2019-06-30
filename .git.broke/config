@@ -1,0 +1,11 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://github.com/vahidhedayati/micronaut-vuejs-cqrs
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "broken-with-multi-commandhandler"]
+	remote = origin
+	merge = refs/heads/broken-with-multi-commandhandler

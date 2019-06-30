@@ -3,12 +3,11 @@ package hotel.read.services.read;
 
 import hotel.read.adaptors.models.HotelModel;
 import hotel.read.domain.Hotel;
-import hotel.read.domain.HotelRooms;
 import hotel.read.domain.interfaces.HotelsInterface;
-import hotel.read.event.events.*;
 import hotel.read.implementation.ApplicationConfiguration;
 import hotel.read.implementation.SortingAndOrderArguments;
 import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
+import io.micronaut.context.annotation.Primary;
 import io.micronaut.spring.tx.annotation.Transactional;
 
 import javax.inject.Singleton;
@@ -16,12 +15,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-
+@Primary
 @Singleton
 public class HotelService implements HotelsInterface {
 
@@ -35,63 +33,6 @@ public class HotelService implements HotelsInterface {
     public HotelService(@CurrentSession EntityManager entityManager, ApplicationConfiguration applicationConfiguration) {
         this.entityManager = entityManager;
         this.applicationConfiguration = applicationConfiguration;
-    }
-
-
-    @Override
-    @Transactional
-    public void handleEvent(HotelDeleted cmd) {
-        findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
-    }
-
-    @Override
-    @Transactional
-    public void handleEvent(HotelUpdated cmd) {
-        findById(cmd.getId()).ifPresent(hotel -> entityManager.createQuery("UPDATE Hotel h  SET name = :name, code = :code, email = :email, phone = :phone  where id = :id")
-                .setParameter("name", cmd.getName())
-                .setParameter("id", cmd.getId())
-                .setParameter("code", cmd.getCode())
-                .setParameter("phone", cmd.getPhone())
-                .setParameter("email", cmd.getEmail())
-                .executeUpdate()
-        );
-    }
-
-
-    @Override
-    @Transactional
-    public void handleEvent(HotelCreated cmd) {
-        Hotel hotel = new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(),cmd.getUpdateUserId(),cmd.getLastUpdated(),cmd.getUpdateUserName().get());
-        List<HotelRooms> hotelRooms = new ArrayList<>();
-        if (!findByCode(hotel.getCode()).isPresent()) {
-            entityManager.persist(hotel);
-            if (cmd.getHotelRooms()!=null) {
-                for (HotelRoomsCreated rmc  : cmd.getHotelRooms() ) {
-                    HotelRooms hotelRooms1 = new HotelRooms(hotel,rmc.getRoomType(),rmc.getPrice(), rmc.getStockTotal());
-                    hotelRooms.add(hotelRooms1);
-                }
-                hotel.setHotelRooms(hotelRooms);
-            }
-            entityManager.persist(hotel);
-        }
-
-    }
-    @Transactional
-    public <T extends EventRoot> void handleEvent(T  cmd) {
-        if (cmd instanceof HotelSaved) {
-            handleEvent((HotelSaved) cmd);
-        } else if (cmd instanceof HotelCreated) {
-            handleEvent((HotelCreated) cmd);
-        } else if (cmd instanceof HotelUpdated) {
-            handleEvent((HotelUpdated) cmd);
-        } else if (cmd instanceof HotelDeleted) {
-            handleEvent((HotelDeleted) cmd);
-        }
-    }
-    @Override
-    @Transactional
-    public void handleEvent(HotelSaved cmd) {
-        save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(), cmd.getUpdateUserId(), cmd.getUpdateUserName().get()));
     }
 
 
@@ -155,4 +96,7 @@ public class HotelService implements HotelsInterface {
                 .findFirst();
     }
 
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
 }

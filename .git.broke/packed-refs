@@ -1,0 +1,8 @@
+# pack-refs with: peeled fully-peeled 
+a6eae6cc49cf2b184585cf86d1d41ed3d63303e7 refs/remotes/origin/EventStore.JVM
+11e5d6ed1802406f1a8b2bc9460a130a083c9b54 refs/remotes/origin/broken-with-multi-commandhandler
+d2a3046649f8aade54d599aa7f6b87f1c6de567f refs/remotes/origin/june18
+45f9ddb5d16e7b8031c0275dec8d3ce96ad8ffbf refs/remotes/origin/kafka
+11e5d6ed1802406f1a8b2bc9460a130a083c9b54 refs/remotes/origin/master
+6b25b9df3f9fcb8b6c90dd96f8166cdb3cea1752 refs/remotes/origin/websocket-v1
+45cc8e5708da748c41e1a91606a0527ea0ce033f refs/remotes/origin/working-basic

@@ -2,11 +2,11 @@ package hotel.read.event.listeners;
 
 
 import hotel.read.event.events.EventRoot;
-import hotel.read.services.read.HotelService;
 import io.micronaut.configuration.kafka.ConsumerAware;
 import io.micronaut.configuration.kafka.annotation.KafkaKey;
 import io.micronaut.configuration.kafka.annotation.KafkaListener;
 import io.micronaut.configuration.kafka.annotation.Topic;
+import io.micronaut.context.event.ApplicationEventPublisher;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -32,14 +32,17 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
     }
 
 
+    /**
+     * This publishes kafka Generic Command as real command locally -
+     * local events in this folder extend ApplicationEventListener and pick relevant work
+     */
     @Inject
-    private HotelService dao;
-
+    ApplicationEventPublisher publisher;
 
     @Topic("hotelRead")
     public <T extends EventRoot>  void consume(@KafkaKey String hotelCode,  T cmd) {
         if (cmd!=null) {
-            dao.handleEvent(cmd);
+            publisher.publishEvent(cmd);
         }
     }
 

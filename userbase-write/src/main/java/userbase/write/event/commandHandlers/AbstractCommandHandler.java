@@ -5,16 +5,9 @@ import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.spring.tx.annotation.Transactional;
 import userbase.write.domain.User;
-import userbase.write.event.commands.CommandRoot;
-import userbase.write.event.commands.UserDeleteCommand;
-import userbase.write.event.commands.UserSaveCommand;
 import userbase.write.event.commands.UserUpdateCommand;
 import userbase.write.event.events.EventRoot;
-import userbase.write.event.events.UserDeleted;
-import userbase.write.event.events.UserSaved;
-import userbase.write.event.events.UserUpdated;
 import userbase.write.event.kafka.EventPublisher;
-import userbase.write.implementations.MyApplicationConfiguration;
 import userbase.write.implementations.Users;
 
 import javax.inject.Singleton;
@@ -35,21 +28,36 @@ public abstract class AbstractCommandHandler<E>  implements Users, ApplicationEv
 
     @PersistenceContext
     private EntityManager entityManager;
-    private final MyApplicationConfiguration myApplicationConfiguration;
 
     private final EmbeddedServer embeddedServer;
     protected static final String topic = "userRead";
     private final EventPublisher eventPublisher;
 
     public AbstractCommandHandler(@CurrentSession EntityManager entityManager, EmbeddedServer embeddedServer,
-                                  MyApplicationConfiguration myApplicationConfiguration, EventPublisher eventPublisher) {
+                                  EventPublisher eventPublisher) {
         this.entityManager = entityManager;
         this.embeddedServer=embeddedServer;
-        this.myApplicationConfiguration = myApplicationConfiguration;
         this.eventPublisher=eventPublisher;
     }
-
-
+    @Transactional
+    public void persistToDb(Object object) {
+        entityManager.persist(object);
+    }
+    @Transactional
+    public void removeFromDb(Object object) {
+        entityManager.remove(object);
+    }
+    @Transactional
+    public void updateDb(UserUpdateCommand cmd) {
+        findById(cmd.getId()).ifPresent(user -> entityManager.createQuery("UPDATE User h  SET username = :username, password = :password, firstname=:firstname, surname=:surname where id = :id")
+                .setParameter("username", cmd.getUsername())
+                .setParameter("id", cmd.getId())
+                .setParameter("password", cmd.getPassword())
+                .setParameter("firstname", cmd.getFirstname())
+                .setParameter("surname", cmd.getSurname())
+                .executeUpdate()
+        );
+    }
     @Override
     @Transactional(readOnly = true)
     public Optional<User> findById(@NotNull Long id) {
@@ -75,7 +83,4 @@ public abstract class AbstractCommandHandler<E>  implements Users, ApplicationEv
         eventPublisher.publish(embeddedServer,topic,cmd);
     }
 
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
 }

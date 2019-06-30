@@ -1,6 +1,7 @@
 package userbase.read.service;
 
 import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
+import io.micronaut.context.annotation.Primary;
 import io.micronaut.spring.tx.annotation.Transactional;
 import userbase.read.domain.User;
 import userbase.read.event.events.EventRoot;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+@Primary
 @Singleton
 public class UserService implements Users {
 
@@ -85,41 +87,9 @@ public class UserService implements Users {
                 .findFirst();
     }
 
-    @Transactional
-    public <T extends EventRoot> void  handleEvent(T  cmd) {
-        if (cmd instanceof UserSaved) {
-            handleEvent((UserSaved) cmd);
-        } else if (cmd instanceof UserUpdated) {
-            handleEvent((UserUpdated) cmd);
-        } else if (cmd instanceof UserDeleted) {
-            handleEvent((UserDeleted) cmd);
-        }
-    }
 
-    @Transactional
-    @Override
-    public void handleEvent(UserSaved cmd) {
-        User user = new User(cmd.getUsername(), cmd.getPassword(), cmd.getFirstname(), cmd.getSurname(), cmd.getLastUpdated());
-        entityManager.persist(user);
-    }
-
-    @Transactional
-    @Override
-    public void handleEvent(UserDeleted cmd) {
-        findById(cmd.getId()).ifPresent(hotel -> entityManager.remove(hotel));
-    }
-
-    @Transactional
-    @Override
-    public void handleEvent(UserUpdated cmd) {
-        findById(cmd.getId()).ifPresent(user -> entityManager.createQuery("UPDATE User h  SET username = :username, password = :password, firstname=:firstname, surname=:surname where id = :id")
-                .setParameter("username", cmd.getUsername())
-                .setParameter("id", cmd.getId())
-                .setParameter("password", cmd.getPassword())
-                .setParameter("firstname", cmd.getFirstname())
-                .setParameter("surname", cmd.getSurname())
-                .executeUpdate()
-        );
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
 }
 

@@ -5,13 +5,13 @@ import io.micronaut.configuration.kafka.ConsumerAware;
 import io.micronaut.configuration.kafka.annotation.KafkaKey;
 import io.micronaut.configuration.kafka.annotation.KafkaListener;
 import io.micronaut.configuration.kafka.annotation.Topic;
+import io.micronaut.context.event.ApplicationEventPublisher;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.TopicPartition;
 import userbase.read.event.events.EventRoot;
-import userbase.read.service.UserService;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
@@ -30,13 +30,17 @@ public class KafkaEventListener implements ConsumerRebalanceListener, ConsumerAw
         this.consumer=consumer;
     }
 
+    /**
+     * This publishes kafka Generic Command as real command locally -
+     * local events in this folder extend ApplicationEventListener and pick relevant work
+     */
     @Inject
-    private UserService dao;
+    ApplicationEventPublisher publisher;
 
     @Topic("userRead")
     public <T extends EventRoot> void consume(@KafkaKey String hotelCode,  T cmd) {
         if (cmd!=null) {
-            dao.handleEvent(cmd);
+            publisher.publishEvent(cmd);
         }
     }
 

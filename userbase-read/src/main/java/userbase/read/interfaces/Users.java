@@ -16,8 +16,4 @@ public interface Users {
     Optional<User> findById(@NotNull Long id);
     Optional<UserModel> findAll(@NotNull SortingAndOrderArguments args);
     Optional<User>  findByUsername(String username);
-    <T extends EventRoot> void handleEvent(T  cmd);
-    void handleEvent(UserSaved hotelSaveCommand);
-    void handleEvent(UserDeleted hotel);
-    void handleEvent(UserUpdated hotel);
 }
