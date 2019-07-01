@@ -35,6 +35,7 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
     private static final Logger LOG = LoggerFactory.getLogger(GatewayController.class);
     private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
+    private final String CLASS_PATH="gateway.command.event.commands.";
     private WebSocketBroadcaster broadcaster;
     private final EventPublisher eventPublisher;
     final EmbeddedServer embeddedServer;
@@ -49,17 +50,6 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
         this.eventPublisher = eventPublisher;
         this.broadcaster=broadcaster;
     }
-
-
-    Map<String, Class> commandClasses = new HashMap<String,Class>() {
-        {
-            put(HotelSaveCommand.class.getSimpleName(), HotelSaveCommand.class);
-            put(HotelUpdateCommand.class.getSimpleName(), HotelUpdateCommand.class);
-            put(HotelDeleteCommand.class.getSimpleName(), HotelDeleteCommand.class);
-            put(UserSaveCommand.class.getSimpleName(), UserSaveCommand.class);
-            put(UserUpdateCommand.class.getSimpleName(), UserUpdateCommand.class);
-        }
-    };
 
 
     @Override
@@ -152,8 +142,12 @@ public class GatewayController implements ApplicationEventListener<ProcessEvent>
     public HttpResponse process(String topic, @JsonProperty("eventType") String eventType, @Body String formInput)  {
         JsonMediaTypeCodec mediaTypeCodec = (JsonMediaTypeCodec) mediaTypeCodecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
                 .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
-        CommandRoot cmd = (CommandRoot) mediaTypeCodec.decode(commandClasses.get(eventType),formInput);
-        eventPublisher.publish(embeddedServer,topic,cmd);
+        try {
+            CommandRoot cmd = (CommandRoot) mediaTypeCodec.decode( Class.forName(CLASS_PATH+eventType),formInput);
+            eventPublisher.publish(embeddedServer,topic,cmd);
+        } catch (Exception e) {
+            LOG.error("Class conversion issue "+e.getMessage(),e);
+        }
         return HttpResponse.accepted();
     }
 

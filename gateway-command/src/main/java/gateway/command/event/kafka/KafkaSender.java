@@ -1,6 +1,5 @@
 package gateway.command.event.kafka;
 
-import gateway.command.event.commands.CommandRoot;
 import io.micronaut.configuration.kafka.annotation.KafkaClient;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -20,6 +19,11 @@ public class KafkaSender<T> {
     }
 
     public Future<RecordMetadata> send(String topic, String transactionId, T event) {
-        return kafkaProducer.send(new ProducerRecord<>(topic, transactionId, event));
+        ProducerRecord record = new ProducerRecord<>(topic, transactionId, event);
+        return kafkaProducer.send(record);
+    }
+
+    public void flush() {
+        kafkaProducer.flush();
     }
 }
