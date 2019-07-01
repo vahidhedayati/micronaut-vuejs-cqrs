@@ -91,7 +91,7 @@
     },
     created () {
       this.fetchData()
-      this.connect();
+
       /**
        * This is also sent as part of form submission - meaning to actually properly use this validation which is processed
        * via events to an undefined command handler - the currentUser is stored in physical Command.java object that exists on
@@ -122,57 +122,7 @@
     }
   },
     methods: {
-      connect() {
-        this.socket = new WebSocket("ws://localhost:8082/ws/process");
-        this.socket.onopen = () => {
-          this.status = "connected";
-          this.logs.push({ event: "Connected to", data: 'ws://localhost:8082'})
 
-          this.socket.send(JSON.stringify({currentUser:this.hotel.currentUser,eventType:'userForm'}));
-          /**
-           * we only get a message back when something has gone wrong in gateway-command process action
-           * or there was success on the form from handler as in validation checks passed
-           */
-          this.socket.onmessage = ({data}) => {
-            if (JSON.parse(data).currentUser===this.hotel.currentUser ) {
-              var currentStatus = JSON.parse(data).status;
-              if (currentStatus==='error') {
-                this.submittedForm=false;
-                this.errors=JSON.parse(data).errors
-
-              } else if (currentStatus==='success') {
-                this.submittedForm=false;
-                /**
-                 * When we save a brand new record - we don't have its ID as yet - the command handler now does a lookup
-                 * sets id in WebsocketMessage which is relayed back to user via websockets
-                 * the hotel object locally was updated when user clicked submit they triggered event which sent that data
-                 * to overwrite the hotel object in data above from hotelForm
-                 * this now sets its actual id from remote action that was successful - making it full object
-                 */
-                this.hotel.id=JSON.parse(data).id
-                /**
-                 * This simply appends dynamic hotel back to the existing list refer to /store/models/hotels.js
-                 */
-                this.$store.dispatch( {type:'updateHotels',hotel:this.hotel});
-
-                this.successAdded="Hotel "+this.hotel.name+" added";
-                this.hotel={id:'',currentUser:''}
-              }
-            }
-            this.logs.push({ event: "Recieved message", data });
-          };
-        };
-      },
-
-      disconnect() {
-        this.socket.close();
-        this.status = "disconnected";
-        this.logs = [];
-      },
-      sendMessage() {
-        this.socket.send(JSON.stringify({currentUser:this.hotel.currentUser,eventType:'userForm'}));
-        this.message = "";
-      },
 
       fetchData: async function () {
         try {
