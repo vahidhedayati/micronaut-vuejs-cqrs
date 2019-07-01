@@ -12,6 +12,9 @@ import userbase.read.models.UserModel;
 
 import java.util.Optional;
 
+/**
+ * Handles read queries coming in from gateway-query
+ */
 @Validated
 @Controller("/")
 public class UserController {

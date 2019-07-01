@@ -161,6 +161,7 @@ export default {
                 }
               }
             }).catch((error) => {
+              console.log(" E "+JSON.stringify(error.response.data))
             this.$emit('hotel-errors',   error.response.data);
            if (error.response) {
             } else if ( error.request) {

@@ -13,6 +13,9 @@ import io.reactivex.annotations.Nullable;
 import java.net.URI;
 import java.util.Optional;
 
+/**
+ * This is in charge of providing read data to gateway-query
+ */
 @Validated
 @Controller("/")
 public class HotelController {

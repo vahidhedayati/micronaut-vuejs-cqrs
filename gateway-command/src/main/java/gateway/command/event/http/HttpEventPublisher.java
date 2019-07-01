@@ -10,11 +10,11 @@ import io.reactivex.Maybe;
  */
 
 
-public abstract class HttpEventPublisher {
+public abstract class HttpEventPublisher<R> {
 
 
     public HttpEventPublisher() { }
 
-    public abstract<T extends CommandRoot> Maybe<HttpResponse> publish(DefaultClient clnt, T command);
+    public abstract<T extends CommandRoot> Maybe<HttpResponse> publish(R clnt, T command);
 
 }

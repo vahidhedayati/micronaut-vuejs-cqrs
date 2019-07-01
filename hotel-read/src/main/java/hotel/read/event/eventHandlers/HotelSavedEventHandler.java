@@ -17,6 +17,7 @@ public class HotelSavedEventHandler extends AbstractEventHandler<HotelSaved> {
 
     @Override
     public void onApplicationEvent(HotelSaved cmd) {
-        save(new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(), cmd.getUpdateUserId(), cmd.getUpdateUserName().get()));
+        Hotel h = new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(), cmd.getUpdateUserId(), cmd.getUpdateUserName().get());
+        save(h);
     }
 }

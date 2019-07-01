@@ -2,12 +2,13 @@ package gateway.command.init;
 
 import gateway.command.event.commands.HotelCreateCommand;
 import gateway.command.event.commands.UserSaveCommand;
-import gateway.command.event.http.*;
+import gateway.command.event.http.HotelClient;
+import gateway.command.event.http.UserClient;
 import io.micronaut.context.event.ApplicationEventListener;
+import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
 import lombok.RequiredArgsConstructor;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 
@@ -15,28 +16,29 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DataLoader  implements ApplicationEventListener<ServerStartupEvent> {
 
+
 	private final HotelClient hotelClient;
 	private final UserClient userClient;
+	private final EmbeddedServer embeddedServer;
 
-
-	@Inject
-	public DataLoader(HotelClient hotelClient, UserClient userClient) {
-
+	public DataLoader(EmbeddedServer embeddedServer,HotelClient hotelClient, UserClient userClient) {
+		this.embeddedServer=embeddedServer;
 		this.hotelClient = hotelClient;
 		this.userClient = userClient;
 	}
 
 	@Override
 	public void onApplicationEvent(ServerStartupEvent event) {
-		List<HotelCreateCommand> hotels = DemoHotelsFactory.defaultHotels();
-		for (HotelCreateCommand cmd : hotels ) {
-			hotelClient.publish(cmd);
+		List<UserSaveCommand> users = DemoUsersFactory.defaultUsers(embeddedServer);
+		for (UserSaveCommand cmd : users) {
+			userClient.publish(cmd).blockingGet();
 		}
-		List<UserSaveCommand> users = DemoUsersFactory.defaultUsers();
-		for (UserSaveCommand cmd : users ) {
-			userClient.publish(cmd);
+
+		List<HotelCreateCommand> hotels = DemoHotelsFactory.defaultHotels(embeddedServer);
+		for (HotelCreateCommand cmd : hotels) {
+			hotelClient.publish(cmd).blockingGet();
+
 		}
 	}
-
 
 }

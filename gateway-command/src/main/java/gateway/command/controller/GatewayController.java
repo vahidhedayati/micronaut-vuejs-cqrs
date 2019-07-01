@@ -68,7 +68,7 @@ public class GatewayController {
                 .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
         try {
             CommandRoot cmd = (CommandRoot) mediaTypeCodec.decode( Class.forName(CLASS_PATH+eventType),formInput);
-
+            cmd.initiate(embeddedServer,eventType);
             //String representation of http class listeners gateway.command.event.http.HotelListener or UserListener
             String httpClassName = HTTP_PATH+topic.substring(0, 1).toUpperCase() + topic.substring(1)+"Listener";
 

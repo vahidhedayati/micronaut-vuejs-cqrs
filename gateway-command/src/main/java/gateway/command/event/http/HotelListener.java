@@ -19,7 +19,7 @@ import io.reactivex.Maybe;
  *
  */
 
-public class HotelListener extends HttpEventPublisher {
+public class HotelListener extends HttpEventPublisher<HotelClient> {
 
 
     /**
@@ -38,8 +38,7 @@ public class HotelListener extends HttpEventPublisher {
      * @return HttpResponse from remote end
      */
     @Override
-    public <T extends CommandRoot> Maybe<HttpResponse> publish(DefaultClient clnt, T command) {
-        //System.out.println(" "+command.getClass()+" "+clnt.getClass()+" --- hotel listener");
+    public <T extends CommandRoot> Maybe<HttpResponse> publish(HotelClient clnt, T command) {
         return ((HotelClient)clnt).publish(command);
     }
 

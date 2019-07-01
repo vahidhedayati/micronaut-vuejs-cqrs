@@ -1,10 +1,10 @@
 <template>
   <div id="custom1">
-    <ul id="logs">
-      <li v-for="log in logs" class="log">
-        {{ log.event }}: {{ log.data }}
-      </li>
-    </ul>
+
+    <ul v-show="errors.length>0"  class="errors"><li v-for="error in errors">
+      actual_message: {{error}} -
+      -- translated_code:  {{$t(error)}}
+    </li></ul>
     <search-form v-model="search"
                  @submit="searchHotels()"
                  :submittedForm="submittedForm"
@@ -15,10 +15,6 @@
                  @hotel-errors="errorHotels"
     ></search-form>
 
-    <ul v-show="errors.length>0"  class="errors"><li v-for="error in errors">
-     actual_message: {{error}} -
-             -- translated_code:  {{$t(error)}}
-    </li></ul>
 
     <ul v-show="successAdded"  class="success">
       <li >
@@ -71,7 +67,7 @@
         message: "",
         currentUser:"",
         masterUser:"",
-        logs: [],
+
         socket: null,
         submittedForm:false,
         submittedEdit:false,
@@ -156,7 +152,7 @@
         this.$store.dispatch( {type:'removeHotel',hotel:hotel});
       },
       currentHotel: function(ho) {
-        this.errors=[];
+        //this.errors=[];
         this.successAdded=null;
         this.hotel=ho;
       },
@@ -169,6 +165,7 @@
         this.$store.dispatch( {type:'updateHotels',hotel:cv});
       },
       errorHotels: function (errors) {
+        console.log(' AHHHH '+JSON.stringify(errors))
         this.errors=errors;
       },
       fetchHotels: function (pageNumber) {

@@ -27,10 +27,5 @@ jpa:
         hbm2ddl:
           auto: update
         show_sql: false
----
-kafka:
-  #  embedded:
-  #    enabled: true
-  bootstrap:
-    servers: "${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}"
+
 

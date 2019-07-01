@@ -21,7 +21,6 @@ public class HotelSaveCommandHandler extends AbstractCommandHandler<HotelSaveCom
 
     @Override
     public void onApplicationEvent(HotelSaveCommand cmd) {
-        System.out.println("Locale save comm"+cmd.getCode());
         HotelSaved cmd1 = new HotelSaved(cmd);
         cmd1.setUpdateUserName(userReadClient.findById(cmd.getUpdateUserId()).map(u->u.getUsername()));
         cmd1.setEventType(cmd1.getClass().getSimpleName());

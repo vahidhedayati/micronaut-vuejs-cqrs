@@ -5,7 +5,7 @@ import gateway.command.event.commands.CommandRoot;
 import io.micronaut.http.HttpResponse;
 import io.reactivex.Maybe;
 
-public class UserListener extends HttpEventPublisher {
+public class UserListener extends HttpEventPublisher<UserClient> {
 
     /**
      * This constructor is essential In gatewayController when : Class.forName(clazz.getName()).newInstance()
@@ -23,8 +23,7 @@ public class UserListener extends HttpEventPublisher {
      * @return HttpResponse from remote end
      */
     @Override
-    public <T extends CommandRoot> Maybe<HttpResponse> publish(DefaultClient clnt, T command) {
-        System.out.println(" "+command.getClass()+" "+clnt.getClass()+" --- user listener");
+    public <T extends CommandRoot> Maybe<HttpResponse> publish(UserClient clnt, T command) {
         return ((UserClient)clnt).publish(command);
     }
 
