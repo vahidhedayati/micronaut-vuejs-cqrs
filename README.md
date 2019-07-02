@@ -3,7 +3,10 @@ Micronaut backend vuejs frontend application - CQRS
 
 
 
-###### Youtube [Video demonstrating product](https://www.youtube.com/watch?v=-pKr6Zg-MtA). Written [description available here](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/master/detailedDescription.md).
+###### Youtube [Video demonstrating product part 2 - Latest as per diagram](https://www.youtube.com/watch?v=SB2JP6aF5Fs). Written [description available here](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/master/detailedDescription.md).
+
+###### Youtube [Video demonstrating product part 1 - older video](https://www.youtube.com/watch?v=-pKr6Zg-MtA). Relates to [websocket-1 branch git clone https://github.com/vahidhedayati/micronaut-vuejs-cqrs -b websocket-v1](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/tree/websocket-v1) and [websocket-2 branch git clone https://github.com/vahidhedayati/micronaut-vuejs-cqrs -b websocket-v2](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/tree/websocket-v2)
+
 
 ![how this app works](https://raw.githubusercontent.com/vahidhedayati/micronaut-vuejs-cqrs/master/docs/eventstoreCQRS-latest.png)
 
