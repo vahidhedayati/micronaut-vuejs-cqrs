@@ -20,7 +20,7 @@ The user mimiks rest calls via either `POST` for write or `GET` to read.
 >  -- For writing any `WRITE` request it talks to defined host port `http://localhost:8082` - this is `gateway-command` microservice.
 
 
-> The user also when connected to port `3000` triggers a websocket connection the same `controller`. The user also hits `gateway-command` on  `ws://localhost:8082` as they load up `Hotel.vue`
+> The user also when connected to port `3000` triggers a websocket connection the same `controller`.
 
 -----------------
 
@@ -30,28 +30,12 @@ The user mimiks rest calls via either `POST` for write or `GET` to read.
 
 -----------------
 
-> `gateway-write` looks at what has been posted according to `evenType parameter` generates required `command object` that is then sent to given `kafka topic`
-The topics are picked up by relevant `hotel-write` or `user-write` microservice applications, depending on `topic` and remaps String json back to real `command object`.
-write microservice would then use the `command object` to validate actual object. 
+> `gateway-write` receives string json and converts to command object - uses HTTPEventPublisher which binds to micronaut http clients locally and transmits command object to any given http client which acts as listener on receiving end.  The sessions retransmits response from http client of remote host back to user which returns either success or failure with errors. 
 
-------------
-> Object validation on write side of command object happens in command handler `KafkaEventListener`. The listener also has a websocket client to communicate to `gateway-command` on  `ws://localhost:8082`:
 
-> if the object is valid - if it was a new record RX java `optional` call made to pick up the new id of the newly added record update etc which picks up newly created id -
-this does appear to be wrong logic since we would want id on read side to appear on user's screen for their new record.
+> Each aggregate route listen in on HttpListener and publish received specific command to ApplicationEventHander aka AbstractCommandHandler - this gets picked up by specific command handlers and 
+1. adds to DB
+2. republishes the command as event object back into kafka
 
-> If the object is invalid - the validation errors are gather and a failure
+> KafakEventListener running on all read nodes, when topic of interest comes in, it is picked up and published to ApplicationEventHandler aka AbstractEventHandler, a relevant handler i.e. HotelUpdatedHandler picks up and stores event locally.
 
-> It connects to gateway-command and transmits a succesful / failure message to websocket server. 
-------------
-
-> Websocket communication to user from `gateway-command` 
-
-> When user opened `Hotel.vue` they made a websocket connection as a client just like `hotel-write`  `KafkaEventListener` does above when transmitting it's messages.
-As they hit the page they get assigned a unique random id which is sent as part of their initial socket connection. The socket listener aka `GatewayController` 
-on `gateway-command` picks up this randomId and internally assigns ID and their current socket to a concurrentMap. 
-when any app in this case `hotel-write` `KafkaEventListener`  publishes a success failure socket event and sends back to this socket controller.
- The response is picked up and the random Id assigned as part of their initial connection has always also been posted as part of any save/update/delete function.
- The random user is picked out from the newly received websocket message that was sent by the write application and from that id the websocket session of the underlying user is found.
- The end user is then sent a websocket message with success/failure response.
- Hotel.vue on user screen picks out the socket event and re-enables form submit button and displays any success failure messages.
