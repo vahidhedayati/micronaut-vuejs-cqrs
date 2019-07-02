@@ -157,7 +157,6 @@ export default {
             .then((res) => {
             if (res) {
               if (res.data.error) {
-                console.log(' res.dat '+res.data.error)
                 this.$emit('hotel-errors',   res.data.error);
               } else {
                 this.$emit('hotel-update', this.hotel);

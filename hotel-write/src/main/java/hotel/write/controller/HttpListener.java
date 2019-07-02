@@ -47,7 +47,6 @@ public class HttpListener {
             for (ConstraintViolation<?> constraintViolation : constraintViolations) {
                 violationMessages.add(constraintViolation.getMessage());
             }
-            System.out.println(" Violato "+violationMessages);
             /**
              * TODO - there appears to be some of form of a bug within micronauts httpClient interface implementation
              * at the moment if you return HttpResponse.serverError or any form of error, the client interface

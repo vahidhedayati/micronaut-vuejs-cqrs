@@ -168,7 +168,6 @@
         this.$store.dispatch( {type:'updateHotels',hotel:cv});
       },
       errorHotels: function (errors) {
-        console.log(' AHHHH '+JSON.stringify(errors))
         this.errors=errors;
       },
       fetchHotels: function (pageNumber) {
