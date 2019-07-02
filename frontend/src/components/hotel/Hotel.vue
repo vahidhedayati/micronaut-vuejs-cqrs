@@ -1,10 +1,13 @@
 <template>
   <div id="custom1">
 
-    <ul v-show="errors.length>0"  class="errors"><li v-for="error in errors">
+
+    <ul v-show="errors.length>0"  class="errors">
+      <li v-for="error in errors">
       actual_message: {{error}} -
       -- translated_code:  {{$t(error)}}
-    </li></ul>
+    </li>
+    </ul>
     <search-form v-model="search"
                  @submit="searchHotels()"
                  :submittedForm="submittedForm"
@@ -152,7 +155,7 @@
         this.$store.dispatch( {type:'removeHotel',hotel:hotel});
       },
       currentHotel: function(ho) {
-        //this.errors=[];
+        this.errors=[];
         this.successAdded=null;
         this.hotel=ho;
       },

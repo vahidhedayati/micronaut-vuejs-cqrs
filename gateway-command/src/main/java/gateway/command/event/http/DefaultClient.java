@@ -16,5 +16,5 @@ import io.reactivex.Maybe;
 public interface DefaultClient  {
 
     @Post("/")
-    <T extends CommandRoot> Maybe<HttpResponse> publish(T command);
+    <T extends CommandRoot> HttpResponse publish(T command);
 }

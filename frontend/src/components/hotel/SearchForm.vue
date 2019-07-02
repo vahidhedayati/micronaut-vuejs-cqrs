@@ -19,7 +19,7 @@
         <hotel-form
           @refresh-list="refreshHotels"
           @hotel-errors="errorHotels"
-          :submittedForm="submittedForm"
+          :submittedForm="updateAddForm"
           :masterUser="masterUser"
           @current-hotel="currentHotel"
           @hotel-update="updateHotels"

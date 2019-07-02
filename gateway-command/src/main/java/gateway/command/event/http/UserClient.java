@@ -7,6 +7,8 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
 import io.reactivex.Maybe;
 
+import java.util.Set;
+
 /**
  * Typical Micronaut HTTP Client passing real command object to remove client host:
  */
@@ -15,5 +17,5 @@ import io.reactivex.Maybe;
 public interface UserClient extends  DefaultClient {
 
     @Post("/")
-    <T extends  CommandRoot> Maybe<HttpResponse> publish(T command);
+    <T extends  CommandRoot> HttpResponse publish(T command);
 }

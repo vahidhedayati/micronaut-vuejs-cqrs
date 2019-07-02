@@ -10,6 +10,7 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.http.codec.MediaTypeCodecRegistry;
 import io.micronaut.jackson.codec.JsonMediaTypeCodec;
 import io.micronaut.runtime.server.EmbeddedServer;
@@ -20,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.util.Set;
 
 @Slf4j
 @ServerWebSocket("/ws/process")
@@ -63,12 +65,13 @@ public class GatewayController {
      * but this contains no process data from remote end.
      */
     @Post(uri = "/{topic}", consumes = MediaType.APPLICATION_JSON)
-    public Maybe<HttpResponse> process(String topic, @JsonProperty("eventType") String eventType, @Body String formInput)  {
+    public HttpResponse process(String topic, @JsonProperty("eventType") String eventType, @Body String formInput)  {
         JsonMediaTypeCodec mediaTypeCodec = (JsonMediaTypeCodec) mediaTypeCodecRegistry.findCodec(MediaType.APPLICATION_JSON_TYPE)
                 .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
         try {
             CommandRoot cmd = (CommandRoot) mediaTypeCodec.decode( Class.forName(CLASS_PATH+eventType),formInput);
             cmd.initiate(embeddedServer,eventType);
+
             //String representation of http class listeners gateway.command.event.http.HotelListener or UserListener
             String httpClassName = HTTP_PATH+topic.substring(0, 1).toUpperCase() + topic.substring(1)+"Listener";
 
@@ -78,16 +81,17 @@ public class GatewayController {
              * HttpEventPublisher so we can instantiate it
              */
             HttpEventPublisher d = (HttpEventPublisher) makeObject(Class.forName(httpClassName));
-
             /**
              * This calls the publish method in the underlying class
              */
+
             return d.publish(defaultClient,cmd);
 
-        } catch (Exception e) {
-            LOG.error("Class conversion issue "+e.getMessage(),e);
+        } catch (ClassNotFoundException e) {
+            LOG.error("ClassNotFoundException "+e.getMessage(),e);
         }
-        return Maybe.just(HttpResponse.serverError());
+        //return Maybe.just(HttpResponse.serverError());
+        return HttpResponse.serverError();
     }
 
 

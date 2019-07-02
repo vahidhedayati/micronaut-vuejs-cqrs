@@ -154,20 +154,16 @@ export default {
     submit () {
       this.$emit('current-hotel',  this.hotel);
        return HotelService.postCall('/hotel',this.hotel)
-              .then((res) => {
-              if (res) {
-                if (res.data) {
-                  this.$emit('hotel-update', this.hotel);
-                }
+            .then((res) => {
+            if (res) {
+              if (res.data.error) {
+                console.log(' res.dat '+res.data.error)
+                this.$emit('hotel-errors',   res.data.error);
+              } else {
+                this.$emit('hotel-update', this.hotel);
               }
-            }).catch((error) => {
-              console.log(" E "+JSON.stringify(error.response.data))
-            this.$emit('hotel-errors',   error.response.data);
-           if (error.response) {
-            } else if ( error.request) {
-            } else {
             }
-          });
+          }).catch((error) => {});
     }
   }
  }

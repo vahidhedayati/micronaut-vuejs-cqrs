@@ -126,14 +126,14 @@ export default {
                this.deleteHotel.id=id;
                return HotelService.postCall('/hotel',this.deleteHotel)
                  .then((res) => {
-                 if (res.data||res.status===200||res.status===202) {
+                 if (res.data.error) {
+                   this.$emit('hotel-errors',   res.data.error);
+                 } else  if (res.data||res.status===200||res.status===202) {
                    this.$emit('remove-hotel', this.deleteHotel);
                  }
-                 }).catch((error) => {
-                     if (error.response) {
-                     //this.$emit('hotel-errors', error.response.data.error);
-                      }
-                 });
+
+             }).catch((error) => {});
+
              }
            }
          },
@@ -145,15 +145,14 @@ export default {
            newName.eventType='HotelUpdateCommand'
            return HotelService.postCall('/hotel',newName)
              .then((res) => {
-              if (res.data||res.status===204||res.status===202) {
-                  this.showForm=false;
-                  this.$emit('hotel-update', res.data);
-              }
-              }).catch((error) => {
-                if (error.response) {
-                     this.$emit('hotel-errors', error.response);
-                }
-          });
+             if (res.data.error) {
+               this.$emit('hotel-errors',   res.data.error);
+            } else  if (res.data||res.status===204||res.status===202) {
+              this.showForm = false;
+              this.$emit('hotel-update', res.data);
+            }
+
+          }).catch((error) => {});
          }
      }
 }

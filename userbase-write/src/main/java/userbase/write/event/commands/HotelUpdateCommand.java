@@ -1,20 +1,26 @@
 package userbase.write.event.commands;
 
+import io.micronaut.validation.Validated;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
+@Validated
 public class HotelUpdateCommand  extends CommandRoot {
 
     @NotNull
     private Long id;
 
     @NotBlank
-    private String name;
-
-
-    @NotBlank
+    @Pattern(regexp = "(?=.*[A-Z]).{2,3}", message = "field_three_char")
     private String code;
 
+    @NotNull
+    @NotBlank
+    @Size(max = 10, min=3)
+    private String name;
     @NotBlank
     private String phone;
 

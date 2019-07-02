@@ -5,6 +5,8 @@ import gateway.command.event.commands.CommandRoot;
 import io.micronaut.http.HttpResponse;
 import io.reactivex.Maybe;
 
+import java.util.Set;
+
 /**
  * This class is the overall dynamic binding class of HttpPublished -
  * When a user posts json strings it has what topic or subject which gets converted from
@@ -38,7 +40,7 @@ public class HotelListener extends HttpEventPublisher<HotelClient> {
      * @return HttpResponse from remote end
      */
     @Override
-    public <T extends CommandRoot> Maybe<HttpResponse> publish(HotelClient clnt, T command) {
+    public <T extends CommandRoot> HttpResponse publish(HotelClient clnt, T command) {
         return ((HotelClient)clnt).publish(command);
     }
 

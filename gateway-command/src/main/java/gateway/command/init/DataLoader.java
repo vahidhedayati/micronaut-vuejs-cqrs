@@ -31,12 +31,12 @@ public class DataLoader  implements ApplicationEventListener<ServerStartupEvent>
 	public void onApplicationEvent(ServerStartupEvent event) {
 		List<UserSaveCommand> users = DemoUsersFactory.defaultUsers(embeddedServer);
 		for (UserSaveCommand cmd : users) {
-			userClient.publish(cmd).blockingGet();
+			userClient.publish(cmd);//.blockingGet();
 		}
 
 		List<HotelCreateCommand> hotels = DemoHotelsFactory.defaultHotels(embeddedServer);
 		for (HotelCreateCommand cmd : hotels) {
-			hotelClient.publish(cmd).blockingGet();
+			hotelClient.publish(cmd);//.blockingGet();
 
 		}
 	}

@@ -5,6 +5,8 @@ import gateway.command.event.commands.CommandRoot;
 import io.micronaut.http.HttpResponse;
 import io.reactivex.Maybe;
 
+import java.util.Set;
+
 public class UserListener extends HttpEventPublisher<UserClient> {
 
     /**
@@ -23,7 +25,7 @@ public class UserListener extends HttpEventPublisher<UserClient> {
      * @return HttpResponse from remote end
      */
     @Override
-    public <T extends CommandRoot> Maybe<HttpResponse> publish(UserClient clnt, T command) {
+    public <T extends CommandRoot> HttpResponse publish(UserClient clnt, T command) {
         return ((UserClient)clnt).publish(command);
     }
 
