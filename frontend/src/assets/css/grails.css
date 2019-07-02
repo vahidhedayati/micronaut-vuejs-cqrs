@@ -59,11 +59,11 @@ a.navbar-brand {
   color: white !important;
 }
 .navbar-nav>li>a:hover {
-  background-color: #2559a7 !important;
-  color: white !important;
+  color: #2559a7 !important;
+  background-color: transparent !important;
 }
 .navbar-nav>li>a {
-  color: #c0d3db;
+  color: #FFFFFF;
 }
 .navbar-dark .navbar-toggler .icon-bar {
   background-color: white;
@@ -86,8 +86,9 @@ a.navbar-brand {
 }
 
 .nav .dropdown a.dropdown-toggle {
-  padding-top: 25px;
+ /* padding-top: 25px;
   padding-bottom: 25px;
+  */
 }
 
 @media (min-width: 768px) {

@@ -92,6 +92,26 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
+"@fortawesome/fontawesome-common-types@^0.2.19":
+  version "0.2.19"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.19.tgz#754a0f85e1290858152e1c05700ab502b11197f1"
+
+"@fortawesome/fontawesome-svg-core@^1.2.19":
+  version "1.2.19"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.19.tgz#0eca1ce9285c3d99e6e340633ee8f615f9d1a2e0"
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.19"
+
+"@fortawesome/free-solid-svg-icons@^5.9.0":
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.9.0.tgz#1c73e7bac17417d23f934d83f7fff5b100a7fda9"
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.19"
+
+"@fortawesome/vue-fontawesome@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@fortawesome/vue-fontawesome/-/vue-fontawesome-0.1.6.tgz#18a0f4263b90f65180fc927325ba01896276ea04"
+
 "@nuxt/opencollective@^0.2.2":
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/@nuxt/opencollective/-/opencollective-0.2.2.tgz#17adc7d380457379cd14cbb64a435ea196cc4a6e"

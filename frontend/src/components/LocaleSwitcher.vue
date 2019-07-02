@@ -1,5 +1,5 @@
 <template>
-  <li class="nav-item dropdown">
+  <div class="dropdown">
     <a
       href="#"
       role="button"
@@ -30,7 +30,7 @@
         <span class="locale-name">{{locale.name}}</span>
       </router-link>
     </div>
-  </li>
+  </div>
 </template>
 
 <script>

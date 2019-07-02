@@ -3,12 +3,7 @@ body,
 input, select, textarea {
   font-family: "Open Sans", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
-.site-header {
-  background-color: #d7f3f1;
-  font-color: #313163;
-  font-size: 18px;
 
-}
 
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.1;
@@ -147,7 +142,10 @@ img {
   margin-right: 0.5em;
   padding: 0;
 }
+.nav ul.dropdown-menu a{
+  display:block !important;
 
+}
 .nav a {
   color: #666666;
   display: block;
@@ -200,7 +198,7 @@ img {
 }
 
 .nav li.dropdown.show ul.dropdown-menu {
-  background-color: #424649;
+  background-color: #FFF;
 }
 
 /* CREATE/EDIT FORMS AND SHOW PAGES */
@@ -638,3 +636,12 @@ footer > p > a {
   color: black;
 }
 
+.site-header {
+  background-color: #a1e2dc;
+  font-color: #ffffff;
+  font-size: 16px;
+}
+.version-number {
+  font-color: #000000;
+  font-size: 11px;
+}

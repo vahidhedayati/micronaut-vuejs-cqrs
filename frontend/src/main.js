@@ -13,6 +13,9 @@ import './assets/css/grails.css'
 import './assets/css/main.css'
 import {Tabs, Tab} from 'vue-tabs-component';
 import VueDropdown from 'vue-dynamic-dropdown'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUserSecret, faUser, faBars } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 Vue.config.productionTip = false
 Vue.router = router;
@@ -23,6 +26,11 @@ Vue.component('vue-dropdown', VueDropdown);
 Vue.component('tabs', Tabs);
 Vue.component('tab', Tab);
 Vue.config.productionTip = false;
+
+library.add(faUserSecret)
+library.add(faUser)
+library.add(faBars)
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 //Global mixin
 Vue.mixin({
