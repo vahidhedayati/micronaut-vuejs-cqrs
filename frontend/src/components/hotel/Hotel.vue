@@ -2,8 +2,8 @@
   <div id="custom1">
 
 
-    <ul v-show="errors.length>0"  class="errors">
-      <li v-for="error in errors">
+    <ul v-show="hotelErrors.length>0"  class="hotelErrors">
+      <li v-for="error in hotelErrors">
       actual_message: {{error}} -
       -- translated_code:  {{$t(error)}}
     </li>
@@ -75,7 +75,7 @@
         submittedForm:false,
         submittedEdit:false,
         status: "disconnected",
-        errors:[],
+        hotelErrors:[],
         successAdded:null,
         hotels: [],
         search:{name:''},
@@ -155,7 +155,7 @@
         this.$store.dispatch( {type:'removeHotel',hotel:hotel});
       },
       currentHotel: function(ho) {
-        this.errors=[];
+        this.hotelErrors=[];
         this.successAdded=null;
         this.hotel=ho;
       },
@@ -167,8 +167,8 @@
       updateHotels: function(cv) {
         this.$store.dispatch( {type:'updateHotels',hotel:cv});
       },
-      errorHotels: function (errors) {
-        this.errors=errors;
+      errorHotels: function (hotelErrors) {
+        this.hotelErrors=hotelErrors;
       },
       fetchHotels: function (pageNumber) {
         var variables=''

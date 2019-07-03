@@ -3,7 +3,7 @@
   <table class="table">
     <thead class="thead-inverse">
       <tr>
-        <th @click="sort('id')" :class="{active: this.column === 'id'}">
+        <th @click="sort('id')" :class="{sortable: this.column === 'id'}">
           ID
           <span :class="{blank:this.column != 'id',
           arrow: (this.column === 'id'),
@@ -12,7 +12,7 @@
           </span>
 
         </th>
-        <th @click="sort('username')" :class="{active: this.column === 'username'}">
+        <th @click="sort('username')" :class="{sortable: this.column === 'username'}">
           username
           <span :class="{blank:(this.column != 'username'),
           arrow: (this.column === 'username'),
@@ -20,7 +20,7 @@
            desc: (this.column ==='username' && this.currentSortDir==='desc')}">
           </span>
         </th>
-        <th @click="sort('firstname')" :class="{active: this.column === 'firstname'}">
+        <th @click="sort('firstname')" :class="{sortable: this.column === 'firstname'}">
           firstname
           <span :class="{blank:(this.column != 'firstname'),
           arrow: (this.column === 'firstname'),
@@ -28,7 +28,7 @@
            desc: (this.column ==='firstname' && this.currentSortDir==='desc')}">
           </span>
         </th>
-        <th @click="sort('lastname')" :class="{active: this.column === 'lastname'}">
+        <th @click="sort('lastname')" :class="{sortable: this.column === 'lastname'}">
           lastname
           <span :class="{blank:(this.column != 'lastname'),
           arrow: (this.column === 'lastname'),

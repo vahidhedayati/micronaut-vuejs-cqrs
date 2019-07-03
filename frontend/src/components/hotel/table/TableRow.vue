@@ -65,7 +65,7 @@ export default {
    data () {
         return {
           response: [],
-          errors: [],
+          hotelErrors: [],
           showHotel:null,
           updatedHotel:{},
           deleteHotel:{id:'',eventType:'HotelDeleteCommand'},

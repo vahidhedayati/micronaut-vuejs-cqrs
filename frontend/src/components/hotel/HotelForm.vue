@@ -89,7 +89,7 @@ export default {
     return {
       valid: true,
       users: [],
-      errors: [],
+      hotelErrors: [],
       hotel:{currentUser:this.masterUser,  name:'AAAAAAAAAAAAA',code:'AAAA',phone:'+44-123456789', email:'aa@aa.com', updateUserName:'admin' , updateUserId:'1',eventType:'HotelSaveCommand'}
 
     }
@@ -126,23 +126,23 @@ export default {
      },
      submitForm (e) {
        this.$emit(' form-status',true);
-       this.errors=[];
+       this.hotelErrors=[];
        const validName = validateName(this.hotel.name);
-       this.errors.push(validName.error);
+       this.hotelErrors.push(validName.error);
        this.valid = validName.valid
        const validPhone = validatePhone(this.hotel.phone);
-       this.errors.push(validPhone.error);
+       this.hotelErrors.push(validPhone.error);
        this.valid = validPhone.valid
        const validEmail = validateEmail(this.hotel.email);
-       this.errors.push(validEmail.error);
+       this.hotelErrors.push(validEmail.error);
        this.valid = validEmail.valid
        /**
         * IF form is valid for submission submit it - otherwise fail front end validation:
         */
        if (this.valid) {
         this.submit();
-       } else if (this.errors.length>0) {
-         this.$emit('hotel-errors',this.errors);
+       } else if (this.hotelErrors.length>0) {
+         this.$emit('hotel-errors',this.hotelErrors);
        }
      },
      updateSearchValue: function (value) {

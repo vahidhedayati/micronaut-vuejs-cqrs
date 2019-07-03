@@ -39,7 +39,7 @@
         </div>
       </div>
       <div class="modal-footer text-left">
-        <button class="btn btn-danger" @click="close()">
+        <button class="btn btn-danger btn-save" @click="close()">
           {{$t('close_button')}}
         </button>
       </div>

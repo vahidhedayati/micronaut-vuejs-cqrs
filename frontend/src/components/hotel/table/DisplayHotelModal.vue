@@ -67,7 +67,7 @@
 
     data: function () {
       return {
-        errors:[],
+        hotelModalErrors:[],
       };
     },
     components: {

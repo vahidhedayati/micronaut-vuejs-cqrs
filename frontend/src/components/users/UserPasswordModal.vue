@@ -43,11 +43,11 @@
       </div>
 
       <div class="modal-footer text-left">
-        <button class="btn btn-danger"@click.prevent="submitForm()">
+        <button class="btn btn-danger btn-save"@click.prevent="submitForm()">
           {{$t('save_button')}}
         </button>
 
-        <button class="btn" @click="close()">
+        <button class="btn btn-cancel" @click="close()">
           {{$t('cancel_button')}}
         </button>
       </div>

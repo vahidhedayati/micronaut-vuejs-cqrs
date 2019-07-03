@@ -56,7 +56,7 @@ export default {
    data () {
         return {
           response: [],
-          errors: [],
+          modalErrors: [],
           newUser:{username:'',firstname:'',surname:'',updateUser:{id:''},eventType:'UserUpdateCommand'},
           deleteUser:{id:'',eventType:'UserDeleteCommand'},
           showUser:null,

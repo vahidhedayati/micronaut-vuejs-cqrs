@@ -43,7 +43,7 @@
 
     data: function () {
       return {
-        errors:[],
+        modalErrors:[],
       };
     },
     components: {

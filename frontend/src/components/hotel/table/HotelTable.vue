@@ -3,7 +3,7 @@
     <table class="table">
       <thead class="thead-inverse">
       <tr>
-        <th @click="sort('id')" :class="{active: this.column === 'id'}">
+        <th @click="sort('id')" :class="{sortable: this.column === 'id'}">
           ID
           <span :class="{blank:this.column != 'id',
           arrow: (this.column === 'id'),
@@ -12,7 +12,7 @@
           </span>
 
         </th>
-        <th @click="sort('name')" :class="{active: this.column === 'name'}">
+        <th @click="sort('name')" :class="{sortable: this.column === 'name'}">
           Name
           <span :class="{blank:(this.column != 'name'),
           arrow: (this.column === 'name'),
@@ -20,7 +20,7 @@
            desc: (this.column ==='name' && this.currentSortDir==='desc')}">
           </span>
         </th>
-        <th @click="sort('code')" :class="{active: this.column === 'code'}">
+        <th @click="sort('code')" :class="{sortable: this.column === 'code'}">
           Code
           <span :class="{blank:(this.column != 'code'),
           arrow: (this.column === 'code'),
@@ -28,7 +28,7 @@
            desc: (this.column ==='code' && this.currentSortDir==='desc')}">
           </span>
         </th>
-        <th @click="sort('phone')" :class="{active: this.column === 'phone'}">
+        <th @click="sort('phone')" :class="{sortable: this.column === 'phone'}">
           phone
           <span :class="{blank:(this.column != 'phone'),
           arrow: (this.column === 'phone'),
@@ -37,7 +37,7 @@
           </span>
         </th>
 
-        <th @click="sort('email')" :class="{active: this.column === 'email'}">
+        <th @click="sort('email')" :class="{sortable: this.column === 'email'}">
           Email
           <span :class="{blank:(this.column != 'email'),
           arrow: (this.column === 'email'),
@@ -45,7 +45,7 @@
            desc: (this.column ==='email' && this.currentSortDir==='desc')}">
           </span>
         </th>
-        <th @click="sort('updateUser')" :class="{active: this.column === 'updateUser'}">
+        <th @click="sort('updateUser')" :class="{sortable: this.column === 'updateUser'}">
           updateUser
           <span :class="{blank:(this.column != 'updateUser'),
           arrow: (this.column === 'updateUser'),
@@ -53,7 +53,7 @@
            desc: (this.column ==='updateUser' && this.currentSortDir==='desc')}">
           </span>
         </th>
-        <th @click="sort('lastUpdated')"  :class="{active: this.column === 'lastUpdated'}">
+        <th @click="sort('lastUpdated')"  :class="{sortable: this.column === 'lastUpdated'}">
           last Updated
           <span :class="{blank:(this.column != 'lastUpdated'),
           arrow: (this.column === 'lastUpdated'),
