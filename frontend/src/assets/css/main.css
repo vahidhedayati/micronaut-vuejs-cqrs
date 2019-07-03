@@ -125,19 +125,129 @@ img {
 
 /* NAVIGATION MENU */
 
+/* customizing bootstrap nav bar */
+.navbar {
+  margin-bottom: 0px;
+  padding-right: 110px;
+}
+.navbar .container {
+  margin: 10px;
+}
+.navbar-dark a {
+  color: #ffffff !important;
+  font-size: 18px !important;
+  text-decoration: none;
+}
+.grails-icon img {
+  width: 40px;
+
+}
+.navbar-dark, .navbar-static-top {
+  background-color: #424649;
+  border: 0px;
+}
+a.navbar-brand {
+  color: white !important;
+  font-size: 19px !important;
+}
+.navbar-dark .navbar-nav>.active>a, .navbar-dark .navbar-nav>.active>a:hover, .navbar-dark .navbar-nav>.active>a:focus {
+  background-color: transparent;
+  color: white;
+}
+.navbar-nav>li.active>a {
+  color: white !important;
+}
+.navbar-nav>li>a:hover {
+  color: #2559a7 !important;
+  background-color: transparent !important;
+}
+.navbar-nav>li>a {
+  color: #FFFFFF;
+}
+.navbar-dark .navbar-toggler .icon-bar {
+  background-color: white;
+}
+.navbar-dark .navbar-toggle:hover, .navbar-dark .navbar-toggle:focus {
+  background-color: #2559a7;
+}
+
+.navbar-toggler {
+  position: relative;
+  float: right;
+  padding: 9px 10px;
+  margin-top: 8px;
+  margin-right: 15px;
+  margin-bottom: 8px;
+  background-color: transparent;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.nav .dropdown a.dropdown-toggle {
+  /* padding-top: 25px;
+   padding-bottom: 25px;
+   */
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: auto;
+  }
+}
+
+/* specific to index.html */
+
+
+.mainmenu .collapse ul ul ul, .mainmenu .collapse ul ul ul.dropdown-menu{
+
+}
+.mainmenu .collapse ul ul ul ul, .mainmenu .collapse ul ul ul ul.dropdown-menu{
+
+}
+
+/******************************Drop-down menu work on hover**********************************/
+.mainmenu{background: none;border: 0 solid;margin: 0;padding: 0;
+  min-height:20px;width: 100%;}
+@media only screen and (min-width: 767px) {
+  .mainmenu .collapse ul li:hover> ul{display:block}
+  .mainmenu .collapse ul ul{position:absolute;top:100%;left:0;min-width:250px;display:none}
+  /*******/
+  .mainmenu .collapse ul ul li{position:relative}
+  .mainmenu .collapse ul ul li:hover> ul{display:block}
+  .mainmenu .collapse ul ul ul{position:absolute;top:0;left:100%;min-width:250px;display:none}
+  /*******/
+  .mainmenu .collapse ul ul ul li{position:relative; width:400px;}
+  .mainmenu .collapse ul ul ul li:hover ul{display:block}
+  .mainmenu .collapse ul ul ul ul{position:absolute;top:0;left:-100%;min-width:250px;display:none;z-index:1}
+
+}
+@media only screen and (max-width: 767px) {
+  .navbar-nav .show .dropdown-menu .dropdown-menu > li > a{padding:16px 15px 16px 35px}
+  .navbar-nav .show .dropdown-menu .dropdown-menu .dropdown-menu > li > a{padding:16px 15px 16px 45px}
+}
+
+@media (max-width: 999px) {
+
+
+  .navbar {
+    padding-right: 0px;
+  }
+}
+
+
 .nav {
   zoom: 1;
 }
 
 .nav ul {
-  overflow: hidden;
   padding-left: 0;
   zoom: 1;
 }
 
 .nav li {
   display: block;
-  float: left;
+  /*float: left;*/
   list-style-type: none;
   margin-right: 0.5em;
   padding: 0;
@@ -167,7 +277,7 @@ img {
 }
 
 .nav a:focus, .nav a:hover {
-  background-color: #999999;
+  background-color: transparent;
   color: #ffffff;
   outline: none;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
@@ -200,6 +310,15 @@ img {
 .nav li.dropdown.show ul.dropdown-menu {
   background-color: #FFF;
 }
+.nav .dropdown-menu {
+  padding: .5rem;
+
+}
+.nav .dropdown-menu li {
+  display: block;
+
+}
+
 
 /* CREATE/EDIT FORMS AND SHOW PAGES */
 
@@ -644,4 +763,40 @@ footer > p > a {
 .version-number {
   font-color: #000000;
   font-size: 11px;
+}
+.menu-options {
+  font-color: #000000;
+  font-size: 14px;
+}
+.user-options {
+  font-color: #FFFFFF;
+  font-size: 16px;
+  font-weight: bold;
+}
+.logout-options {
+  font-color: #02a5ce;
+  font-size: 16px;
+  font-weight: bold;
+}
+.position-navigation  {
+  padding-right: 20em;
+}
+
+.main-heading {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 0;
+  color:#313163;
+  background-color: #d7f3f1;
+}
+.section-heading {
+  text-align: left;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 0;
+  color:#009bc5;
+  background-color:  #ffffff;
+}
+.no-padding {
+  padding:0px;
 }

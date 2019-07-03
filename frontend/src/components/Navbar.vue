@@ -1,6 +1,6 @@
 <template>
-
-  <nav  id="nav" class="site-header navbar navbar-expand-lg navbar-static-top" role="navigation">
+  <div id="menu_area" class="menu-area">
+  <nav  id="nav" class="site-header navbar navbar-expand-lg navbar-static-top mainmenu" role="navigation">
 
     <localized-link
       tag="div"
@@ -20,92 +20,134 @@
     <div class="collapse navbar-collapse" aria-expanded="false" style="height: 0.8px;" id="navbarContent">
 
 
-      <ul class="nav navbar-nav ml-auto">
-        <li class="dropdown">
+      <ul class="nav navbar-nav ml-auto position-navigation">
+        <li class="dropdown menu-options">
         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-           aria-expanded="true"><font-awesome-icon icon="bars" />Menu</a>
-        <ul class="dropdown-menu">
-          <li >
-              <localized-link
-                tag="li"
-                to="hotel"
-                class=""
-                active-class="active"
-              >
+           aria-expanded="true"><font-awesome-icon icon="bars" /> Menu</a>
+          <ul class="dropdown-menu">
 
-                <a class="nav-link">
-                  {{$t('hotel_label')}}
-                </a>
-              </localized-link>
-          </li>
-          <li>
-              <localized-link
-                tag="li"
-                to="users"
-                class=""
-                active-class="active"
-              >
-                <a class="nav-link">
-                  {{$t('users_label')}}
-                </a>
-              </localized-link>
-          </li>
-        </ul>
+            <localized-link  tag="li"  to="hotel" class="" active-class="active">
+              <a class="">{{$t('hotel_label')}}</a>
+            </localized-link>
+            <localized-link tag="li" to="users" class="" active-class="active">
+              <a class="">{{$t('users_label')}}</a>
+            </localized-link>
+
+
+
+            <li class="dropdown">
+              <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown2</a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li class="dropdown">
+                      <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown3</a>
+                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+          </ul>
         </li>
 
-
-
-
         <li class="dropdown">
-
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+          <a href="#" class="user-options dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
              aria-expanded="true"><font-awesome-icon icon="user" /> John Smith</a>
-
           <ul class="dropdown-menu">
+            <li v-on:click="changePassword()"><a  >Change Password</a></li>
+            <li v-on:click="showDetails()"><a  >My Details</a></li>
 
-            <li >
-              <a href="" >
-                <i class="fa fa-user-secret">ss</i>
-              </a>
-            </li>
-
-            <li><a href="" >
-              <i class="fa fa-globe"> ss</i>
-            </a>
-
-
-            </li>
           </ul>
         </li>
 
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-             aria-expanded="true">Status <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li>Option 1</li>
-            <li>Option 1</li>
-          </ul>
+        <li >
+          <a class="logout-options" role="button" v-on:click="logout()"><font-awesome-icon icon="power-off" /> Log out</a>
         </li>
-
-
-
-
-
       </ul>
     </div>
 
   </nav>
+
+    <user-password-modal
+      :show="showPasswordModal"
+      :password="currentPassword"
+      @close="closePasswordPopup"></user-password-modal>
+
+    <user-detail-modal
+      :show="showDetailModal"
+      :user="currentUser"
+      @close="closeDetailPopup"></user-detail-modal>
+
+  </div>
 </template>
 
 <script>
   import LocaleSwitcher from './LocaleSwitcher'
   import LocalizedLink from './LocalizedLink'
+  import UserPasswordModal from './users/UserPasswordModal'
+  import UserDetailModal from './users/UserDetailModal'
+  import $ from 'jquery';
+
+  $('.dropdown-menu a.dropdown-toggle').on('click', function(e) {
+    if (!$(this).next().hasClass('show')) {
+      $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+    }
+    var $subMenu = $(this).next(".dropdown-menu");
+    $subMenu.toggleClass('show');
+
+    $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
+      $('.dropdown-submenu .show').removeClass("show");
+    });
+
+    return false;
+  });
 
   export default {
+    data: function () {
+      return {
+        currentUser:{username:'johnsmith', firstName:'John', lastName:'Smith', password:'easypeasy', phoneNumber:'+44-123456789', messageNumber:'#johnsmith1', position:'Product Manager'},
+        currentPassword:{current:'',newPassword:'',typedPassword:''},
+        showPasswordModal:false,
+        showDetailModal:false,
+      }
+    },
 
+    methods: {
+      closePasswordPopup: function () {
+        this.showPasswordModal = false;
+      },
+      closeDetailPopup: function () {
+        this.showDetailModal = false;
+      },
+      showDetails: function () {
+
+        this.showDetailModal = true;
+      },
+      changePassword: function () {
+        this.showPasswordModal = true;
+      },
+      logout: function () {
+
+      }
+    },
     components: {
       LocaleSwitcher,
-      LocalizedLink
+      LocalizedLink,
+      UserPasswordModal,
+      UserDetailModal
     },
   }
 </script>

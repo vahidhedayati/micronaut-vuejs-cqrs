@@ -14,7 +14,7 @@ import './assets/css/main.css'
 import {Tabs, Tab} from 'vue-tabs-component';
 import VueDropdown from 'vue-dynamic-dropdown'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret, faUser, faBars } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faUser, faBars, faSignOutAlt , faPowerOff } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 Vue.config.productionTip = false
@@ -30,6 +30,9 @@ Vue.config.productionTip = false;
 library.add(faUserSecret)
 library.add(faUser)
 library.add(faBars)
+library.add(faSignOutAlt)
+library.add(faPowerOff)
+
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 //Global mixin
