@@ -8,6 +8,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuetify from 'vuetify'
 import BootstrapVue from 'bootstrap-vue';
+import VeeValidate from 'vee-validate';
 import './assets/css/bootstrap.css'
 import './assets/css/grails.css'
 import './assets/css/main.css'
@@ -22,6 +23,7 @@ Vue.router = router;
 Vue.use(VueAxios, axios);
 Vue.use(BootstrapVue);
 Vue.use(Vuetify);
+Vue.use(VeeValidate);
 Vue.component('vue-dropdown', VueDropdown);
 Vue.component('tabs', Tabs);
 Vue.component('tab', Tab);

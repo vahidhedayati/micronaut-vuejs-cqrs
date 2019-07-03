@@ -55,7 +55,7 @@
 
     data: function () {
       return {
-        errors:[]
+        errorsDetail:[]
       };
     },
     components: {

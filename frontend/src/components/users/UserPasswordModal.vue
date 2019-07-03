@@ -9,27 +9,41 @@
       <div class="text-left form-label col-sm-4">
         {{$t('current_password')}} <span class="required-indicator"> * </span>
       </div>
-      <div class="text-left form-control col-sm-8">
-      <input type="password" v-model="password.current" />
+      <div class="text-left col-sm-8">
+      <input type="password" v-model="password.current" class="form-control" placeholder="Current Password"  />
       </div>
 
         <div class="text-left form-label col-sm-4">
           {{$t('new_password')}} <span class="required-indicator"> * </span>
         </div>
-        <div class="text-left form-control col-sm-8">
-          <input type="password" v-model="password.newPassword" />
+        <div class="text-left  col-sm-8">
+          <input type="password"  name="password" placeholder="New Password" class="form-control"  v-validate="'required|min:6|max:35'" ref="password" />
+          <!-- <span v-show="errors.has('password')" class="alert alert-danger">{{ errors.first('password') }}</span> -->
+
+
         </div>
         <div class="text-left form-label col-sm-4">
           {{$t('retype_password')}} <span class="required-indicator"> * </span>
         </div>
-        <div class="text-left form-control col-sm-8">
-          <input type="password" v-model="password.typedPassword" />
+        <div class="text-left  col-sm-8">
+          <input type="password"  v-validate="'required|confirmed:password'"  placeholder="Password, Again"  class="form-control" name="password2" data-vv-as="password"/>
+        <!--  <span v-show="errors.has('password_confirmation')" class="alert alert-danger">{{ errors.first('password_confirmation') }}</span> -->
+        </div>
+
+
+        <div class="alert alert-danger" v-show="errors.any()">
+          <div v-if="errors.has('password')">
+            {{ errors.first('password') }}
+          </div>
+          <div v-if="errors.has('password2')">
+            {{ errors.first('password2') }}
+          </div>
         </div>
 
       </div>
 
       <div class="modal-footer text-left">
-        <button class="btn btn-danger" @click="close()">
+        <button class="btn btn-danger"@click.prevent="submitForm()">
           {{$t('save_button')}}
         </button>
 
@@ -46,12 +60,14 @@
   import Datepicker from 'vuejs-datepicker';
   import modal from '../Modal'
   import moment from 'moment';
+
+
   export default {
     props: ['show','password' ],
 
     data: function () {
       return {
-        errors:[]
+        errors2:[]
       };
     },
     components: {
@@ -74,6 +90,11 @@
       },
       close: function () {
         this.$emit('close');
+      },
+      submitForm (e) {
+
+          this.submit();
+
       }
     }
   }
