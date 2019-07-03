@@ -21,7 +21,16 @@ public class HotelCreatedEventHandler extends AbstractEventHandler<HotelCreated>
 
     @Override
     public void onApplicationEvent(HotelCreated cmd) {
-        Hotel hotel = new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(),cmd.getUpdateUserId(),cmd.getLastUpdated(),cmd.getUpdateUserName().get());
+        /**
+         * If something has gone wrong and users not added this falls over
+         * making it more error prone
+         */
+        Hotel hotel;
+        if (cmd.getUpdateUserName().isPresent()) {
+            hotel = new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(),cmd.getUpdateUserId(),cmd.getLastUpdated(),cmd.getUpdateUserName().get());
+        } else {
+            hotel = new Hotel(cmd.getCode(), cmd.getName(), cmd.getPhone(), cmd.getEmail(),cmd.getUpdateUserId(),cmd.getLastUpdated());
+        }
         List<HotelRooms> hotelRooms = new ArrayList<>();
         if (!findByCode(hotel.getCode()).isPresent()) {
             merge(hotel);

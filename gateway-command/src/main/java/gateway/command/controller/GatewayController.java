@@ -2,9 +2,12 @@ package gateway.command.controller;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import gateway.command.domain.Events;
 import gateway.command.event.commands.CommandRoot;
 import gateway.command.event.http.DefaultClient;
 import gateway.command.event.http.HttpEventPublisher;
+import gateway.command.service.GatewayService;
+import io.micronaut.discovery.exceptions.NoAvailableServiceException;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
@@ -21,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.util.Date;
 import java.util.Set;
 
 @Slf4j
@@ -38,13 +42,15 @@ public class GatewayController {
     private final DefaultClient defaultClient;
     final EmbeddedServer embeddedServer;
 
+    protected final GatewayService service;
 
     @Inject
     protected MediaTypeCodecRegistry mediaTypeCodecRegistry;
 
 
     @Inject
-    public GatewayController(DefaultClient defaultClient,EmbeddedServer embeddedServer) {
+    public GatewayController( GatewayService service,DefaultClient defaultClient,EmbeddedServer embeddedServer) {
+        this.service=service;
         this.defaultClient=defaultClient;
         this.embeddedServer=embeddedServer;
     }
@@ -84,9 +90,12 @@ public class GatewayController {
             /**
              * This calls the publish method in the underlying class
              */
-
-            return d.publish(defaultClient,cmd);
-
+            try {
+                return d.publish(defaultClient,cmd);
+            } catch (NoAvailableServiceException exception) {
+                LOG.error("NoAvailableServiceException - adding event to Events Queue "+exception.getMessage(),exception);
+               service.save(new Events(new Date(), cmd.getEventType(), service.serializeMessage(cmd)));
+            }
         } catch (ClassNotFoundException e) {
             LOG.error("ClassNotFoundException "+e.getMessage(),e);
         }
