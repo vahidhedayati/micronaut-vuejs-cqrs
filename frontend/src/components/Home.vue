@@ -67,40 +67,34 @@
 
 
         <div class="text-left form-label col-sm-2 section-field-label"> Customs Radios <span class="required-indicator"> * </span></div>
+
         <div class="text-left col-sm-8 ">
 
-              <label>
-                <input type="radio" name="radio" checked> <span class="label-text">Option 01</span>
-              </label>
-              <label>
-                <input type="radio" name="radio"> <span class="label-text">Option 02</span>
-              </label>
-              <label>
-                <input type="radio" name="radio"> <span class="label-text">Option 03</span>
-              </label>
-              <label>
-                <input type="radio" name="radio" disabled> <span class="label-text">Option 04</span>
-              </label>
+            <span class="custom-control inline custom-radio">
+              <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
+              <label class="custom-control-label" for="defaultUnchecked">Default unchecked</label>
+            </span >
 
+            <span class="custom-control inline  custom-radio">
+              <input type="radio" class="custom-control-input" id="defaultChecked" name="defaultExampleRadios" checked>
+              <label class="custom-control-label" for="defaultChecked">Default checked</label>
+            </span>
         </div>
+
         </div>
         <div class="row no-padding check-boxes">
           <div class="text-left form-label col-sm-2 section-field-label"> Customs checkboxes <span class="required-indicator"> * </span></div>
           <div class="text-left col-sm-8 ">
 
-        <label>
-            <input type="checkbox" name="check" checked> <span class="label-text">Option 01</span>
-          </label>
+      <span class="custom-control inline custom-checkbox ">
+                   <input type="checkbox" class="custom-control-input" id="defaultUnchecked1" name="defaultExampleRadios1">
+                   <label class="custom-control-label" for="defaultUnchecked1">Default unchecked</label>
+                 </span >
 
-            <label>
-              <input type="checkbox" name="check"> <span class="label-text">Option 02</span>
-            </label>
-            <label>
-              <input type="checkbox" name="check"> <span class="label-text">Option 03</span>
-            </label>
-            <label>
-              <input type="checkbox" name="check" disabled> <span class="label-text">Option 04</span>
-            </label>
+                 <span class="custom-control inline  custom-checkbox">
+                   <input type="checkbox" class="custom-control-input" id="defaultChecked1" name="defaultExampleRadios1" checked>
+                   <label class="custom-control-label" for="defaultChecked1">Default checked</label>
+                 </span>
 
         </div>
         </div>

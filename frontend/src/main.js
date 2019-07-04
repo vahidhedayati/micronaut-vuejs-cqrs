@@ -7,9 +7,10 @@ import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuetify from 'vuetify'
-import BootstrapVue from 'bootstrap-vue';
 import VeeValidate from 'vee-validate';
-import './assets/css/bootstrap.css'
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 import './assets/css/grails.css'
 import './assets/css/main.css'
 import {Tabs, Tab} from 'vue-tabs-component';
