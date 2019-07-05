@@ -12,7 +12,7 @@
       </div>
     <form >
       <div class="section">
-
+        <span class="form-padding">&nbsp</span>
         <div class="form-group form-row">
           <label class=" col-sm-2 col-form-label mr-2">
             Property Name <span class="required-indicator"> * </span>
@@ -100,8 +100,9 @@
               </div>
             </div>
 
-
+        <span class="form-padding">&nbsp</span>
       </div>
+      <span class="form-padding">&nbsp</span>
       <div class="form-row  form-group">
         <div class="col-md-offset-3">
     <button class="btn btn-danger btn-save"@click.prevent="submitForm()">

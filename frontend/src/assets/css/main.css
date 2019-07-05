@@ -704,6 +704,12 @@ footer > p > a {
 .section form  {
   padding-top: 10px;
 }
+.form-padding {
+  display: block;
+  padding:0px !important;
+  line-height: 15px;
+
+}
 .new-line {
   display: block;
   padding:0px !important;
