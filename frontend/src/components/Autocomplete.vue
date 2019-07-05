@@ -9,6 +9,9 @@
       valueField: {
         default: 'name'
       },
+      placeholder:{
+        default: 'name'
+      },
       items: {
         type: Array,
         required: false,
@@ -26,6 +29,7 @@
       isOpen: false,
       results: [],
       search: '',
+      found:'',
       hiddenId:'',
       isLoading: false,
       arrowCounter: 0,
@@ -54,12 +58,27 @@
     });
     },
     setResult(result) {
-      this.search = result[this.valueField];
-      this.hiddenId=result[this.keyField];
-      this.$emit('search-value', this.search);
-      this.$emit('search-key',this.hiddenId);
-      this.isOpen = false;
+      this.found=result[this.valueField];
+      if ( this.found.length>0) {
+        this.search = this.found;
+        this.hiddenId=result[this.keyField];
+        this.$emit('search-value', this.search);
+        this.$emit('search-key',this.hiddenId);
+        this.isOpen = false;
+      }
+
     },
+    confirmValue(evt) {
+      if (this.found.length===0||this.found.length>0 && this.search != this.result ) {
+        this.search=''
+        this.found=''
+      }
+    },
+    isFull: function() {
+      return this.found.length>0
+    },
+
+
     onArrowDown(evt) {
       if (this.arrowCounter < this.results.length) {
         this.arrowCounter = this.arrowCounter + 1;
@@ -102,11 +121,15 @@
 
 <template>
   <div class="autocomplete">
+
     <input
       type="text"
       @input="onChange"
       v-model="search"
+      :placeholder="placeholder"
+      v-bind:class="{  'normal': isFull()===true , 'italic':isFull()===false}"
       @keydown.down="onArrowDown"
+      @change="confirmValue"
       @keydown.up="onArrowUp"
       @keydown.enter="onEnter"
     />
@@ -163,6 +186,15 @@
   .autocomplete-result:hover {
     background-color: #4AAE9B;
     color: white;
+  }
+  .is-active {
+    font-weight: bold;
+  }
+  .italic {
+    font-style: italic;
+  }
+  .normal {
+    font-style: normal;
   }
 
 </style>

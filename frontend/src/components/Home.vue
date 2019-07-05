@@ -57,6 +57,7 @@
                             @key-press="updateAutoCompleteItems"
                             @search-value="updateSearchValue"
                             @search-key="updateSearchKey"
+                            placeholder="please hold"
                             key-field="customId" value-field="customName"
                             :items="[ {customName : 'Apple', customId:'1'} , {customName:'Banana', customId:'2'} ]" />
 
