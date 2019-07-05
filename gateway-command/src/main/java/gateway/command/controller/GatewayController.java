@@ -2,30 +2,28 @@ package gateway.command.controller;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gateway.command.domain.Events;
 import gateway.command.event.commands.CommandRoot;
 import gateway.command.event.http.DefaultClient;
 import gateway.command.event.http.HttpEventPublisher;
-import gateway.command.service.GatewayService;
 import io.micronaut.discovery.exceptions.NoAvailableServiceException;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
-import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.http.codec.MediaTypeCodecRegistry;
 import io.micronaut.jackson.codec.JsonMediaTypeCodec;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.websocket.annotation.ServerWebSocket;
-import io.reactivex.Maybe;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
+
 
 @Slf4j
 @ServerWebSocket("/ws/process")
@@ -42,15 +40,14 @@ public class GatewayController {
     private final DefaultClient defaultClient;
     final EmbeddedServer embeddedServer;
 
-    protected final GatewayService service;
+
 
     @Inject
     protected MediaTypeCodecRegistry mediaTypeCodecRegistry;
 
 
     @Inject
-    public GatewayController( GatewayService service,DefaultClient defaultClient,EmbeddedServer embeddedServer) {
-        this.service=service;
+    public GatewayController( DefaultClient defaultClient,EmbeddedServer embeddedServer) {
         this.defaultClient=defaultClient;
         this.embeddedServer=embeddedServer;
     }
@@ -76,7 +73,7 @@ public class GatewayController {
                 .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
         try {
             CommandRoot cmd = (CommandRoot) mediaTypeCodec.decode( Class.forName(CLASS_PATH+eventType),formInput);
-            cmd.initiate(embeddedServer,eventType, topic);
+            cmd.initiate(embeddedServer,eventType);
 
             //String representation of http class listeners gateway.command.event.http.HotelListener or UserListener
             String httpClassName = HTTP_PATH+topic.substring(0, 1).toUpperCase() + topic.substring(1)+"Listener";
@@ -93,8 +90,18 @@ public class GatewayController {
             try {
                 return d.publish(defaultClient,cmd);
             } catch (NoAvailableServiceException exception) {
+                /**
+                 * When a service / aggregate root - attempt fails send an immediate error to user and fail task
+                 * no queueing of the command for future replay is required here
+                 */
                 LOG.error("NoAvailableServiceException - adding event to Events Queue "+exception.getMessage(),exception);
-               service.save(new Events(new Date(),d.getClass().getName(), topic, cmd.getTransactionId().toString(), cmd.getEventType(), service.serializeMessage(cmd)));
+
+                Set<String> failureMessages = new HashSet<String>();
+                failureMessages.add(d.getClass().getSimpleName()+" using httpClient "+defaultClient.getClass().getSimpleName()+" service are down");
+                HashMap<String,Set<String>> errors = new HashMap<>();
+                errors.put("error", failureMessages);
+                return HttpResponse.ok(errors);
+
             }
         } catch (ClassNotFoundException e) {
             LOG.error("ClassNotFoundException "+e.getMessage(),e);

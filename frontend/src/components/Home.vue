@@ -48,7 +48,7 @@
               Field  <span class="required-indicator"> * </span>
             </div>
             <div class="text-left col-sm-8">
-              <field-select v-model="someObject" :field="'Something here'" :actualItem=null :values="models"></field-select>
+              <field-select v-model="someObject" :field="'Something'" :actualItem=null :values="models"></field-select>
 
 
 
