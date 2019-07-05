@@ -139,7 +139,7 @@
 <script>
   import {Tabs, Tab} from 'vue-tabs-component';
   import FieldSelect from './form/FieldSelect'
-  import Autocomplete from './Autocomplete'
+  import Autocomplete from './form/Autocomplete'
     export default {
       components: {
         Tabs,

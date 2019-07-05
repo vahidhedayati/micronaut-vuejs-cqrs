@@ -55,7 +55,7 @@
 <script>
  import $ from 'jquery';
 import HotelService from '@/services/HotelService'
-import Autocomplete from '../Autocomplete'
+import Autocomplete from '../form/Autocomplete'
 const validateEmail= email => {
   if (!email.length) {
     return { valid: false, error: "email_needed"};
