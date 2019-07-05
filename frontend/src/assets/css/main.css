@@ -34,7 +34,7 @@ html * {
 }
 
 body {
-  background-color: #F5F5F5;
+  background-color: #FFFF;
   color: #333333;
   overflow-x: hidden; /* prevents box-shadow causing a horizontal scrollbar in firefox when viewport < 960px wide */
   -moz-box-shadow: 0 0 0.3em #424649;
@@ -647,7 +647,10 @@ img.grails-logo {
 
 
 #main-container {
-  width: 80%;
+  background-color: #FFF;
+  text-align: left;
+  padding: 10px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -698,10 +701,22 @@ footer > p > a {
 .position-navigation  {
   padding-right: 20em;
 }
+.section form  {
+  padding-top: 10px;
+}
+.new-line {
+  display: block;
+  padding:0px !important;
+  line-height: 5px;
 
+}
+.section .form-row label {
+  padding-left: 20px !important;
+}
 .main-heading {
   font-size: 18px;
   font-weight: bold;
+  text-align: left;
   margin-top: 0;
   color:#313163;
   background-color: #d7f3f1;
@@ -710,9 +725,11 @@ footer > p > a {
   text-align: left;
   font-size: 14px;
   font-weight: bold;
-  margin-top: 0;
+
   color:#009bc5;
   background-color:  #ffffff;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 .no-padding {
   padding:0px;
@@ -924,6 +941,11 @@ th:hover, tr:hover {
 .section .field {
   color:#313163;
   font-size: 12px;
+}
+.section-row {
+  clear: both;
+  display: inline;
+
 }
 .section-field-label {
   color:#313163;

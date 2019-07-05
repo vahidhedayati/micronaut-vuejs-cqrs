@@ -32,7 +32,9 @@
             <localized-link tag="li" to="users" class="" active-class="active">
               <a class="">{{$t('users_label')}}</a>
             </localized-link>
-
+            <localized-link tag="li" to="property" class="" active-class="active">
+              <a class="">{{$t('property_label')}}</a>
+            </localized-link>
 
 
             <li class="dropdown">

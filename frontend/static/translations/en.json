@@ -22,6 +22,7 @@
       "retype_password": "Retype Password",
       "message_number":"Instant Messaging ID",
       "phone_invalid": "Phone number is not valid format try +44-12345789",
+      "property_label": "Property screen",
       "home": {
         "label": "Home"
       }

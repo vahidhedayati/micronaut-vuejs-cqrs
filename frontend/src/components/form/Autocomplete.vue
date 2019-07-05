@@ -12,6 +12,7 @@
       placeholder:{
         default: 'name'
       },
+
       items: {
         type: Array,
         required: false,
@@ -130,13 +131,14 @@
       v-bind:class="{  'normal': isFull()===true , 'italic':isFull()===false}"
       @keydown.down="onArrowDown"
       @change="confirmValue"
+      class="form-control"
       @keydown.up="onArrowUp"
       @keydown.enter="onEnter"
     />
     <ul
       id="autocomplete-results"
       v-show="isOpen"
-      class="autocomplete-results"
+      class="autocomplete-results form-control"
     >
       <li
         class="loading"
