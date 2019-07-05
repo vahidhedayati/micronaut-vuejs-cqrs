@@ -2,12 +2,6 @@ Micronaut backend vuejs frontend application - CQRS
 ------------------
 
 
-###### Youtube [Video demonstrating product part 2 - Latest as per diagram](https://www.youtube.com/watch?v=SB2JP6aF5Fs). Written [description available here](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/master/detailedDescription.md).
-
-
-
-![how this app works](https://raw.githubusercontent.com/vahidhedayati/micronaut-vuejs-cqrs/master/docs/eventstoreCQRS-latest.png)
-
 --------------
 
 Running app
@@ -30,10 +24,32 @@ kill -9 $(netstat -pln 2>/dev/null |grep LISTEN|grep node|awk '{print $7}'|awk -
 ```
 
 
+---------------------
 
-The above will launch 1 instance of frontend vuejs site running on `localhost:3000` 
-and a backend micronaut site running on port `localhost:{random}` a gateway micronaut app running on port 
-`localhost:8080` 
+![how this app works](https://raw.githubusercontent.com/vahidhedayati/micronaut-vuejs-cqrs/master/docs/eventstoreCQRS-latest.png)
+
+---------------------
+
+
+###### Youtube [Video demonstrating product part 2 - Latest as per diagram](https://www.youtube.com/watch?v=SB2JP6aF5Fs). Written [description available here](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/master/detailedDescription.md).
+
+
+---------------------
+
+The above will launch 1 instance of :
+> frontend vuejs site running on `localhost:3000`
+
+> gateway-query port  `localhost:8081` 
+
+> gateway-command port  `localhost:8082` 
+
+> hotel-read port  `localhost:{random}` 
+ 
+> hotel-write port  `localhost:{random}`
+
+> user-read port  `localhost:{random}`  
+
+> user-write port  `localhost:{random}`
 
 
 --------------
@@ -50,5 +66,5 @@ and
 --------------
 
 
-##### Please refer to [what CQRS is here](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/master/cqrs-explained.md).
+##### CQRS further reading, please refer to [what CQRS is here](https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/master/cqrs-explained.md).
 
