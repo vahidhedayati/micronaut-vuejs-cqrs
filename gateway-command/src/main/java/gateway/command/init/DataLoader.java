@@ -4,12 +4,14 @@ import gateway.command.controller.GatewayController;
 import gateway.command.domain.Events;
 import gateway.command.event.commands.HotelCreateCommand;
 import gateway.command.event.commands.UserSaveCommand;
+import gateway.command.event.http.DefaultClient;
 import gateway.command.event.http.HotelClient;
 import gateway.command.event.http.UserClient;
 import gateway.command.service.GatewayService;
 import io.micronaut.configuration.hibernate.jpa.scope.CurrentSession;
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.discovery.exceptions.NoAvailableServiceException;
+import io.micronaut.http.codec.MediaTypeCodecRegistry;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
 import io.reactivex.Completable;
@@ -19,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -39,7 +42,12 @@ public class DataLoader  implements ApplicationEventListener<ServerStartupEvent>
 	private final EmbeddedServer embeddedServer;
 	protected final GatewayService service;
 
+
+	@Inject
+	protected MediaTypeCodecRegistry mediaTypeCodecRegistry;
+
 	public DataLoader(GatewayService service, EmbeddedServer embeddedServer, HotelClient hotelClient, UserClient userClient) {
+
 		this.service = service;
 		this.embeddedServer=embeddedServer;
 		this.hotelClient = hotelClient;
@@ -55,7 +63,8 @@ public class DataLoader  implements ApplicationEventListener<ServerStartupEvent>
 				userClient.publish(cmd);
 			} catch (NoAvailableServiceException exception) {
 				LOG.error("NoAvailableServiceException - adding event to Events Queue "+exception.getMessage(),exception);
-				service.save(new Events(new Date(), cmd.getEventType(),  service.serializeMessage(cmd)));
+				System.out.println(" CMD TPC ----------------------------------------------------------------"+cmd.getTopic());
+				service.save(new Events(new Date(), userClient.getClass().getName(), cmd.getTopic(), cmd.getTransactionId().toString(), cmd.getEventType(),  service.serializeMessage(cmd)));
 			}
 
 		}
@@ -66,7 +75,8 @@ public class DataLoader  implements ApplicationEventListener<ServerStartupEvent>
 				hotelClient.publish(cmd);
 			} catch (NoAvailableServiceException exception) {
 				LOG.error("NoAvailableServiceException - adding event to Events Queue "+exception.getMessage(),exception);
-				service.save(new Events(new Date(), cmd.getEventType(),  service.serializeMessage(cmd)));
+				System.out.println(" CMD TPC ------------------------------------------------------------------------- "+cmd.getTopic());
+				service.save(new Events(new Date(), hotelClient.getClass().getName(), cmd.getTopic(),cmd.getTransactionId().toString(),  cmd.getEventType(),  service.serializeMessage(cmd)));
 			}
 		}
 
@@ -89,7 +99,7 @@ public class DataLoader  implements ApplicationEventListener<ServerStartupEvent>
 	 * @return
 	 */
 	Completable processEvents() {
-		RunnableEvents r = new RunnableEvents(service);
+		RunnableEvents r = new RunnableEvents(mediaTypeCodecRegistry, embeddedServer,   service);
 		return Completable
 				.fromRunnable(r)
 				.subscribeOn(Schedulers.io())

@@ -58,7 +58,7 @@ public class DemoHotelsFactory {
 	static HotelCreateCommand addHotel(EmbeddedServer embeddedServer, String code,String name, String email, String phone) {
 		HotelCreateCommand hotel = new HotelCreateCommand(code,name ,phone,email,1L,
 				Date.from(LocalDate.parse( "2019-01-10" ).plusDays( 10 ).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()),addRooms());
-		hotel.initiate(embeddedServer,"HotelCreateCommand");
+		hotel.initiate(embeddedServer,"HotelCreateCommand", "hotel");
 		return hotel;
 	}
 

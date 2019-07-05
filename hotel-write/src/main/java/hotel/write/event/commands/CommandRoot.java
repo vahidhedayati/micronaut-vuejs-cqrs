@@ -1,9 +1,7 @@
 package hotel.write.event.commands;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import hotel.write.event.Action;
 import hotel.write.event.events.EventRoot;
 import io.micronaut.runtime.server.EmbeddedServer;
@@ -12,26 +10,6 @@ import java.time.Instant;
 import java.util.UUID;
 
 
-/**
- * Please note abstrat classes as json deserialisation goes runs into issues, to get around it this block is needed:
- */
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.EXISTING_PROPERTY, //field must be present in the POJO
-        property = "eventType")
-
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = HotelCreateCommand.class),
-        @JsonSubTypes.Type(value = HotelSaveCommand.class),
-        @JsonSubTypes.Type(value = HotelUpdateCommand.class),
-        @JsonSubTypes.Type(value = HotelDeleteCommand.class),
-        @JsonSubTypes.Type(value = UserSaveCommand.class),
-        @JsonSubTypes.Type(value = UserDeleteCommand.class),
-        @JsonSubTypes.Type(value = UserUpdateCommand.class)
-})
-
 public abstract class CommandRoot implements Action {
 
     private String eventType;
@@ -39,6 +17,7 @@ public abstract class CommandRoot implements Action {
     //Stores time of event
     private Instant instant;
 
+    private String topic;
     //Stores a random transaction Id
     private UUID transactionId;
 
@@ -59,10 +38,19 @@ public abstract class CommandRoot implements Action {
         this.host = embeddedServer.getHost();
         this.port = embeddedServer.getPort();
     }
-
+    public void initiate(EmbeddedServer embeddedServer, String eventType, String topic) {
+        this.topic=topic;
+        this.eventType=eventType;
+        this.instant = Instant.now();
+        this.transactionId=UUID.randomUUID();
+        this.host = embeddedServer.getHost();
+        this.port = embeddedServer.getPort();
+    }
     protected CommandRoot() {}
 
+
     public CommandRoot(EventRoot cmd) {
+        this.topic=cmd.getTopic();
         this.currentUser=cmd.getCurrentUser();
         this.eventType=cmd.getEventType();
         this.instant=cmd.getInstant();
@@ -71,7 +59,9 @@ public abstract class CommandRoot implements Action {
         this.port=cmd.getPort();
     }
 
+
     public CommandRoot(CommandRoot cmd) {
+        this.topic=cmd.getTopic();
         this.currentUser=cmd.getCurrentUser();
         this.eventType=cmd.getEventType();
         this.instant=cmd.getInstant();
@@ -128,4 +118,11 @@ public abstract class CommandRoot implements Action {
         this.port = port;
     }
 
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
 }

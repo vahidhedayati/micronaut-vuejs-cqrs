@@ -25,7 +25,7 @@ public class DemoUsersFactory {
 	static UserSaveCommand addUser(EmbeddedServer embeddedServer, String username,String password,String firstname,String surname) {
 		UserSaveCommand user = new UserSaveCommand(username,password ,firstname,surname,
 				Date.from(LocalDate.parse( "2019-01-10" ).plusDays( 10 ).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
-		user.initiate(embeddedServer,"UserSaveCommand");
+		user.initiate(embeddedServer,"UserSaveCommand", "user");
 		return user;
 	}
 

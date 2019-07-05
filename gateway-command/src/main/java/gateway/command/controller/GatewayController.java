@@ -76,7 +76,7 @@ public class GatewayController {
                 .orElseThrow(() -> new IllegalStateException("No JSON codec found"));
         try {
             CommandRoot cmd = (CommandRoot) mediaTypeCodec.decode( Class.forName(CLASS_PATH+eventType),formInput);
-            cmd.initiate(embeddedServer,eventType);
+            cmd.initiate(embeddedServer,eventType, topic);
 
             //String representation of http class listeners gateway.command.event.http.HotelListener or UserListener
             String httpClassName = HTTP_PATH+topic.substring(0, 1).toUpperCase() + topic.substring(1)+"Listener";
@@ -94,7 +94,7 @@ public class GatewayController {
                 return d.publish(defaultClient,cmd);
             } catch (NoAvailableServiceException exception) {
                 LOG.error("NoAvailableServiceException - adding event to Events Queue "+exception.getMessage(),exception);
-               service.save(new Events(new Date(), cmd.getEventType(), service.serializeMessage(cmd)));
+               service.save(new Events(new Date(),d.getClass().getName(), topic, cmd.getTransactionId().toString(), cmd.getEventType(), service.serializeMessage(cmd)));
             }
         } catch (ClassNotFoundException e) {
             LOG.error("ClassNotFoundException "+e.getMessage(),e);

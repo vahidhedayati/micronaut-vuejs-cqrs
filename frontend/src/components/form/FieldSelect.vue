@@ -1,7 +1,7 @@
 <template id="driverSelect-template" xmlns="http://www.w3.org/1999/xhtml">
   <div class="form-group"> <!--4-->
     <select class="form-control" v-model="selected" @change="updateValue()">
-      <option v-if="this.blankForm" disabled :value="null">Select a {{field}}</option>
+      <option v-if="this.blankForm"  :value="null" style="font><i>Select a {{field}}</i></option>
       <option v-for="value in values" :value="value.id" :key="value.id">
         {{ value.name }}
       </option>

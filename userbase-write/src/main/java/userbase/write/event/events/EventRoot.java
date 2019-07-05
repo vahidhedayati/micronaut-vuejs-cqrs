@@ -1,10 +1,10 @@
 package userbase.write.event.events;
 
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import io.micronaut.runtime.server.EmbeddedServer;
 import userbase.write.event.Action;
 import userbase.write.event.commands.CommandRoot;
@@ -38,6 +38,8 @@ public abstract class EventRoot implements Action {
     //Stores time of event
     private Instant instant;
 
+    private String topic;
+
     //Stores a random transaction Id
     private UUID transactionId;
 
@@ -51,7 +53,8 @@ public abstract class EventRoot implements Action {
     //created
     private String currentUser;
 
-    public void initiate(EmbeddedServer embeddedServer, String eventType) {
+    public void initiate(EmbeddedServer embeddedServer, String eventType, String topic) {
+        this.topic=topic;
         this.eventType=eventType;
         this.instant = Instant.now();
         this.transactionId=UUID.randomUUID();
@@ -62,6 +65,7 @@ public abstract class EventRoot implements Action {
     protected EventRoot() {}
 
     public EventRoot(EventRoot cmd) {
+        this.topic=cmd.getTopic();
         this.currentUser=cmd.getCurrentUser();
         this.eventType=cmd.getEventType();
         this.instant=cmd.getInstant();
@@ -70,6 +74,7 @@ public abstract class EventRoot implements Action {
         this.port=cmd.getPort();
     }
     public EventRoot(CommandRoot cmd) {
+        this.topic=cmd.getTopic();
         this.currentUser=cmd.getCurrentUser();
         this.eventType=cmd.getEventType();
         this.instant=cmd.getInstant();
@@ -126,4 +131,11 @@ public abstract class EventRoot implements Action {
         this.port = port;
     }
 
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
 }

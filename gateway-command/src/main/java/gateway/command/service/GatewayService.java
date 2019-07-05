@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,13 +36,18 @@ public class GatewayService {
 
     @Transactional
     public void save(Events event) {
-        if (event!=null) {
-            if (!findByCode(event.getEventType()).isPresent()) {
+        if (event!=null && !findByTransactionId(event.getTransactionId()).isPresent()) {
                 entityManager.persist(event);
-            }
         }
     }
-
+    @Transactional
+    public void markCompleted(Events event) {
+        if (event!=null && findByTransactionId(event.getTransactionId()).isPresent()) {
+            entityManager.createQuery("UPDATE Events h  SET completed = :completed  where id = :id")
+                    .setParameter("completed", new Date())
+                    .executeUpdate();
+        }
+    }
 
     @Transactional(readOnly = true)
     public List<Events> processMissing() {
@@ -58,7 +64,14 @@ public class GatewayService {
                 .getResultStream()
                 .findFirst();
     }
-
+    @Transactional
+    public Optional<Events> findByTransactionId(String code) {
+        return entityManager
+                .createQuery("from Events h where h.transactionId = :code", Events.class)
+                .setParameter("code", code)
+                .getResultStream()
+                .findFirst();
+    }
 
     public <T extends CommandRoot> String serializeMessage(T command) {
         String json;
