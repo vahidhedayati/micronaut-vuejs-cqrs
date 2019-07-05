@@ -1,4 +1,4 @@
-Micronaut backend vuejs frontend application - CQRS
+Event driven CQRS application - Written in Micronaut backend, vuejs frontend 
 ------------------
 
 
