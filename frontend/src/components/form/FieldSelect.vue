@@ -1,7 +1,12 @@
 <template id="driverSelect-template" xmlns="http://www.w3.org/1999/xhtml">
   <div class="form-group"> <!--4-->
-    <select class="form-control" v-model="selected" @change="updateValue()">
-      <option v-if="this.blankForm" disabled :value="null">Select a {{field}}</option>
+    <select class="form-control" v-model="selected" @change="updateValue()"
+            style="background-color:#FFFFFF;display: block; font-size: 14px;  font-style: italic;"
+            onmouseover="this.className='form-control with_bg'; "
+            onChange="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;
+            this.style.fontStyle=this.options[this.selectedIndex].style.fontStyle;
+">
+      <option v-if="this.blankForm" style="background-color:#8ded67;  font-style: italic;"  :value="null">Select a {{field}}</option>
       <option v-for="value in values" :value="value.id" :key="value.id">
         {{ value.name }}
       </option>
@@ -32,4 +37,6 @@ export default {
 </script>
 
 <style>
+  .with_bg{background-color:#e7fcde; display: block; font-size: 14px; border: 2px solid #5ed230; cursor: pointer;}
+  .without_bg{background-color:#FFFFFF; cursor: pointer;}
 </style>
