@@ -4,8 +4,7 @@
             style="background-color:#FFFFFF;display: block; font-size: 14px;  font-style: italic;"
             onmouseover="this.className='form-control with_bg'; "
             onChange="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;
-            this.style.fontStyle=this.options[this.selectedIndex].style.fontStyle;
-">
+            this.style.fontStyle=this.options[this.selectedIndex].style.fontStyle;">
       <option v-if="this.blankForm" style="background-color:#8ded67;  font-style: italic;"  :value="null">Select a {{field}}</option>
       <option v-for="value in values" :value="value.id" :key="value.id">
         {{ value.name }}

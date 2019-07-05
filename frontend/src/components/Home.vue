@@ -1,5 +1,6 @@
 <template>
     <div class="hello">
+
         <h5>{{ msg }}</h5>
         <h6>This is fab hotel using Micronaut. </h6>
       <tabs :options="{ defaultTabHash: 'search' }">
@@ -112,7 +113,23 @@
       <button class="btn btn-general"@click.prevent="submitForm()">
         {{$t('save_button')}}
       </button>
+      <div class="notes">
+        <pre>
+          Things to keep in mind about vuejs -
 
+          -> package.json - and maintaining upto date packages / vulnrabilities
+
+          -> When attempting to translate content or use vuejs in context of translatable site - the routing url's are
+          altered to always include the current language code - refer to current router/index.js as well as Navbar.vue
+
+          -> Whilst vuex store has been used with current CRUD listing of hotel and when a user adds a new record, with
+          PAGINATION involved user currently sees the max record returned 'stored in vuex' when they click on sortable
+          column to show last record i.e. newly added record the user does actually reupdate the content of store since
+          the sorting went off to DB and looked up according to new ordering etc.
+          Since if they had 10 and they add 1 = 11 11 is on next page in theory so they would be doing a refresh
+
+        </pre>
+      </div>
 
     </div>
 
