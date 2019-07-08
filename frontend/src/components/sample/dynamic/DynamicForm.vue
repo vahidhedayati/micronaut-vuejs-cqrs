@@ -10,6 +10,8 @@
 
         <!-- changed to use formdata which is a dynamic declaration in each parent page to the same dataset or a specific Vue file that contains form data -->
 
+<slot name="content">
+    </slot>
 
 
 
