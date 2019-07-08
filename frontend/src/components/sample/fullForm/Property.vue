@@ -5,8 +5,6 @@
       Create a property
     </div>
 
-
-
       <div class="section-heading">
         Property Name & Address
       </div>
@@ -121,7 +119,7 @@
   </section>
 </template>
 <script>
-  import Autocomplete from '../form/Autocomplete'
+  import Autocomplete from '../../form/Autocomplete'
 
   export default {
     components: {

@@ -3,7 +3,9 @@ import Router from 'vue-router'
 import Home from '@/views/Home.vue'
 import Hotel from '@/components/hotel/Hotel'
 import User from '@/components/users/User'
-import Property from '@/components/sample/Property'
+import Property from '@/components/sample/fullForm/Property'
+import PropertySplit from '@/components/sample/dynamicForm/PropertySplit'
+import Property2 from '@/components/sample/dynamicForm2/Property2'
 Vue.use(Router)
 import { defaultLocale } from '../components/i18n/i18n'
 export default new Router({
@@ -44,6 +46,14 @@ export default new Router({
         {
           path: 'property',
           component: Property
+        },
+        {
+          path: 'propertysplit',
+          component: PropertySplit
+        },
+        {
+          path: 'property2',
+          component: Property2
         },
       ],
     },

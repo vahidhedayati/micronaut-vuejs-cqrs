@@ -23,6 +23,8 @@
       "message_number":"Instant Messaging ID",
       "phone_invalid": "Phone number is not valid format try +44-12345789",
       "property_label": "Property screen",
+      "propertysplit_label": "Property Dynamic screen",
+      "propertysplit2_label": "Property Another form Dynamic screen",
       "home": {
         "label": "Home"
       }

@@ -1,7 +1,6 @@
 <template id="driverSelect-template" xmlns="http://www.w3.org/1999/xhtml">
   <div class="form-group"> <!--4-->
-    <select class="form-control" v-model="selected" @change="updateValue()"
-            v-bind:class="{  'normal': selected!=null , 'italic':selected===null}" >
+    <select class="form-control" v-model="selected" @change="updateValue()">
       <option v-if="this.blankForm"  :value="null">Select a {{field}}</option>
       <option v-for="value in values" :value="value.id" :key="value.id">
         {{ value.name }}
@@ -33,10 +32,4 @@ export default {
 </script>
 
 <style>
-  .italic:first-line {
-    font-style: italic;
-  }
-  .normal {
-    font-style: normal;
-  }
 </style>

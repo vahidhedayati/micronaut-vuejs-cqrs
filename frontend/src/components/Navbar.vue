@@ -35,6 +35,16 @@
             <localized-link tag="li" to="property" class="" active-class="active">
               <a class="">{{$t('property_label')}}</a>
             </localized-link>
+            <localized-link tag="li" to="propertysplit" class="" active-class="active">
+                          <a class="">{{$t('propertysplit_label')}}</a>
+                        </localized-link>
+
+            <localized-link tag="li" to="property2" class="" active-class="active">
+                                      <a class="">{{$t('propertysplit2_label')}}</a>
+                                    </localized-link>
+
+
+
 
 
             <li class="dropdown">

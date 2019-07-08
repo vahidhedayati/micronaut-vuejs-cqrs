@@ -192,11 +192,6 @@
   .is-active {
     font-weight: bold;
   }
-  .italic {
-    font-style: italic;
-  }
-  .normal {
-    font-style: normal;
-  }
+
 
 </style>
