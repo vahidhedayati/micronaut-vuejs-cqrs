@@ -20,61 +20,55 @@
     <div class="collapse navbar-collapse" aria-expanded="false" style="height: 0.8px;" id="navbarContent">
 
 
+
       <ul class="nav navbar-nav ml-auto position-navigation">
-        <li class="dropdown menu-options">
-        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-           aria-expanded="true"><font-awesome-icon icon="bars" /> Menu</a>
-          <ul class="dropdown-menu">
-
-            <localized-link  tag="li"  to="hotel" class="" active-class="active">
-              <a class="">{{$t('hotel_label')}}</a>
-            </localized-link>
-            <localized-link tag="li" to="users" class="" active-class="active">
-              <a class="">{{$t('users_label')}}</a>
-            </localized-link>
-            <localized-link tag="li" to="property" class="" active-class="active">
-              <a class="">{{$t('property_label')}}</a>
-            </localized-link>
-            <localized-link tag="li" to="propertysplit" class="" active-class="active">
-                          <a class="">{{$t('propertysplit_label')}}</a>
-                        </localized-link>
-
-            <localized-link tag="li" to="property2" class="" active-class="active">
-                                      <a class="">{{$t('propertysplit2_label')}}</a>
-                                    </localized-link>
+  <li class="dropdown menu-options">
+              <a class="btn btn-secondary dropdown-toggle"  data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="true"><font-awesome-icon icon="bars" /> Menu</a>
 
 
+            <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                 <localized-link  tag="li"  to="hotel" class="" active-class="active">
+                    <a class="">{{$t('hotel_label')}}</a>
+                  </localized-link>
+                  <localized-link tag="li" to="users" class="" active-class="active">
+                    <a class="">{{$t('users_label')}}</a>
+                  </localized-link>
+                  <localized-link tag="li" to="property" class="" active-class="active">
+                    <a class="">{{$t('property_label')}}</a>
+                  </localized-link>
+                  <localized-link tag="li" to="propertysplit" class="" active-class="active">
+                    <a class="">{{$t('propertysplit_label')}}</a>
+                  </localized-link>
 
-
-
-            <li class="dropdown">
-              <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="dropdown">
-                  <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown2</a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li class="dropdown">
-                      <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown3</a>
-                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
+                  <localized-link tag="li" to="property2" class="" active-class="active">
+                   <a class="">{{$t('propertysplit2_label')}}</a>
+                  </localized-link>
+                <li class="dropdown-divider"></li>
+                <li class="dropdown-submenu">
+                  <a  class="dropdown-item" tabindex="-1" href="#">Hover me for more options</a>
+                  <ul class="dropdown-menu">
+                    <li class="dropdown-item"><a tabindex="-1" href="#">Second level</a></li>
+                    <li class="dropdown-submenu">
+                      <a class="dropdown-item" href="#">Even More..</a>
+                      <ul class="dropdown-menu">
+                          <li class="dropdown-item"><a href="#">3rd level</a></li>
+                            <li class="dropdown-submenu"><a class="dropdown-item" href="#">another level</a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item"><a href="#">4th level</a></li>
+                                <li class="dropdown-item"><a href="#">4th level</a></li>
+                                <li class="dropdown-item"><a href="#">4th level</a></li>
+                            </ul>
+                          </li>
+                            <li class="dropdown-item"><a href="#">3rd level</a></li>
                       </ul>
                     </li>
+                    <li class="dropdown-item"><a href="#">Second level</a></li>
+                    <li class="dropdown-item"><a href="#">Second level</a></li>
                   </ul>
                 </li>
               </ul>
-            </li>
-
-          </ul>
-        </li>
-
+       </li>
         <li class="dropdown">
           <a href="#" class="user-options dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
              aria-expanded="true"><font-awesome-icon icon="user" /> John Smith</a>
@@ -166,5 +160,5 @@
 
 
 <style scoped>
-  /* ... */
+
 </style>
