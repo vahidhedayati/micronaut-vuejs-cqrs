@@ -7,7 +7,7 @@
   :headingText="currentHeadingText"
   :sectionHeadingText="currentSectionHeadingText"
   formAction="/property/save"
-:exampleComponent="exampleComponent"
+
  />
 
 </div>

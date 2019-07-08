@@ -128,6 +128,30 @@
       Autocomplete
 
     },
+     methods: {
+       sort: function (s) {
+         this.column=s;
+         this.activeColumn=s;
+         if (s === this.currentSort) {
+           this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc';
+
+         }
+         this.currentSort = s;
+
+
+       },
+       updateAutoCompleteItems: function (searchValue) {
+         if (searchValue.length>2) {
+
+         }
+       },
+       updateSearchValue: function (value) {
+         //this.hotel.updateUserName=value
+       },
+       updateSearchKey: function (key) {
+         //this.hotel.updateUserId=key
+       },
+     },
   }
 </script>
 <style>

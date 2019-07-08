@@ -74,7 +74,7 @@
     },
     data: function () {
       return {
-        errors:[],
+        userErrors:[],
         users: [],
         search:{name:''},
         user: {},
@@ -133,11 +133,11 @@
         this.fetchUsers(0)
       },
       updateUsers: function (user) {
-        this.errors=[];
+        this.userErrors=[];
         this.users=updateObjectsInArr(this.users, [user])
       },
       errorUsers: function (errors) {
-        this.errors=errors;
+        this.userErrors=errors;
       },
       fetchUsers: function (pageNumber) {
         var variables=''

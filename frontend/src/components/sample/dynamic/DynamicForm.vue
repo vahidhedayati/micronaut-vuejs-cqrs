@@ -39,12 +39,12 @@ import MainHeading from './MainHeading'
 import SectionHeading from './SectionHeading'
 
   export default {
-   props: ['headingText', 'sectionHeadingText','formAction', 'exampleComponent'],
+   props: ['headingText', 'sectionHeadingText','formAction'],
     components: {
       MainHeading,
       SectionHeading,
       Autocomplete,
-      "example-component": this.exampleComponent
+
 
     }
   }
