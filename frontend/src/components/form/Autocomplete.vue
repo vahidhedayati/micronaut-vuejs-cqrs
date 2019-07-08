@@ -12,7 +12,9 @@
       placeholder:{
         default: 'name'
       },
-
+      fieldName: {
+      default:'selectName'
+      },
       items: {
         type: Array,
         required: false,
@@ -125,6 +127,7 @@
 
     <input
       type="text"
+      :name="fieldName"
       @input="onChange"
       v-model="search"
       :placeholder="placeholder"

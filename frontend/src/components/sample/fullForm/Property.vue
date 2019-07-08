@@ -16,7 +16,8 @@
             Property Name <span class="required-indicator"> * </span>
           </label>
           <div class="col-sm-6">
-            <input type="text"  class="form-control" >
+            <input type="text"  class="form-control" name="propertyName"  v-validate="'required|min:6|max:35'"  >
+            <span v-show="errors.has('propertyName')" class="clear alert alert-danger">{{ errors.first('propertyName') }}</span>
           </div>
         </div>
         <div class="form-group form-row">
@@ -24,7 +25,8 @@
             Street Address <span class="required-indicator"> * </span>
           </label>
           <div class="col-sm-6">
-            <input type="text"  class="form-control" >
+            <input type="text"  class="form-control" name="address1" v-validate="'required|min:6|max:35'">
+            <span v-show="errors.has('address1')" class="clear alert alert-danger">{{ errors.first('address1') }}</span>
             <span class="new-line">&nbsp</span>
             <input type="text"  class="form-control" >
           </div>
@@ -36,14 +38,15 @@
             <div class="col-sm-4">
 
               <autocomplete form-field="search"
+                          fieldName="city"
                             @key-press="updateAutoCompleteItems"
                             @search-value="updateSearchValue"
                             @search-key="updateSearchKey"
                             placeholder="Enter or select City"
                             key-field="customId" value-field="customName"
-
+ v-validate="'required|min:1'"
                             :items="[ {customName : 'London', customId:'1'} , {customName:'Manchester', customId:'2'} ]" />
-
+ <span v-show="errors.has('city')" class="clear alert alert-danger">{{ errors.first('city') }}</span>
             </div>
           </div>
 
