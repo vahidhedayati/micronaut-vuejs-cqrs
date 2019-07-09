@@ -39,6 +39,8 @@ public class HttpListener {
      */
     @Post("/")
     public <T extends CommandRoot> HttpResponse publish(T command) {
+        System.out.println( " cmd "+command.getInstant());
+
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         final Set<ConstraintViolation<T>> constraintViolations = validator.validate(command);
         if (constraintViolations.size() > 0) {

@@ -13,8 +13,7 @@ import io.reactivex.Maybe;
  *
  * This is a way of getting gateway to just dynamically pass this default interface which converts locally to real interface
  */
-public interface DefaultClient  {
-
+public  interface DefaultClient  {
     @Post("/")
     <T extends CommandRoot> HttpResponse publish(T command);
 }

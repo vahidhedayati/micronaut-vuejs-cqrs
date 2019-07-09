@@ -5,12 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gateway.command.event.commands.CommandRoot;
 import gateway.command.event.http.DefaultClient;
 import gateway.command.event.http.HttpEventPublisher;
+import gateway.command.event.http.UserClient;
 import io.micronaut.discovery.exceptions.NoAvailableServiceException;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.client.RxHttpClient;
+import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.codec.MediaTypeCodecRegistry;
 import io.micronaut.jackson.codec.JsonMediaTypeCodec;
 import io.micronaut.runtime.server.EmbeddedServer;
@@ -20,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,9 +39,11 @@ public class GatewayController {
 
     private final String CLASS_PATH="gateway.command.event.commands.";
     private final String HTTP_PATH="gateway.command.event.http.";
+    @Inject
+    @Client(id="hotel-write")
+    private  RxHttpClient httpClient;
 
-
-    private final DefaultClient defaultClient;
+    //private final DefaultClient defaultClient;
     final EmbeddedServer embeddedServer;
 
 
@@ -47,8 +53,9 @@ public class GatewayController {
 
 
     @Inject
-    public GatewayController( DefaultClient defaultClient,EmbeddedServer embeddedServer) {
-        this.defaultClient=defaultClient;
+    public GatewayController(  EmbeddedServer embeddedServer) {
+        //this.httpClient=httpClient;
+        //this.defaultClient=defaultClient;  DefaultClient defaultClient,
         this.embeddedServer=embeddedServer;
     }
 
@@ -87,8 +94,12 @@ public class GatewayController {
             /**
              * This calls the publish method in the underlying class
              */
+            String clientClassName = HTTP_PATH+topic.substring(0, 1).toUpperCase() + topic.substring(1)+"Client";
+
+            // ((UserClient) defaultClient)
+           // makeObject(Class.forName(clientClassName)),
             try {
-                return d.publish(defaultClient,cmd);
+                return d.publish( cmd);
             } catch (NoAvailableServiceException exception) {
                 /**
                  * When a service / aggregate root - attempt fails send an immediate error to user and fail task
@@ -97,7 +108,7 @@ public class GatewayController {
                 LOG.error("NoAvailableServiceException - adding event to Events Queue "+exception.getMessage(),exception);
 
                 Set<String> failureMessages = new HashSet<String>();
-                failureMessages.add(d.getClass().getSimpleName()+" using httpClient "+defaultClient.getClass().getSimpleName()+" service are down");
+                failureMessages.add(d.getClass().getSimpleName()+" using httpClient ");//+defaultClient.getClass().getSimpleName()+" service are down");
                 HashMap<String,Set<String>> errors = new HashMap<>();
                 errors.put("error", failureMessages);
                 return HttpResponse.ok(errors);
@@ -120,14 +131,19 @@ public class GatewayController {
         Object o = null;
 
         try {
-            if (HttpEventPublisher.class.isAssignableFrom(clazz)) {
-                o = Class.forName(clazz.getName()).newInstance();
-            } else {
+           // if (HttpEventPublisher.class.isAssignableFrom(clazz)||DefaultClient.class.isAssignableFrom(clazz)) {
+            o = Class.forName(clazz.getName()).newInstance();
 
-                throw new RuntimeException(
-                        "Invalid class: class should be child of MyInterface");
-            }
+          /*  Constructor<?> cons = clazz.getConstructor(clazz.getClass());
+            System.out.println(" co  "+cons.getName());
+            o =  cons.newInstance(httpClient);
+            */
+            //} else {
 
+              //  throw new RuntimeException(
+               //         "Invalid class: class should be child of MyInterface");
+            //}
+                //return o;
         } catch (Exception e) {
             e.printStackTrace();
         }

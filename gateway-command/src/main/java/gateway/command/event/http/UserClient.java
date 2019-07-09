@@ -14,8 +14,11 @@ import java.util.Set;
  */
 
 @Client(id = "userbase-write", path = "/")
-public interface UserClient extends  DefaultClient {
+public interface UserClient {
 
     @Post("/")
-    <T extends  CommandRoot> HttpResponse publish(T command);
+    <T extends CommandRoot> void initialize(T cmd);
+    @Post("/")
+    <T extends CommandRoot> HttpResponse publish(T command);
+
 }

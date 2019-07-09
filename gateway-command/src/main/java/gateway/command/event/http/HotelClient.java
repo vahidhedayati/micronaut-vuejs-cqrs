@@ -15,8 +15,12 @@ import java.util.Set;
  */
 @Primary
 @Client(id = "hotel-write", path = "/")
-public interface HotelClient  extends  DefaultClient {
+public interface HotelClient   { //extends  DefaultClient
 
     @Post("/")
-    <T extends  CommandRoot> HttpResponse publish(T command);
+    <T extends CommandRoot> void initialize(T cmd);
+
+    @Post("/")
+    <T extends CommandRoot> HttpResponse publish(T command);
+
 }
