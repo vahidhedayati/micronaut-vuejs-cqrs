@@ -37,7 +37,7 @@ public class GatewayController {
     private final String HTTP_PATH="gateway.command.event.http.";
 
 
-    private final DefaultClient defaultClient;
+   // private final DefaultClient defaultClient;
     final EmbeddedServer embeddedServer;
 
 
@@ -47,8 +47,8 @@ public class GatewayController {
 
 
     @Inject
-    public GatewayController( DefaultClient defaultClient,EmbeddedServer embeddedServer) {
-        this.defaultClient=defaultClient;
+    public GatewayController(EmbeddedServer embeddedServer) {
+        //this.defaultClient=defaultClient;  DefaultClient defaultClient,
         this.embeddedServer=embeddedServer;
     }
 
@@ -82,22 +82,21 @@ public class GatewayController {
              * This grabs our dynamic mapper for above class which calls the abstract method in above class
              * physically identified under its abstract name of HttpEventPublisher so HotelListener pretending to be
              * HttpEventPublisher so we can instantiate it
+             *
+             * This below is the fix also for commandreplaywip :
+             * https://github.com/vahidhedayati/micronaut-vuejs-cqrs/blob/commandreplaywip/gateway-command/src/main/java/gateway/command/init/RunnableEvents.java#L63
              */
-            HttpEventPublisher d = (HttpEventPublisher) makeObject(Class.forName(httpClassName));
-            /**
-             * This calls the publish method in the underlying class
-             */
+            HttpEventPublisher d = (HttpEventPublisher) embeddedServer.getApplicationContext().getBean(Class.forName(httpClassName));
             try {
-                return d.publish(defaultClient,cmd);
+                return d.publish(cmd);
             } catch (NoAvailableServiceException exception) {
                 /**
                  * When a service / aggregate root - attempt fails send an immediate error to user and fail task
                  * no queueing of the command for future replay is required here
                  */
                 LOG.error("NoAvailableServiceException - adding event to Events Queue "+exception.getMessage(),exception);
-
                 Set<String> failureMessages = new HashSet<String>();
-                failureMessages.add(d.getClass().getSimpleName()+" using httpClient "+defaultClient.getClass().getSimpleName()+" service are down");
+                failureMessages.add(d.getClass().getSimpleName()+" using httpClient "); //;/+defaultClient.getClass().getSimpleName()+" service are down");
                 HashMap<String,Set<String>> errors = new HashMap<>();
                 errors.put("error", failureMessages);
                 return HttpResponse.ok(errors);
@@ -111,27 +110,4 @@ public class GatewayController {
     }
 
 
-    /**
-     * Assigns and returns actual object instance of given Class object
-     * @param clazz
-     * @return
-     */
-    public Object makeObject(Class<?> clazz) {
-        Object o = null;
-
-        try {
-            if (HttpEventPublisher.class.isAssignableFrom(clazz)) {
-                o = Class.forName(clazz.getName()).newInstance();
-            } else {
-
-                throw new RuntimeException(
-                        "Invalid class: class should be child of MyInterface");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return o;
-    }
 }

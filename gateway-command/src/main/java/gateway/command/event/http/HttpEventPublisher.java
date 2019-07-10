@@ -12,11 +12,10 @@ import java.util.Set;
  */
 
 
-public abstract class HttpEventPublisher<R> {
+public abstract class HttpEventPublisher {
 
 
     public HttpEventPublisher() { }
 
-    public abstract<T extends CommandRoot> HttpResponse publish(R clnt, T command);
-
+    public abstract<T extends CommandRoot> HttpResponse publish( T command);
 }
