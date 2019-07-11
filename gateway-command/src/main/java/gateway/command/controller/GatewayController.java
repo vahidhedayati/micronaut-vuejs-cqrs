@@ -3,7 +3,6 @@ package gateway.command.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import gateway.command.event.commands.CommandRoot;
-import gateway.command.event.http.DefaultClient;
 import gateway.command.event.http.HttpEventPublisher;
 import io.micronaut.discovery.exceptions.NoAvailableServiceException;
 import io.micronaut.http.HttpResponse;
@@ -36,8 +35,6 @@ public class GatewayController {
     private final String CLASS_PATH="gateway.command.event.commands.";
     private final String HTTP_PATH="gateway.command.event.http.";
 
-
-   // private final DefaultClient defaultClient;
     final EmbeddedServer embeddedServer;
 
 
@@ -48,7 +45,6 @@ public class GatewayController {
 
     @Inject
     public GatewayController(EmbeddedServer embeddedServer) {
-        //this.defaultClient=defaultClient;  DefaultClient defaultClient,
         this.embeddedServer=embeddedServer;
     }
 
@@ -96,7 +92,7 @@ public class GatewayController {
                  */
                 LOG.error("NoAvailableServiceException - adding event to Events Queue "+exception.getMessage(),exception);
                 Set<String> failureMessages = new HashSet<String>();
-                failureMessages.add(d.getClass().getSimpleName()+" using httpClient "); //;/+defaultClient.getClass().getSimpleName()+" service are down");
+                failureMessages.add(d.getClass().getSimpleName()+" service is down");
                 HashMap<String,Set<String>> errors = new HashMap<>();
                 errors.put("error", failureMessages);
                 return HttpResponse.ok(errors);
@@ -105,7 +101,6 @@ public class GatewayController {
         } catch (ClassNotFoundException e) {
             LOG.error("ClassNotFoundException "+e.getMessage(),e);
         }
-        //return Maybe.just(HttpResponse.serverError());
         return HttpResponse.serverError();
     }
 

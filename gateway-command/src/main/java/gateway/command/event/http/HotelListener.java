@@ -34,7 +34,6 @@ public class HotelListener extends HttpEventPublisher {
 
     @Override
     public <T extends CommandRoot> HttpResponse publish( T command) {
-        System.out.println("Publishing hotel");
         return client.publish(command);
     }
 

@@ -13,9 +13,8 @@ import java.util.Set;
 /**
  * Typical Micronaut HTTP Client passing real command object to remove client host:
  */
-//@Primary
 @Client(id = "hotel-write", path = "/")
-public interface HotelClient  extends  DefaultClient {
+public interface HotelClient {
 
     @Post("/")
     <T extends  CommandRoot> HttpResponse publish(T command);
