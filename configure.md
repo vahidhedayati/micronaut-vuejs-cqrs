@@ -19,8 +19,12 @@ or if you have installed docker simply run `sudo docker run -p 8500:8500 consul`
  `sudo rm -rf  /tmp/kafka-logs/*`
 
  Please ensure you are also running kafka
+
+ -> sudo /opt/kafka/bin/zookeeper-server-start.sh /opt/kafka/config/zookeeper.properties
+
  -> sudo /opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properties
- 
+
+ ## To list topics: - no need to run below just a local test:
  -> sudo /opt/kafka/bin/kafka-topics.sh --list --zookeeper localhost:2181
 
  #### Kafka on windows: [Download kafka](https://www.apache.org/dyn/closer.cgi?path=/kafka/2.2.1/kafka_2.11-2.2.1.tgz)
