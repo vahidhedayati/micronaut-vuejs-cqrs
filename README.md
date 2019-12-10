@@ -1,6 +1,16 @@
+
 Event driven CQRS application - Written in Micronaut backend, vuejs frontend 
 ------------------
 
+
+### Side note - similar / related projects
+- [micronaut-vuejs-cqrs (this)](https://github.com/vahidhedayati/micronaut-vuejs-cqrs)
+
+- [micronaut-vuejs-crud](https://github.com/vahidhedayati/micronaut-vuejs-crud)
+
+- [grails-vue-springsecurity-demo](https://github.com/vahidhedayati/grails-vue-springsecurity-demo)
+
+- [micronaut-ms micronaut beer serving app](https://github.com/vahidhedayati/micronaut-ms)
 
 --------------
 
